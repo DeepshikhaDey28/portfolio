@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff8f0"/>
+      <stop offset="100%" stop-color="#f2dfd0"/>
+    </radialGradient>
+    <linearGradient id="hair-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3c2415"/>
+      <stop offset="100%" stop-color="#1f1109"/>
+    </linearGradient>
+    <linearGradient id="skin-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8cfb2"/>
+      <stop offset="100%" stop-color="#eebb97"/>
+    </linearGradient>
+    <linearGradient id="shirt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#657655"/>
+      <stop offset="100%" stop-color="#4f5d41"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="120" cy="120" r="115" fill="url(#bg-grad)" stroke="#3b4432" stroke-width="4"/>
+
+  <!-- Back Hair -->
+  <path d="M60 115 C55 170 70 210 90 225 L150 225 C170 210 185 170 180 115 Z" fill="url(#hair-grad)"/>
+
+  <!-- Neck & Shoulders -->
+  <path d="M102 145 L102 175 L138 175 L138 145 Z" fill="url(#skin-grad)"/>
+  <path d="M65 240 C75 195 95 178 120 178 C145 178 165 195 175 240 Z" fill="url(#shirt-grad)" stroke="#3b4432" stroke-width="3"/>
+  <!-- Collar Accent -->
+  <path d="M105 178 L120 195 L135 178 Z" fill="#f4d06f" stroke="#3b4432" stroke-width="2"/>
+
+  <!-- Head Base -->
+  <ellipse cx="120" cy="118" rx="46" ry="52" fill="url(#skin-grad)" stroke="#3b4432" stroke-width="3"/>
+
+  <!-- Ears -->
+  <circle cx="73" cy="120" r="10" fill="url(#skin-grad)" stroke="#3b4432" stroke-width="2.5"/>
+  <circle cx="167" cy="120" r="10" fill="url(#skin-grad)" stroke="#3b4432" stroke-width="2.5"/>
+
+  <!-- Cute Front Hair / Bangs -->
+  <path d="M72 105 C70 65 105 52 120 52 C145 52 170 65 168 105 C155 78 135 84 120 84 C100 84 82 82 72 105 Z" fill="url(#hair-grad)" stroke="#3b4432" stroke-width="3"/>
+  <path d="M74 105 C78 130 82 145 84 150 C80 135 78 120 74 105 Z" fill="url(#hair-grad)"/>
+  <path d="M166 105 C162 130 158 145 156 150 C160 135 162 120 166 105 Z" fill="url(#hair-grad)"/>
+
+  <!-- Eyebrows -->
+  <path d="M92 98 Q102 94 110 98" fill="none" stroke="#2a170c" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M130 98 Q138 94 148 98" fill="none" stroke="#2a170c" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Eyes -->
+  <circle cx="102" cy="110" r="4.5" fill="#2a170c"/>
+  <circle cx="138" cy="110" r="4.5" fill="#2a170c"/>
+  <circle cx="103.5" cy="108.5" r="1.5" fill="#ffffff"/>
+  <circle cx="139.5" cy="108.5" r="1.5" fill="#ffffff"/>
+
+  <!-- Chic Stylish Glasses -->
+  <rect x="88" y="100" width="28" height="22" rx="6" fill="rgba(255,255,255,0.2)" stroke="#a0252f" stroke-width="3"/>
+  <rect x="124" y="100" width="28" height="22" rx="6" fill="rgba(255,255,255,0.2)" stroke="#a0252f" stroke-width="3"/>
+  <path d="M116 110 L124 110" fill="none" stroke="#a0252f" stroke-width="3"/>
+  <path d="M88 108 L74 114" fill="none" stroke="#a0252f" stroke-width="2.5"/>
+  <path d="M152 108 L166 114" fill="none" stroke="#a0252f" stroke-width="2.5"/>
+
+  <!-- Cute Smile & Blush -->
+  <path d="M112 132 Q120 142 128 132" fill="none" stroke="#a0252f" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="88" cy="124" rx="7" ry="4" fill="rgba(235, 100, 110, 0.35)"/>
+  <ellipse cx="152" cy="124" rx="7" ry="4" fill="rgba(235, 100, 110, 0.35)"/>
+
+  <!-- Decorative Sparkle -->
+  <path d="M185 50 Q185 62 197 62 Q185 62 185 74 Q185 62 173 62 Q185 62 185 50 Z" fill="#f4d06f" stroke="#3b4432" stroke-width="1.5"/>
+</svg>

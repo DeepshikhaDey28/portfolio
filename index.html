@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deepshikha Dey | Portfolio & About Me</title>
+  <link rel="icon" type="image/png" href="assets/avatar.png">
+  
+  <!-- Google Fonts for Retro OS & Scrapbook aesthetics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Gaegu:wght@400;700&family=Outfit:wght@400;500;600;700;800&family=Patrick+Hand&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- VIEW 1: RETRO OS DESKTOP (LANDING PAGE - ELAINE STYLE)   -->
+  <!-- ======================================================== -->
+  <section id="desktop-view" class="view active">
+    
+    <!-- Top Bar / Header Controls -->
+    <header class="os-header">
+      <div class="os-header-left">
+        <button id="view-about-top-btn" class="retro-icon-btn" title="Open Full About Me Page">
+          <span class="chevron-icon">&lt;</span>
+        </button>
+        <span class="os-clock" id="os-clock">14:15</span>
+      </div>
+      <h1 class="portfolio-title">PORTFOLIO</h1>
+      <div class="os-header-right">
+        <button id="sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects">
+          <span id="sound-icon">🔊</span>
+        </button>
+        <button id="quick-about-btn" class="pill-btn highlight">
+          <span>About Me ↗</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Desktop Workspace with Grid Background -->
+    <main class="desktop-workspace">
+
+      <!-- Desktop Sidebar Left Icons -->
+      <aside class="desktop-icons-col left-col">
+        <div class="desktop-icon-item" id="icon-profile" tabindex="0" role="button" aria-label="Open Profile and About Me">
+          <div class="icon-box profile-icon-box">
+            <span class="icon-letter">h</span>
+          </div>
+          <span class="icon-label">profile</span>
+          <span class="icon-hint">Click for full page</span>
+        </div>
+
+        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Projects">
+          <div class="icon-box folder-icon-box">
+            <svg class="folder-svg" viewBox="0 0 48 40" fill="none">
+              <path d="M4 8C4 5.79086 5.79086 4 8 4H18L22 8H40C42.2091 8 44 9.79086 44 12V32C44 34.2091 42.2091 36 40 36H8C5.79086 36 4 34.2091 4 32V8Z" fill="#F4D06F" stroke="#3D3A2A" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M12 16H36V28H12V16Z" fill="#FFFDF8" stroke="#3D3A2A" stroke-width="2"/>
+            </svg>
+          </div>
+          <span class="icon-label">works</span>
+        </div>
+      </aside>
+
+      <!-- Center Windows Container -->
+      <div class="desktop-center-area">
+
+        <!-- Top Social Strip 1 -->
+        <div class="social-bar">
+          <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="social-pill linkedin" title="LinkedIn Profile">
+            <span>in</span>
+          </a>
+          <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="social-pill github" title="GitHub Profile">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+          <a href="mailto:dey.deepshikha.283@gmail.com" class="social-pill email" title="Send Email">
+            <span>✉</span>
+          </a>
+          <button id="open-tableau-pill" class="social-pill tableau" title="Data Science & Dashboards">
+            <span>📊</span>
+          </button>
+        </div>
+
+        <!-- RETRO WINDOW 1: C:\DEEPSHIKHA\portfolio -->
+        <article class="retro-window" id="window-portfolio">
+          <div class="window-titlebar">
+            <span class="window-title">C:\DEEPSHIKHA\portfolio</span>
+            <div class="window-controls">
+              <button class="win-btn minimize" title="Minimize">−</button>
+              <button class="win-btn close" title="Close">×</button>
+            </div>
+          </div>
+          <div class="window-body portfolio-body">
+            <div class="portfolio-avatar-wrap">
+              <img src="assets/illustrative_avatar.svg" alt="Deepshikha Dey" class="portfolio-avatar avatar-toggleable" title="Click to toggle between illustrated &amp; photo avatar">
+              <span class="avatar-status-dot" title="Available for roles"></span>
+            </div>
+            <div class="portfolio-text-content">
+              <span class="greeting-sub">hi! i'm</span>
+              <h2 class="name-heading">Deepshikha Dey</h2>
+              <div class="role-badge-tag">DATA SCIENTIST &amp; FRONT-END DEVELOPER</div>
+              <p class="quote-text">
+                &ldquo;Bridging the gap between data analytics and front-end engineering with intention.&rdquo;
+              </p>
+              <div class="window-cta-row">
+                <button class="retro-btn primary" id="win-about-open-btn">
+                  <span>Open Full Profile / About Me &rarr;</span>
+                </button>
+                <button class="retro-btn secondary" id="win-quick-works-btn">
+                  <span>View Projects &darr;</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\works (Tools & Tech Showcase) -->
+        <article class="retro-window" id="window-works">
+          <div class="window-titlebar">
+            <span class="window-title">C:\DEEPSHIKHA\works</span>
+            <div class="window-controls">
+              <button class="win-btn minimize" title="Minimize">−</button>
+              <button class="win-btn close" title="Close">×</button>
+            </div>
+          </div>
+          <div class="window-body works-body">
+            <div class="works-accent-stripe"></div>
+            
+            <!-- Tab Navigation inside window -->
+            <div class="window-nav-tabs">
+              <button class="win-tab-btn active" data-tab="tools">TOOLS &amp; TECH</button>
+              <button class="win-tab-btn" data-tab="featured">FEATURED WORK</button>
+              <button class="win-tab-btn" data-tab="telemetry">SEVRAOS &amp; DATA</button>
+            </div>
+
+            <!-- Tab 1: Tools Grid (Authentic to Elaine's Window 2) -->
+            <div class="tab-pane active" id="tab-tools">
+              <h3 class="pane-title">CORE TOOLSET</h3>
+              <div class="tools-grid">
+                <div class="tool-card">
+                  <div class="tool-icon-circle python">🐍</div>
+                  <span class="tool-name">Python</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle react">⚛️</div>
+                  <span class="tool-name">React.js</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle sql">🗄️</div>
+                  <span class="tool-name">SQL (MySQL)</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle tableau">📊</div>
+                  <span class="tool-name">Tableau</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle pandas">🐼</div>
+                  <span class="tool-name">Pandas / NumPy</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle html">🌐</div>
+                  <span class="tool-name">HTML5 / CSS3</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle figma">🎨</div>
+                  <span class="tool-name">Figma</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle git">🐙</div>
+                  <span class="tool-name">Git / GitHub</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle vscode">💻</div>
+                  <span class="tool-name">VS Code</span>
+                </div>
+                <div class="tool-card">
+                  <div class="tool-icon-circle security">🛡️</div>
+                  <span class="tool-name">Cyber Security</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2: Featured Work -->
+            <div class="tab-pane" id="tab-featured">
+              <div class="projects-list-mini">
+                <div class="project-mini-card">
+                  <div class="pmc-header">
+                    <h4>B2B Business &amp; E-Commerce Platform</h4>
+                    <span class="pmc-tag">Frontend &amp; Retail</span>
+                  </div>
+                  <p>Full e-commerce platform with product catalog, cart flows, authentication, and order workflows.</p>
+                  <div class="pmc-footer">
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="pmc-link">GitHub Repo &rarr;</a>
+                  </div>
+                </div>
+
+                <div class="project-mini-card">
+                  <div class="pmc-header">
+                    <h4>SevraOS Telemetry &amp; Device UI</h4>
+                    <span class="pmc-tag">Team Lead / React</span>
+                  </div>
+                  <p>Architected front-end UI for SevraOS device and engineered telemetry analytics data pipelines using Python &amp; SQL.</p>
+                  <div class="pmc-footer">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">Figma</span>
+                    <span class="badge-role">Sevra AI</span>
+                  </div>
+                </div>
+
+                <div class="project-mini-card">
+                  <div class="pmc-header">
+                    <h4>Python Data &amp; Algorithmic Hub</h4>
+                    <span class="pmc-tag">Algorithms &amp; Core CS</span>
+                  </div>
+                  <p>Core algorithmic foundations, data structures, variables, and type casting operations implemented in Python.</p>
+                  <div class="pmc-footer">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Data Structures</span>
+                    <span class="tech-tag">OOP</span>
+                    <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="pmc-link">GitHub Repo &rarr;</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3: Telemetry & Data Science -->
+            <div class="tab-pane" id="tab-telemetry">
+              <div class="telemetry-info-box">
+                <h4>Data Science &amp; Business Intelligence Highlights</h4>
+                <ul>
+                  <li><strong>Yhills Intern:</strong> Executed data cleaning and preprocessing pipelines on raw datasets; designed interactive Tableau dashboards for actionable KPIs.</li>
+                  <li><strong>Sevra AI Team Lead:</strong> Streamlined telemetry data pipelines, integrating Python and SQL to monitor device performance metrics in real-time.</li>
+                  <li><strong>Python Hub:</strong> Data structure implementations and algorithmic scripts in public repository <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank">First_Python</a>.</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- Bottom Social Strip 2 -->
+        <div class="social-bar bottom-bar">
+          <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="social-pill linkedin" title="LinkedIn">
+            <span>in</span>
+          </a>
+          <a href="https://github.com/DeepshikhaDey28" target="_blank" class="social-pill github" title="GitHub">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+          <button id="quick-resume-btn-bar" class="social-pill cv-pill" title="View Resume">
+            <span>📄</span>
+          </button>
+          <button id="quick-contact-pill" class="social-pill contact-pill" title="Contact Me">
+            <span>📞</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Desktop Sidebar Right Icons -->
+      <aside class="desktop-icons-col right-col">
+        <div class="desktop-icon-item" id="icon-contact" tabindex="0" role="button" aria-label="Open Contact Information">
+          <div class="icon-box folder-icon-box">
+            <svg class="folder-svg" viewBox="0 0 48 40" fill="none">
+              <path d="M4 8C4 5.79086 5.79086 4 8 4H18L22 8H40C42.2091 8 44 9.79086 44 12V32C44 34.2091 42.2091 36 40 36H8C5.79086 36 4 34.2091 4 32V8Z" fill="#F4D06F" stroke="#3D3A2A" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="24" cy="22" r="5" fill="#3D3A2A"/>
+            </svg>
+          </div>
+          <span class="icon-label">contact</span>
+        </div>
+
+        <div class="desktop-icon-item" id="icon-resume" tabindex="0" role="button" aria-label="Open Resume &amp; CV">
+          <div class="icon-box folder-icon-box">
+            <svg class="folder-svg" viewBox="0 0 48 40" fill="none">
+              <path d="M4 8C4 5.79086 5.79086 4 8 4H18L22 8H40C42.2091 8 44 9.79086 44 12V32C44 34.2091 42.2091 36 40 36H8C5.79086 36 4 34.2091 4 32V8Z" fill="#F4D06F" stroke="#3D3A2A" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M16 15H32M16 21H32M16 27H26" stroke="#3D3A2A" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="icon-label">resume</span>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- Bottom Status / Help Bar -->
+    <footer class="os-footer-bar">
+      <div class="taskbar-left">
+        <span class="taskbar-start-badge">📁 DEEPSHIKHA-OS</span>
+        <span class="taskbar-item active">portfolio.exe</span>
+        <span class="taskbar-item">works.exe</span>
+      </div>
+      <div class="taskbar-right">
+        <span class="badge-status">● ONLINE</span>
+        <span class="location-badge">Pune, India (Grad 2027)</span>
+      </div>
+    </footer>
+
+  </section>
+
+
+  <!-- ======================================================== -->
+  <!-- VIEW 2: FULL ABOUT ME PAGE (DAKSH / MARYAM SCRAPBOOK)    -->
+  <!-- ======================================================== -->
+  <section id="about-view" class="view">
+    
+    <!-- Top Navigation Ribbon -->
+    <nav class="scrapbook-nav">
+      <button id="back-to-desktop-btn" class="back-pill-btn">
+        <span class="back-arrow">&larr;</span> Back to Desktop OS
+      </button>
+      <div class="scrapbook-nav-brand">
+        <span class="heart-pixel">♥</span> Deepshikha Dey &bull; Profile &amp; Resume
+      </div>
+      <div class="scrapbook-nav-actions">
+        <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="download-resume-btn">
+          <span>⬇ Download Official PDF</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Scrapbook Main Canvas with Red & Cream Gingham Border -->
+    <div class="scrapbook-wrapper">
+      <div class="scrapbook-page">
+
+        <!-- Top Header Strip: Pixel Heart & Role Pill -->
+        <header class="scrapbook-header">
+          <div class="sh-left">
+            <span class="pixel-tag">♥ Resume &amp; Profile</span>
+          </div>
+          <div class="sh-right">
+            <span class="editorial-pill">Computer Science &bull; Data Science &bull; Front-End</span>
+          </div>
+        </header>
+
+        <!-- Main 2-Column Content Layout (Directly matching Daksh / Maryam format) -->
+        <div class="scrapbook-grid">
+          
+          <!-- LEFT COLUMN: Avatar, Stickers, Contact Card, Skills, Languages -->
+          <div class="scrapbook-col-left">
+
+            <!-- Photo Polaroid Frame with Tape and Exclamation Sticker -->
+            <div class="polaroid-card">
+              <div class="washi-tape top-center"></div>
+              <div class="polaroid-img-container">
+                <img src="assets/illustrative_avatar.svg" alt="Deepshikha Dey" class="scrapbook-avatar avatar-toggleable" title="Click to toggle avatar">
+              </div>
+              <div class="exclamation-sticker">!!</div>
+            </div>
+
+            <!-- Contact Sticker Badge -->
+            <div class="contact-sticker-badge">
+              <div class="handle-line">
+                <span class="handle-at">@DeepshikhaDey28</span>
+              </div>
+              <div class="contact-details-list">
+                <a href="mailto:dey.deepshikha.283@gmail.com" class="c-link">dey.deepshikha.283@gmail.com</a>
+                <span class="c-phone">Pune, Maharashtra, India</span>
+                <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="c-link linkedin-link">linkedin.com/in/deepshikha-dey</a>
+              </div>
+            </div>
+
+            <!-- Skills Box (Matching Daksh Skills Card format) -->
+            <div class="scrapbook-card skills-card">
+              <h3 class="card-title-marker">Skills</h3>
+              <div class="card-title-line"></div>
+              
+              <div class="skills-category">
+                <h4 class="sub-skill-title">Front-End &amp; UI/UX</h4>
+                <ul class="marker-bullet-list">
+                  <li>React.js &amp; Component Design</li>
+                  <li>HTML5 &amp; Semantic Web</li>
+                  <li>CSS3 &amp; Modern Layouts (Grid/Flex)</li>
+                  <li>Figma Prototyping &amp; Wireframing</li>
+                </ul>
+              </div>
+
+              <div class="skills-category">
+                <h4 class="sub-skill-title">Data Science &amp; Pipelines</h4>
+                <ul class="marker-bullet-list">
+                  <li>Python (Pandas, NumPy)</li>
+                  <li>SQL (MySQL, Data Modeling)</li>
+                  <li>Tableau Interactive Dashboards</li>
+                  <li>Data Cleaning &amp; Preprocessing</li>
+                  <li>System Telemetry Analytics</li>
+                </ul>
+              </div>
+
+              <div class="skills-category">
+                <h4 class="sub-skill-title">Core CS &amp; Security</h4>
+                <ul class="marker-bullet-list">
+                  <li>Cybersecurity Fundamentals</li>
+                  <li>Data Structures &amp; Algorithms</li>
+                  <li>C Programming</li>
+                  <li>Git, GitHub &amp; Version Control</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Languages Card -->
+            <div class="scrapbook-card languages-card">
+              <h3 class="card-title-marker">Languages</h3>
+              <div class="card-title-line"></div>
+              <div class="languages-grid">
+                <div class="lang-item">
+                  <span class="lang-name">English</span>
+                  <span class="lang-level">Professional</span>
+                </div>
+                <div class="lang-item">
+                  <span class="lang-name">German</span>
+                  <span class="lang-level">A2 Level</span>
+                </div>
+                <div class="lang-item">
+                  <span class="lang-name">Hindi</span>
+                  <span class="lang-level">Native</span>
+                </div>
+                <div class="lang-item">
+                  <span class="lang-name">Marathi</span>
+                  <span class="lang-level">Bilingual</span>
+                </div>
+                <div class="lang-item">
+                  <span class="lang-name">Bengali</span>
+                  <span class="lang-level">Native</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: Hii, I'm Deepshikha, About Me Card, Experience, Education -->
+          <div class="scrapbook-col-right">
+
+            <!-- Big Expressive Headline (Matching "Hii, I'm Daksh" / "Hello, I'm Maryam") -->
+            <div class="scrapbook-hero-title">
+              <span class="hero-hi">Hii,</span>
+              <h1 class="hero-name">I'm Deepshikha</h1>
+              <div class="sparkle-star">✦</div>
+            </div>
+
+            <!-- "About me" Card (Matching Reference 1 Card) -->
+            <div class="scrapbook-card about-me-card">
+              <h2 class="card-title-marker underline-marker">About me</h2>
+              <p class="about-text-body">
+                I am a B.Tech Computer Science student specializing in Data Science at Symbiosis Skills and Professional University, with a cumulative CGPA of 8.94 (and recent semester SGPA of 9.45).
+              </p>
+              <p class="about-text-body">
+                I have consistently paired academic excellence with hands-on application across multiple internships. I specialize in bridging the gap between front-end development and data analytics, using Python and SQL to engineer robust solutions and Tableau to translate complex data into clear, actionable insights. Having worked in diverse settings, I thrive in a collaborative team environment and under various projects.
+              </p>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="scrapbook-card experience-card">
+              <div class="card-header-flex">
+                <h2 class="card-title-marker">Experience &amp; Internships</h2>
+                <span class="badge-accent">3 Internships</span>
+              </div>
+              <div class="card-title-line"></div>
+
+              <div class="experience-timeline">
+                
+                <!-- Experience 1 -->
+                <div class="timeline-entry">
+                  <div class="timeline-dot"></div>
+                  <div class="entry-header">
+                    <h3 class="entry-title">Sevra AI (MyCare)</h3>
+                    <span class="entry-period">June 2026 – July 2026</span>
+                  </div>
+                  <div class="entry-role">Team Lead – Front-End &amp; Data Science Intern</div>
+                  <p class="entry-desc">
+                    Led a cross-functional development team to architect and build the complete front-end interface for the SevraOS device using Figma, HTML, CSS, and React.js. Engineered data pipelines to perform advanced analytics on system telemetry, utilizing Python and SQL to extract actionable insights and optimize overall system performance.
+                  </p>
+                  <div class="entry-tags">
+                    <span class="mini-tag">React.js</span>
+                    <span class="mini-tag">Python</span>
+                    <span class="mini-tag">SQL</span>
+                    <span class="mini-tag">Figma</span>
+                    <span class="mini-tag">Telemetry Analytics</span>
+                  </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="timeline-entry">
+                  <div class="timeline-dot"></div>
+                  <div class="entry-header">
+                    <h3 class="entry-title">Erfinden Technologies</h3>
+                    <span class="entry-period">May 2025 – July 2025</span>
+                  </div>
+                  <div class="entry-role">E-commerce Platform Development Intern</div>
+                  <p class="entry-desc">
+                    Developed a full-scale e-commerce platform for a retail company, implementing product listings, shopping cart functionality, login/signup authentication, and order processing workflows.
+                  </p>
+                  <div class="entry-tags">
+                    <span class="mini-tag">HTML5</span>
+                    <span class="mini-tag">CSS3</span>
+                    <span class="mini-tag">JavaScript</span>
+                    <span class="mini-tag">Cart Architecture</span>
+                    <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="mini-tag link-tag">GitHub: B2B-website ↗</a>
+                  </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="timeline-entry">
+                  <div class="timeline-dot"></div>
+                  <div class="entry-header">
+                    <h3 class="entry-title">Yhills</h3>
+                    <span class="entry-period">May 2024 – July 2024</span>
+                  </div>
+                  <div class="entry-role">Data Science Intern</div>
+                  <p class="entry-desc">
+                    Executed data cleaning and preprocessing on raw datasets to ensure high data quality for analysis. Designed and created interactive dashboards using Tableau to provide actionable business insights.
+                  </p>
+                  <div class="entry-tags">
+                    <span class="mini-tag">Tableau</span>
+                    <span class="mini-tag">Data Cleaning</span>
+                    <span class="mini-tag">EDA</span>
+                    <span class="mini-tag">Dashboards</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="scrapbook-card education-card">
+              <h2 class="card-title-marker">Education</h2>
+              <div class="card-title-line"></div>
+              
+              <div class="edu-list">
+                <div class="edu-item">
+                  <div class="edu-top">
+                    <h4>Symbiosis Skills and Professional University</h4>
+                    <span class="edu-year">2023 – 2027</span>
+                  </div>
+                  <p class="edu-degree">B.Tech in Computer Science (Cyber Security)</p>
+                  <div class="gpa-badges">
+                    <span class="gpa-badge">Cumulative CGPA: <strong>8.94 / 10.0</strong></span>
+                    <span class="gpa-badge highlight">Recent Semester SGPA: <strong>9.45 / 10.0</strong></span>
+                  </div>
+                </div>
+
+                <div class="edu-item">
+                  <div class="edu-top">
+                    <h4>MIT ADT Junior College</h4>
+                    <span class="edu-year">2021 – 2023</span>
+                  </div>
+                  <p class="edu-degree">Higher Secondary Education (12th Grade)</p>
+                </div>
+
+                <div class="edu-item">
+                  <div class="edu-top">
+                    <h4>Pawar Public School</h4>
+                    <span class="edu-year">Completed</span>
+                  </div>
+                  <p class="edu-degree">Secondary Education (10th Grade)</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Soft Skills & Highlights -->
+            <div class="scrapbook-card softskills-card">
+              <h2 class="card-title-marker">Soft Skills &amp; Leadership</h2>
+              <div class="card-title-line"></div>
+              <div class="soft-tags-cloud">
+                <span class="soft-tag">Critical Thinking &amp; Analytical Problem Solving</span>
+                <span class="soft-tag">Project Management &amp; Team Leadership</span>
+                <span class="soft-tag">Effective Verbal &amp; Written Communication</span>
+                <span class="soft-tag">Time Management &amp; Prioritization</span>
+                <span class="soft-tag">Cross-Functional Team Collaboration</span>
+              </div>
+            </div>
+
+            <!-- Cute bottom scrapbook signature & character element -->
+            <div class="scrapbook-bottom-banner">
+              <div class="banner-note">
+                <p>&ldquo;Always curious, eager to learn, and excited to keep building impactful digital products.&rdquo;</p>
+                <div class="stamp-badge">VERIFIED &bull; 2026/2027</div>
+              </div>
+              <button class="back-pill-btn big" id="bottom-back-btn">
+                <span>&larr; Return to Desktop OS</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL 1: CONTACT DIALOG                                  -->
+  <!-- ======================================================== -->
+  <div class="retro-modal-overlay" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-contact-title">
+    <div class="retro-modal-box">
+      <div class="window-titlebar">
+        <span class="window-title" id="modal-contact-title">C:\DEEPSHIKHA\contact.exe</span>
+        <div class="window-controls">
+          <button class="win-btn close close-modal-btn">×</button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <h3 class="modal-heading">Let's Connect &amp; Collaborate! ✉️</h3>
+        <p class="modal-desc">
+          Feel free to reach out for software engineering, data science internships, full-time opportunities, or collaborative projects.
+        </p>
+
+        <div class="contact-info-cards">
+          <div class="c-info-card">
+            <span class="ci-icon">📧</span>
+            <div class="ci-details">
+              <span class="ci-label">Email Address</span>
+              <span class="ci-val">dey.deepshikha.283@gmail.com</span>
+            </div>
+            <button class="copy-btn" data-copy="dey.deepshikha.283@gmail.com" title="Copy to clipboard">Copy</button>
+          </div>
+
+          <div class="c-info-card">
+            <span class="ci-icon">💼</span>
+            <div class="ci-details">
+              <span class="ci-label">LinkedIn</span>
+              <span class="ci-val">in/deepshikha-dey-904a931aa</span>
+            </div>
+            <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="visit-btn">Visit ↗</a>
+          </div>
+
+          <div class="c-info-card">
+            <span class="ci-icon">🐙</span>
+            <div class="ci-details">
+              <span class="ci-label">GitHub</span>
+              <span class="ci-val">DeepshikhaDey28</span>
+            </div>
+            <a href="https://github.com/DeepshikhaDey28" target="_blank" class="visit-btn">Visit ↗</a>
+          </div>
+
+          <div class="c-info-card">
+            <span class="ci-icon">📍</span>
+            <div class="ci-details">
+              <span class="ci-label">Location</span>
+              <span class="ci-val">Pune, Maharashtra, India</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-action-row">
+          <a href="mailto:dey.deepshikha.283@gmail.com?subject=Hello%20Deepshikha!" class="retro-btn primary">
+            <span>Send Direct Email &rarr;</span>
+          </a>
+          <button class="retro-btn secondary close-modal-btn">
+            <span>Close</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL 2: RESUME VIEWER & DOWNLOAD                        -->
+  <!-- ======================================================== -->
+  <div class="retro-modal-overlay" id="resume-modal" role="dialog" aria-modal="true" aria-labelledby="modal-resume-title">
+    <div class="retro-modal-box large">
+      <div class="window-titlebar">
+        <span class="window-title" id="modal-resume-title">C:\DEEPSHIKHA\resume.pdf</span>
+        <div class="window-controls">
+          <button class="win-btn close close-modal-btn">×</button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="resume-modal-top">
+          <div>
+            <h3 class="modal-heading">Deepshikha Dey &mdash; Official Resume</h3>
+            <p class="modal-desc">B.Tech Computer Science &bull; CGPA 8.94 / 10.0 &bull; Pune, India</p>
+          </div>
+          <div class="resume-actions-group">
+            <button id="toggle-resume-format-btn" class="retro-btn secondary">
+              <span>Toggle PDF / Formatted View</span>
+            </button>
+            <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="retro-btn primary">
+              <span>⬇ Download PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Formatted In-Browser View (Always works across all mobile & desktop browsers) -->
+        <div id="resume-formatted-view" class="resume-sheet-preview">
+          <div class="rsp-header">
+            <h2>DEEPSHIKHA DEY</h2>
+            <p class="rsp-sub">Computer Science Student &bull; Pune, India &bull; Graduation 2027</p>
+            <p class="rsp-contacts">
+              <a href="mailto:dey.deepshikha.283@gmail.com">dey.deepshikha.283@gmail.com</a> |
+              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank">LinkedIn</a> |
+              <a href="https://github.com/DeepshikhaDey28" target="_blank">GitHub</a>
+            </p>
+          </div>
+
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title">SELF INTRODUCTION</h4>
+            <p class="rsp-text">
+              I am a B.Tech Computer Science student specializing in Data Science, with a CGPA of 8.94 (recent SGPA: 9.45). I have consistently paired academic excellence with hands-on application across multiple internships. I specialize in bridging the gap between front-end development and data analytics, using Python and SQL to engineer robust solutions and Tableau to translate complex data into clear, actionable insights. Having worked in diverse settings, I can work well in a team environment and under various projects.
+            </p>
+          </div>
+
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title">TECHNICAL SKILLS</h4>
+            <ul class="rsp-skills-list">
+              <li><strong>Languages:</strong> Python, SQL (MySQL), C, HTML, CSS, React</li>
+              <li><strong>Data Science:</strong> Pandas, NumPy, Tableau, Data Cleaning, Dashboarding</li>
+              <li><strong>Core CS:</strong> Data Structures, Algorithms, Cybersecurity Fundamentals</li>
+              <li><strong>Tools:</strong> Git, GitHub, Microsoft Office, Figma, VS Code</li>
+            </ul>
+          </div>
+
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title">EXPERIENCE</h4>
+            
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>Sevra AI (MyCare) | Team Lead – Front-End &amp; Data Science Intern</strong>
+                <span class="rsp-date">June 2026 – July 2026</span>
+              </div>
+              <p>
+                Led a cross-functional development team to architect and build the complete front-end interface for the SevraOS device using Figma, HTML, CSS, and React.js. Engineered data pipelines to perform advanced analytics on system telemetry, utilizing Python and SQL to extract actionable insights and optimize overall system performance.
+              </p>
+            </div>
+
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>Erfinden Technologies | E-commerce Platform Development Intern</strong>
+                <span class="rsp-date">May 2025 – July 2025</span>
+              </div>
+              <p>
+                Developed a full-scale e-commerce platform for a retail company, implementing product listings and shopping cart functionality. Integrated secure payment gateways and managed order processing workflows.
+              </p>
+            </div>
+
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>Yhills | Data Science Intern</strong>
+                <span class="rsp-date">May 2024 – July 2024</span>
+              </div>
+              <p>
+                Executed data cleaning and preprocessing on raw datasets to ensure high data quality for analysis. Designed and created interactive dashboards using Tableau to provide actionable business insights.
+              </p>
+            </div>
+          </div>
+
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title">EDUCATION</h4>
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>Symbiosis Skills and Professional University</strong>
+                <span class="rsp-date">2023 – 2027</span>
+              </div>
+              <p>B.Tech in Computer Science (Cyber Security) | Cumulative GPA: <strong>8.94 / 10.0</strong> | Recent Semester SGPA: <strong>9.45 / 10.0</strong></p>
+            </div>
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>MIT ADT Junior College</strong>
+                <span class="rsp-date">2021 – 2023</span>
+              </div>
+              <p>Higher Secondary Education (12th Grade)</p>
+            </div>
+            <div class="rsp-item">
+              <div class="rsp-item-top">
+                <strong>Pawar Public School</strong>
+                <span class="rsp-date">Completed</span>
+              </div>
+              <p>Secondary Education (10th Grade)</p>
+            </div>
+          </div>
+
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title">LANGUAGES &amp; SOFT SKILLS</h4>
+            <p><strong>Languages:</strong> English (Professional), German (A2), Hindi, Marathi, Bengali (Native/Bilingual)</p>
+            <p><strong>Soft Skills:</strong> Critical Thinking &amp; Analytical Problem Solving, Project Management &amp; Team Leadership, Effective Verbal and Written Communication, Time Management &amp; Prioritization, Cross-Functional Communication</p>
+          </div>
+        </div>
+        
+        <!-- Embedded PDF Fallback -->
+        <div id="resume-pdf-view" class="pdf-frame-wrapper" style="display: none;">
+          <iframe src="assets/resume.pdf" title="Deepshikha Dey Resume" class="pdf-iframe"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-notification" class="toast">Copied to clipboard!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
