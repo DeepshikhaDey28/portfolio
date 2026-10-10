@@ -76,11 +76,25 @@ html, body {
    VIEW 1: RETRO OS DESKTOP (ELAINE STYLE)
    ======================================================== */
 #desktop-view {
-  background-color: var(--os-bg);
+  background-color: #f5f4eb;
   background-image: 
-    linear-gradient(to right, var(--os-grid-line) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, var(--os-grid-line) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
+    radial-gradient(ellipse at 50% 15%, rgba(255, 255, 255, 0.7) 0%, transparent 70%),
+    radial-gradient(circle at 10% 20%, rgba(52, 211, 153, 0.07) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    linear-gradient(to right, rgba(116, 129, 105, 0.22) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(116, 129, 105, 0.22) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(116, 129, 105, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(116, 129, 105, 0.09) 1px, transparent 1px);
+  background-size: 
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    96px 96px,
+    96px 96px,
+    24px 24px,
+    24px 24px;
+  background-attachment: fixed;
+  box-shadow: inset 0 0 100px rgba(59, 68, 50, 0.06);
   min-height: 100vh;
   position: relative;
 }
