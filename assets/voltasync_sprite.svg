@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <filter id="volt-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#facc15"/>
+    </filter>
+    <linearGradient id="volt-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="40%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+  </defs>
+
+  <!-- React Spark Lightning Tail -->
+  <path d="M105 105 L125 90 L115 80 L142 55 L125 60 L135 40" stroke="#facc15" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#volt-glow)"/>
+  <path d="M105 105 L125 90 L115 80 L142 55 L125 60 L135 40" stroke="#fef08a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Feet -->
+  <ellipse cx="62" cy="132" rx="11" ry="7" fill="#ca8a04"/>
+  <ellipse cx="98" cy="132" rx="11" ry="7" fill="#ca8a04"/>
+
+  <!-- Chubby Electric Body -->
+  <ellipse cx="80" cy="98" rx="34" ry="28" fill="url(#volt-body)" stroke="#a16207" stroke-width="2.5" filter="url(#volt-glow)"/>
+
+  <!-- Cute Hands -->
+  <ellipse cx="58" cy="102" rx="7" ry="5" fill="#facc15" stroke="#a16207" stroke-width="1.5"/>
+  <ellipse cx="102" cy="102" rx="7" ry="5" fill="#facc15" stroke="#a16207" stroke-width="1.5"/>
+
+  <!-- Lightning Ears -->
+  <polygon points="52,48 30,16 58,32" fill="#facc15" stroke="#a16207" stroke-width="2.5"/>
+  <polygon points="38,28 30,16 48,24" fill="#0f172a"/>
+  
+  <polygon points="108,48 130,16 102,32" fill="#facc15" stroke="#a16207" stroke-width="2.5"/>
+  <polygon points="122,28 130,16 112,24" fill="#0f172a"/>
+
+  <!-- Head -->
+  <circle cx="80" cy="62" r="28" fill="url(#volt-body)" stroke="#a16207" stroke-width="2.5"/>
+
+  <!-- Red Electric Cheek Pouches -->
+  <circle cx="58" cy="70" r="7.5" fill="#ef4444" opacity="0.9"/>
+  <circle cx="102" cy="70" r="7.5" fill="#ef4444" opacity="0.9"/>
+
+  <!-- Big Sparkling Anime Eyes -->
+  <ellipse cx="68" cy="58" rx="6.5" ry="8.5" fill="#0f172a"/>
+  <ellipse cx="92" cy="58" rx="6.5" ry="8.5" fill="#0f172a"/>
+  <circle cx="66" cy="55" r="2.5" fill="#ffffff"/>
+  <circle cx="90" cy="55" r="2.5" fill="#ffffff"/>
+
+  <!-- Tiny Nose & Cat-mouth Smile -->
+  <circle cx="80" cy="64" r="1.5" fill="#713f12"/>
+  <path d="M75 68 Q80 72 85 68" stroke="#713f12" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>

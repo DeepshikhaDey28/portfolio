@@ -13,10 +13,35 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 // ========================================================
 // 1. ROYALTY-FREE 8-BIT CHIPTUNE BGM & AUDIO SYNTHESIZER
 // ========================================================
+// 1. AUDIO ENGINE & SOUNDTRACK (REAL MP3 AUDIO + SYNTH FALLBACK)
+// ========================================================
 class RetroAudioEngine {
   constructor() {
     this.sfxEnabled = true;
     this.bgmEnabled = false;
+    this.currentView = 'desktop';
+    this.lastWalkTime = 0;
+
+    // Real audio files provided by user in assets/sounds/
+    this.audioFiles = {
+      websiteBgm: new Audio('assets/sounds/website_bgm.mp3'),
+      gameBgm: new Audio('assets/sounds/game_bgm.mp3'),
+      click: new Audio('assets/sounds/game_click.mp3'),
+      death: new Audio('assets/sounds/game_death.mp3'),
+      walk: new Audio('assets/sounds/walk.mp3')
+    };
+
+    try {
+      this.audioFiles.websiteBgm.loop = true;
+      this.audioFiles.websiteBgm.volume = 0.35;
+      this.audioFiles.gameBgm.loop = true;
+      this.audioFiles.gameBgm.volume = 0.40;
+      this.audioFiles.click.volume = 0.50;
+      this.audioFiles.death.volume = 0.55;
+      this.audioFiles.walk.volume = 0.28;
+    } catch (e) {}
+
+    // Web Audio synthesizer for chiptune & retro backup
     this.audioCtx = null;
     this.bgmTimer = null;
     this.bgmStep = 0;
@@ -60,41 +85,50 @@ class RetroAudioEngine {
 
       osc.start();
       osc.stop(this.audioCtx.currentTime + duration);
+    } catch (e) {}
+  }
+
+  // Voice typewriter blip
+  playBlip() {
+    if (!this.sfxEnabled) return;
+    this.playTone(240 + Math.random() * 80, 'square', 0.04, 0.04);
+  }
+
+  // Real click sound
+  playClick() {
+    if (!this.sfxEnabled) return;
+    try {
+      this.audioFiles.click.currentTime = 0;
+      this.audioFiles.click.play().catch(() => {
+        this.playTone(520, 'triangle', 0.06, 0.08);
+      });
     } catch (e) {
-      console.warn('Audio play error:', e);
+      this.playTone(520, 'triangle', 0.06, 0.08);
     }
   }
 
-  // Undertale-inspired voice typewriter blip
-  playBlip() {
-    if (!this.sfxEnabled) return;
-    const baseFreq = 220 + Math.random() * 80;
-    this.playTone(baseFreq, 'square', 0.04, 0.05);
-  }
-
-  // Menu button click
-  playClick() {
-    this.playTone(520, 'triangle', 0.06, 0.08);
-  }
-
-  // Menu selection sound
   playSelect() {
-    if (!this.sfxEnabled) return;
-    this.init();
-    if (!this.audioCtx) return;
-    const t = this.audioCtx.currentTime;
-    this.playTone(440, 'triangle', 0.06, 0.07);
-    setTimeout(() => this.playTone(880, 'triangle', 0.09, 0.07), 60);
+    this.playClick();
   }
 
-  // Battle encounter opening fanfare (Pokemon & Undertale fusion)
+  // Real walking footstep sound
+  playWalk() {
+    if (!this.sfxEnabled) return;
+    const now = Date.now();
+    if (now - this.lastWalkTime < 240) return; // Throttled footstep cadence
+    this.lastWalkTime = now;
+    try {
+      this.audioFiles.walk.currentTime = 0;
+      this.audioFiles.walk.play().catch(() => {});
+    } catch (e) {}
+  }
+
+  // Battle encounter fanfare
   playEncounter() {
     if (!this.sfxEnabled) return;
     const notes = [330, 392, 494, 587, 659, 784, 880, 988, 1175];
     notes.forEach((freq, idx) => {
-      setTimeout(() => {
-        this.playTone(freq, 'square', 0.08, 0.07);
-      }, idx * 60);
+      setTimeout(() => this.playTone(freq, 'square', 0.08, 0.07), idx * 55);
     });
   }
 
@@ -120,36 +154,30 @@ class RetroAudioEngine {
     } catch (e) {}
   }
 
-  // Hurt damage sound (Undertale crunch hit)
+  // Hurt / death sound
   playHurt() {
     if (!this.sfxEnabled) return;
-    this.init();
-    if (!this.audioCtx) return;
     try {
-      // Noise buffer hit
-      const bufferSize = this.audioCtx.sampleRate * 0.12;
-      const buffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-      const noise = this.audioCtx.createBufferSource();
-      noise.buffer = buffer;
-      const gain = this.audioCtx.createGain();
-      gain.gain.setValueAtTime(0.2, this.audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.12);
-      noise.connect(gain);
-      gain.connect(this.audioCtx.destination);
-      noise.start();
+      this.audioFiles.death.currentTime = 0;
+      this.audioFiles.death.play().catch(() => {});
     } catch (e) {}
   }
 
-  // Healing chime
+  // Healing chime (Nurse Joy / Coffee Machine restoration)
   playHeal() {
     if (!this.sfxEnabled) return;
-    const notes = [440, 554, 659, 880];
+    const notes = [493.88, 659.25, 830.61, 987.77, 880.00, 987.77];
     notes.forEach((freq, idx) => {
-      setTimeout(() => this.playTone(freq, 'sine', 0.15, 0.08), idx * 75);
+      setTimeout(() => this.playTone(freq, 'sine', 0.22, 0.10), idx * 110);
+    });
+  }
+
+  // Item pickup chime
+  playItemChime() {
+    if (!this.sfxEnabled) return;
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, idx) => {
+      setTimeout(() => this.playTone(freq, 'triangle', 0.12, 0.09), idx * 80);
     });
   }
 
@@ -159,7 +187,7 @@ class RetroAudioEngine {
     setTimeout(() => this.playTone(450, 'triangle', 0.1, 0.09), 100);
   }
 
-  // Victory Fanfare (When Pip is caught!)
+  // Victory Fanfare
   playVictory() {
     if (!this.sfxEnabled) return;
     const melody = [
@@ -177,86 +205,41 @@ class RetroAudioEngine {
     });
   }
 
-  // Royalty-free 8-Bit Chiptune Adventure BGM Loop (Pokemon & Undertale Inspired)
+  // View-based dynamic background music manager
+  setBgmForView(view) {
+    this.currentView = view;
+    if (!this.bgmEnabled) {
+      this.stopAllBgm();
+      return;
+    }
+
+    try {
+      if (view === 'game') {
+        this.audioFiles.websiteBgm.pause();
+        this.audioFiles.gameBgm.currentTime = 0;
+        this.audioFiles.gameBgm.play().catch(() => {});
+      } else {
+        this.audioFiles.gameBgm.pause();
+        this.audioFiles.websiteBgm.play().catch(() => {});
+      }
+    } catch (e) {}
+  }
+
   toggleBgm() {
     this.bgmEnabled = !this.bgmEnabled;
     if (this.bgmEnabled) {
-      this.init();
-      this.startBgmLoop();
+      this.setBgmForView(this.currentView);
     } else {
-      this.stopBgmLoop();
+      this.stopAllBgm();
     }
     return this.bgmEnabled;
   }
 
-  startBgmLoop() {
-    this.stopBgmLoop();
-    // Catchy 16-step upbeat chiptune melody
-    const melody = [
-      523.25, 659.25, 783.99, 659.25,
-      587.33, 659.25, 698.46, 587.33,
-      523.25, 659.25, 783.99, 1046.50,
-      987.77, 783.99, 880.00, 783.99
-    ];
-    const bass = [
-      130.81, 130.81, 164.81, 164.81,
-      146.83, 146.83, 174.61, 174.61,
-      130.81, 130.81, 196.00, 196.00,
-      174.61, 174.61, 146.83, 196.00
-    ];
-
-    const stepDuration = 180; // ms per 16th beat
-    this.bgmStep = 0;
-
-    this.bgmTimer = setInterval(() => {
-      if (!this.bgmEnabled || !this.audioCtx) return;
-      try {
-        const step = this.bgmStep % melody.length;
-        // Melody voice (pulse/square)
-        const oscM = this.audioCtx.createOscillator();
-        const gainM = this.audioCtx.createGain();
-        oscM.type = 'square';
-        oscM.frequency.setValueAtTime(melody[step], this.audioCtx.currentTime);
-        gainM.gain.setValueAtTime(0.04, this.audioCtx.currentTime);
-        gainM.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.14);
-        oscM.connect(gainM);
-        gainM.connect(this.bgmMasterGain);
-        oscM.start();
-        oscM.stop(this.audioCtx.currentTime + 0.14);
-
-        // Bass voice (triangle)
-        const oscB = this.audioCtx.createOscillator();
-        const gainB = this.audioCtx.createGain();
-        oscB.type = 'triangle';
-        oscB.frequency.setValueAtTime(bass[step], this.audioCtx.currentTime);
-        gainB.gain.setValueAtTime(0.06, this.audioCtx.currentTime);
-        gainB.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.16);
-        oscB.connect(gainB);
-        gainB.connect(this.bgmMasterGain);
-        oscB.start();
-        oscB.stop(this.audioCtx.currentTime + 0.16);
-
-        // Hi-hat / snare noise on beats
-        if (step % 2 === 0) {
-          const noiseBuffer = this.audioCtx.createBuffer(1, this.audioCtx.sampleRate * 0.03, this.audioCtx.sampleRate);
-          const data = noiseBuffer.getChannelData(0);
-          for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * 0.03;
-          const noise = this.audioCtx.createBufferSource();
-          noise.buffer = noiseBuffer;
-          noise.connect(this.bgmMasterGain);
-          noise.start();
-        }
-
-        this.bgmStep++;
-      } catch (e) {}
-    }, stepDuration);
-  }
-
-  stopBgmLoop() {
-    if (this.bgmTimer) {
-      clearInterval(this.bgmTimer);
-      this.bgmTimer = null;
-    }
+  stopAllBgm() {
+    try {
+      this.audioFiles.websiteBgm.pause();
+      this.audioFiles.gameBgm.pause();
+    } catch (e) {}
   }
 }
 
@@ -299,6 +282,7 @@ function switchView(targetViewId, pushHash = true) {
   } else {
     pipGame.onLeave();
   }
+  sfx.setBgmForView(targetViewId);
 
   if (targetViewId === 'works') {
     loadGitHubRepos();
@@ -374,24 +358,31 @@ function toggleSound() {
 soundBtn?.addEventListener('click', toggleSound);
 gameSoundBtn?.addEventListener('click', toggleSound);
 
-// Royalty-Free Chiptune Music toggle
+// Royalty-Free Chiptune & Ambient Music toggle
 const musicBtn = document.getElementById('music-toggle-btn');
-const gameMusicBtn = document.getElementById('game-music-toggle-btn');
+const gameAudioBtn = document.getElementById('game-audio-toggle-btn');
 
 function handleBgmToggle() {
   const isPlaying = sfx.toggleBgm();
   const label = isPlaying ? '🎵 BGM: ON' : '🎵 BGM: OFF';
-  [musicBtn, gameMusicBtn].forEach(btn => {
-    if (btn) {
-      btn.querySelector('span').textContent = label;
-      btn.classList.toggle('active', isPlaying);
-    }
-  });
-  showToast(isPlaying ? '8-Bit Chiptune Music Playing 🎶' : 'Music Paused');
+  const gameLabel = isPlaying ? '🎵 Audio: ON' : '🔇 Audio: OFF';
+  if (musicBtn) {
+    const span = musicBtn.querySelector('span');
+    if (span) span.textContent = label;
+    musicBtn.classList.toggle('active', isPlaying);
+  }
+  const gameAudioIcon = document.getElementById('game-audio-icon');
+  if (gameAudioIcon) {
+    gameAudioIcon.textContent = gameLabel;
+  }
+  if (gameAudioBtn) {
+    gameAudioBtn.classList.toggle('active', isPlaying);
+  }
+  showToast(isPlaying ? 'Audio Soundtrack Playing 🎶' : 'Music Paused');
 }
 
 musicBtn?.addEventListener('click', handleBgmToggle);
-gameMusicBtn?.addEventListener('click', handleBgmToggle);
+gameAudioBtn?.addEventListener('click', handleBgmToggle);
 
 
 // ========================================================
@@ -649,22 +640,71 @@ document.querySelectorAll('.close-runner-btn').forEach(btn => {
 // ========================================================
 // 6. "CATCH THAT PIP!" GAME & UNDERTALE DODGING ENGINE
 // ========================================================
+// ========================================================
+// 6. POKEMON-STYLE 2D OPEN WORLD RPG & BATTLE ENGINE
+// ========================================================
 class CatchThatPipGame {
   constructor() {
+    this.mode = 'overworld'; // 'overworld' | 'battle' | 'dex'
+    this.owCanvas = null;
+    this.owCtx = null;
+    this.owAnimId = null;
+
+    this.dodgeCanvas = null;
+    this.dodgeCtx = null;
+    this.dodgeAnimId = null;
+
+    this.keys = {};
+    this.dialogueActive = false;
+
+    // Trainer Player State
     this.player = {
       name: 'DEEPSHIKHA',
       level: 28,
       hp: 100,
       maxHp: 100,
-      x: 240,
-      y: 90,
-      speed: 4,
-      size: 14
+      exp: 89.4,
+      // Open World Grid Position (Tile 32x32)
+      x: 8 * 32,
+      y: 7 * 32,
+      w: 24,
+      h: 28,
+      speed: 2.6,
+      sprintSpeed: 4.8,
+      dir: 0, // 0: Down, 1: Up, 2: Left, 3: Right
+      animFrame: 0,
+      animTimer: 0,
+      isMoving: false,
+      isSprinting: false,
+      stepCount: 0,
+      dustParticles: []
     };
 
-    // Species Catalog
+    // Camera
+    this.camera = { x: 0, y: 0, width: 640, height: 360 };
+
+    // Inventory
+    this.inventory = {
+      capsules: 5,
+      potions: 3,
+      elixirs: 1,
+      candies: 1
+    };
+
+    // Pip-Dex Caught Registry (6 Unique Species)
+    this.dex = {
+      flamechar: false,
+      bulbasprout: false,
+      buggypip: false,
+      aquabyte: false,
+      voltasync: false,
+      neuropip: false
+    };
+
+    // 6 Species Catalog
     this.speciesData = {
       flamechar: {
+        id: '#001',
         name: 'FLAMECHAR',
         level: 28,
         hp: 85,
@@ -673,11 +713,19 @@ class CatchThatPipGame {
         type2: 'CODE',
         badgeClass: 'type-fire',
         spriteSrc: 'assets/flamechar_sprite.svg',
+        zone: 'Route 1: Python Meadow',
         greeting: 'Wild FLAMECHAR sparks with enthusiasm! Its tail flame crackles with Python bytecode!',
         inspect: 'FLAMECHAR: Fire/Code Pip! Known for fiery performance. Weak to clean formatting and iced chai.',
-        bulletType: 'fire'
+        bulletType: 'fire',
+        moves: [
+          { name: 'Python Strike', type: 'FIRE', dmg: 35, desc: 'Fiery bytecode pulse' },
+          { name: 'Vector Blast', type: 'CODE', dmg: 45, desc: 'Vectorized tensor beam' },
+          { name: 'Flame Byte', type: 'FIRE', dmg: 25, desc: 'Ember compilation slice' },
+          { name: 'Overclock Hotfix', type: 'CODE', dmg: 55, desc: 'Critical deploy burst' }
+        ]
       },
       bulbasprout: {
+        id: '#002',
         name: 'BULBASPROUT',
         level: 28,
         hp: 90,
@@ -686,11 +734,19 @@ class CatchThatPipGame {
         type2: 'GRASS',
         badgeClass: 'type-trainer',
         spriteSrc: 'assets/bulbasprout_sprite.svg',
+        zone: 'Route 1: Python Meadow',
         greeting: 'Wild BULBASPROUT emerged from the Pandas DataFrame! It wields data decision trees!',
         inspect: 'BULBASPROUT: Data/Tree Pip! Grows rapidly with clean SQL tables and Tableau charts.',
-        bulletType: 'data'
+        bulletType: 'data',
+        moves: [
+          { name: 'DataFrame Vine', type: 'GRASS', dmg: 30, desc: 'Pandas column whip' },
+          { name: 'SQL Query Splash', type: 'DATA', dmg: 40, desc: 'Heavy indexed query' },
+          { name: 'Tableau Bloom', type: 'DATA', dmg: 45, desc: 'KPI metric blast' },
+          { name: 'Decision Root', type: 'GRASS', dmg: 25, desc: 'Root node shock' }
+        ]
       },
       buggypip: {
+        id: '#003',
         name: 'BUGGYPIP',
         level: 28,
         hp: 75,
@@ -699,12 +755,83 @@ class CatchThatPipGame {
         type2: 'CYBER',
         badgeClass: 'type-glitch',
         spriteSrc: 'assets/buggypip_sprite.svg',
+        zone: 'Route 3: Cyber Matrix',
         greeting: 'Wild BUGGYPIP threatens production release! "Uncaught TypeError at index.js:42"!',
         inspect: 'BUGGYPIP: Glitch Pip! Feeds on missing semicolons. Can be pacified by Refactoring Code.',
-        bulletType: 'glitch'
+        bulletType: 'glitch',
+        moves: [
+          { name: 'TypeError Spike', type: 'GLITCH', dmg: 35, desc: 'Null reference crash' },
+          { name: 'Memory Leak', type: 'CYBER', dmg: 45, desc: 'RAM exhaustion wave' },
+          { name: 'Infinite Loop', type: 'GLITCH', dmg: 50, desc: 'Thread blocking spike' },
+          { name: 'Patch Reject', type: 'CYBER', dmg: 30, desc: 'Merge conflict pulse' }
+        ]
+      },
+      aquabyte: {
+        id: '#004',
+        name: 'AQUABYTE',
+        level: 28,
+        hp: 92,
+        maxHp: 92,
+        type1: 'WATER',
+        type2: 'SQL',
+        badgeClass: 'type-code',
+        spriteSrc: 'assets/aquabyte_sprite.svg',
+        zone: 'Route 2: Data Lake',
+        greeting: 'Wild AQUABYTE surfaced from the SQL telemetry stream! Its database shell glistens with queries!',
+        inspect: 'AQUABYTE: Water/SQL Pip! Hardened database shell. Highly resistant to unindexed queries.',
+        bulletType: 'data',
+        moves: [
+          { name: 'SQL Splash', type: 'WATER', dmg: 35, desc: 'High-speed relational stream' },
+          { name: 'Telemetry Pump', type: 'SQL', dmg: 45, desc: 'Live sensor pressure surge' },
+          { name: 'Pipeline Wave', type: 'WATER', dmg: 50, desc: 'Data cleansing tsunami' },
+          { name: 'Schema Jet', type: 'SQL', dmg: 30, desc: 'Table schema pulse' }
+        ]
+      },
+      voltasync: {
+        id: '#005',
+        name: 'VOLTASYNC',
+        level: 28,
+        hp: 80,
+        maxHp: 80,
+        type1: 'ELECTRIC',
+        type2: 'REACT',
+        badgeClass: 'type-fire',
+        spriteSrc: 'assets/voltasync_sprite.svg',
+        zone: 'Route 3: Cyber Matrix',
+        greeting: 'Wild VOLTASYNC discharged async promises! Lightning sparks from its React state ears!',
+        inspect: 'VOLTASYNC: Electric/React Pip! Bounces through the Virtual DOM at 120 FPS!',
+        bulletType: 'fire',
+        moves: [
+          { name: 'React Spark', type: 'ELECTRIC', dmg: 35, desc: 'Virtual DOM re-render zap' },
+          { name: 'Async Bolt', type: 'REACT', dmg: 45, desc: 'Await promise lightning' },
+          { name: 'State Thunder', type: 'ELECTRIC', dmg: 55, desc: 'High-voltage hook surge' },
+          { name: 'Prop Shock', type: 'REACT', dmg: 28, desc: 'Direct prop collision' }
+        ]
+      },
+      neuropip: {
+        id: '#006',
+        name: 'NEUROPIP',
+        level: 28,
+        hp: 88,
+        maxHp: 88,
+        type1: 'PSYCHIC',
+        type2: 'AI',
+        badgeClass: 'type-trainer',
+        spriteSrc: 'assets/neuropip_sprite.svg',
+        zone: 'Route 3: Cyber Matrix',
+        greeting: 'Wild NEUROPIP hovered into reality! Its neural crystal glows with deep learning embeddings!',
+        inspect: 'NEUROPIP: Psychic/AI Pip! Analyzes multi-dimensional patterns and optimizes neural layers.',
+        bulletType: 'glitch',
+        moves: [
+          { name: 'Neural Beam', type: 'PSYCHIC', dmg: 40, desc: 'Multi-layer perceptron ray' },
+          { name: 'Tensor Strike', type: 'AI', dmg: 50, desc: 'Multi-dimensional matrix hit' },
+          { name: 'Deep Learning', type: 'PSYCHIC', dmg: 60, desc: 'Gradient descent wave' },
+          { name: 'Attention Wave', type: 'AI', dmg: 32, desc: 'Transformer attention pulse' }
+        ]
       }
     };
 
+    // Active Battle Variables
     this.currentSpeciesKey = 'flamechar';
     this.pip = null;
     this.isRefactored = false;
@@ -714,56 +841,250 @@ class CatchThatPipGame {
     this.dodgeInterval = null;
     this.bullets = [];
 
-    this.keys = {};
-    this.canvas = null;
-    this.ctx = null;
-    this.animationFrame = null;
-    this.pfpImage = null;
+    // Map Dimensions (40 x 30 tiles @ 32px each = 1280 x 960 world)
+    this.mapCols = 40;
+    this.mapRows = 30;
+    this.tileSize = 32;
 
+    // Build Open World Map Tiles & Entity Objects
+    this.initWorldMap();
+
+    // Init DOM Hooks
     this.initDOM();
   }
 
-  initDOM() {
-    this.canvas = document.getElementById('pip-dodge-canvas');
-    if (this.canvas) {
-      this.ctx = this.canvas.getContext('2d');
+  initWorldMap() {
+    // 0: Lab Floor (Parquet)
+    // 1: Lab Wall (Solid)
+    // 2: Lab Furniture/Desk/PC (Solid)
+    // 3: Outdoor Cobble/Dirt Path (Walkable)
+    // 4: Outdoor Meadow Grass (Walkable)
+    // 5: Tall Wild Grass (Walkable, triggers encounters!)
+    // 6: Deep Water (Solid)
+    // 7: Wooden Bridge (Walkable)
+    // 8: Cyber Circuit Matrix (Walkable)
+    // 9: Outer Pine Trees / Border (Solid)
+    this.tiles = [];
+    for (let r = 0; r < this.mapRows; r++) {
+      this.tiles[r] = [];
+      for (let c = 0; c < this.mapCols; c++) {
+        // Outer boundaries
+        if (r === 0 || r === this.mapRows - 1 || c === 0 || c === this.mapCols - 1) {
+          this.tiles[r][c] = 9;
+        }
+        // PALLET DEV LAB (Top-Left: c: 1..15, r: 1..13)
+        else if (c >= 1 && c <= 15 && r >= 1 && r <= 13) {
+          if (r === 1 || c === 1 || c === 15 || (r === 13 && c !== 8 && c !== 9)) {
+            this.tiles[r][c] = 1; // Lab Wall
+          } else if (r === 3 && (c >= 3 && c <= 6)) {
+            this.tiles[r][c] = 2; // Lab Computer Desk & Servers
+          } else if (r === 3 && (c >= 10 && c <= 13)) {
+            this.tiles[r][c] = 2; // Lab Bookshelf & PC
+          } else {
+            this.tiles[r][c] = 0; // Lab Parquet Floor
+          }
+        }
+        // DATA LAKE (Bottom-Left: c: 1..16, r: 16..28)
+        else if (c >= 2 && c <= 16 && r >= 17 && r <= 27) {
+          // Wooden bridge spanning lake at c: 8..9
+          if ((c === 8 || c === 9) && r >= 17 && r <= 26) {
+            this.tiles[r][c] = 7; // Bridge
+          } else if (c === 2 || c === 16 || r === 17 || r === 27) {
+            this.tiles[r][c] = 3; // Shore path
+          } else {
+            this.tiles[r][c] = 6; // Deep animated water
+          }
+        }
+        // CYBER CIRCUIT MATRIX (Bottom-Right: c: 18..38, r: 16..28)
+        else if (c >= 18 && c <= 38 && r >= 16 && r <= 28) {
+          if (r === 16 || c === 18) {
+            this.tiles[r][c] = 3; // Path divider
+          } else if ((r === 20 || r === 25) && (c === 23 || c === 31)) {
+            this.tiles[r][c] = 9; // Cyber server monolith
+          } else {
+            this.tiles[r][c] = 8; // Cyber circuit tile
+          }
+        }
+        // ROUTE 1: PYTHON MEADOW (Top-Right: c: 16..38, r: 1..15)
+        else {
+          // Cobble paths
+          if (c === 16 || c === 17 || (r === 14 && c <= 28) || (c === 27 && r <= 14)) {
+            this.tiles[r][c] = 3; // Path
+          }
+          // Tall Wild Grass patches
+          else if ((c >= 20 && c <= 25 && r >= 4 && r <= 10) || (c >= 29 && c <= 36 && r >= 5 && r <= 12)) {
+            this.tiles[r][c] = 5; // Tall Grass
+          } else {
+            this.tiles[r][c] = 4; // Meadow Grass
+          }
+        }
+      }
     }
 
-    // Preload trainer avatar for soul rendering in canvas
+    // NPCs
+    this.npcs = [
+      {
+        id: 'oak',
+        name: 'DEV MENTOR OAK',
+        x: 8 * 32,
+        y: 4 * 32,
+        color: '#dc2626',
+        dialogue: "Welcome, Deepshikha! The Open Dev Region is brimming with 6 wild algorithmic Pips! Step into tall grass or approach roaming creatures on the routes to catch them and complete your Pip-Dex!"
+      },
+      {
+        id: 'python_dev',
+        name: 'PYTHON ENGINEER',
+        x: 27 * 32,
+        y: 7 * 32,
+        color: '#2563eb',
+        dialogue: "Did you know? Deepshikha architected the First_Python algorithmic hub and B2B eCommerce platform! Wild Flamechar and Bulbasprout love clean Python loops!"
+      },
+      {
+        id: 'telemetry_lead',
+        name: 'SEVRA TELEMETRY LEAD',
+        x: 9 * 32,
+        y: 16 * 32,
+        color: '#059669',
+        dialogue: "At Sevra AI, Deepshikha led front-end UI and built SQL data pipelines monitoring device telemetry in real-time. Look into the Data Lake for wild Aquabyte!"
+      },
+      {
+        id: 'cyber_sec',
+        name: 'SECURITY ANALYST',
+        x: 23 * 32,
+        y: 20 * 32,
+        color: '#7c3aed',
+        dialogue: "Deepshikha's B.Tech Computer Science Cyber Security specialization (CGPA 8.94)! In this Cyber Matrix, Buggypip, Voltasync, and Neuropip thrive!"
+      }
+    ];
+
+    // Interactive Objects (Healing Station, Signs, Items)
+    this.interactives = [
+      {
+        type: 'heal',
+        x: 4 * 32,
+        y: 3 * 32,
+        label: 'Coffee / Nurse Station',
+        action: () => this.healTrainer()
+      },
+      {
+        type: 'pc',
+        x: 12 * 32,
+        y: 3 * 32,
+        label: 'Dev PC Terminal',
+        action: () => this.showDialogue('DEV TERMINAL', "Git status: Clean branch 'main'. 4 projects deployed to Vercel and GitHub with 0 lint errors!")
+      },
+      {
+        type: 'sign',
+        x: 8 * 32,
+        y: 14 * 32,
+        text: "📍 PALLET DEV LAB: Deepshikha Dey's Engineering Headquarters. Exit ahead to Route 1."
+      },
+      {
+        type: 'sign',
+        x: 20 * 32,
+        y: 4 * 32,
+        text: "📍 ROUTE 1: PYTHON MEADOW. High concentration of wild Flamechar & Bulbasprout in the tall grass!"
+      },
+      {
+        type: 'sign',
+        x: 8 * 32,
+        y: 16 * 32,
+        text: "📍 ROUTE 2: DATA LAKE & TELEMETRY SPRINGS. Cross bridge for live SQL streams."
+      },
+      {
+        type: 'sign',
+        x: 19 * 32,
+        y: 16 * 32,
+        text: "📍 ROUTE 3: CYBER MATRIX RUINS. Warning: Glitches and electric neural state spikes!"
+      },
+      {
+        type: 'item',
+        x: 35 * 32,
+        y: 4 * 32,
+        name: '3x Pip-Capsules',
+        collected: false,
+        grant: () => {
+          this.inventory.capsules += 3;
+          this.showDialogue('FOUND ITEM', "Deepshikha picked up 3x Pip-Capsules! Ready to catch wild Pips!");
+        }
+      },
+      {
+        type: 'item',
+        x: 4 * 32,
+        y: 26 * 32,
+        name: 'StackOverflow Elixir',
+        collected: false,
+        grant: () => {
+          this.inventory.elixirs += 1;
+          this.showDialogue('FOUND ITEM', "Deepshikha found a StackOverflow Elixir (+60 HP Restore)!");
+        }
+      },
+      {
+        type: 'item',
+        x: 36 * 32,
+        y: 22 * 32,
+        name: 'Rare Code Candy',
+        collected: false,
+        grant: () => {
+          this.inventory.candies += 1;
+          this.showDialogue('FOUND ITEM', "Deepshikha found a Rare Code Candy (+1 Level Boost)!");
+        }
+      }
+    ];
+
+    // Roaming Wild Pips in Open World
+    this.roamingPips = [
+      { species: 'flamechar', x: 23 * 32, y: 7 * 32, origX: 23 * 32, origY: 7 * 32, wander: 1.5, active: true },
+      { species: 'bulbasprout', x: 32 * 32, y: 9 * 32, origX: 32 * 32, origY: 9 * 32, wander: 1.5, active: true },
+      { species: 'aquabyte', x: 5 * 32, y: 20 * 32, origX: 5 * 32, origY: 20 * 32, wander: 1.2, active: true },
+      { species: 'buggypip', x: 26 * 32, y: 22 * 32, origX: 26 * 32, origY: 22 * 32, wander: 1.5, active: true },
+      { species: 'voltasync', x: 33 * 32, y: 19 * 32, origX: 33 * 32, origY: 19 * 32, wander: 1.5, active: true },
+      { species: 'neuropip', x: 35 * 32, y: 26 * 32, origX: 35 * 32, origY: 26 * 32, wander: 1.5, active: true }
+    ];
+  }
+
+  initDOM() {
+    this.owCanvas = document.getElementById('pip-overworld-canvas');
+    if (this.owCanvas) this.owCtx = this.owCanvas.getContext('2d');
+
+    this.dodgeCanvas = document.getElementById('pip-dodge-canvas');
+    if (this.dodgeCanvas) this.dodgeCtx = this.dodgeCanvas.getContext('2d');
+
+    // Preload trainer avatar
     this.pfpImage = new Image();
     this.pfpImage.src = 'assets/profile.jpg';
 
-    // Action Command Buttons
-    document.getElementById('btn-pip-fight')?.addEventListener('click', () => this.openSubmenu('fight'));
-    document.getElementById('btn-pip-act')?.addEventListener('click', () => this.openSubmenu('act'));
-    document.getElementById('btn-pip-item')?.addEventListener('click', () => this.openSubmenu('item'));
-    document.getElementById('btn-pip-mercy')?.addEventListener('click', () => this.openSubmenu('mercy'));
-    document.getElementById('submenu-back-btn')?.addEventListener('click', () => this.closeSubmenu());
-
-    // Wild Pip Switcher Buttons
-    document.querySelectorAll('.pip-switch-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const species = btn.getAttribute('data-pip');
-        document.querySelectorAll('.pip-switch-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.selectSpecies(species);
-      });
-    });
-
-    // Keyboard Dodging Controls (Arrow Keys & WASD)
+    // Keyboard controls
     window.addEventListener('keydown', (e) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd', ' '].includes(e.key)) {
-        if (this.isDodging) e.preventDefault();
+      const k = e.key.toLowerCase();
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', ' '].includes(k)) {
+        if (this.mode === 'overworld' || this.isDodging) e.preventDefault();
       }
-      this.keys[e.key.toLowerCase()] = true;
+      this.keys[k] = true;
+
+      // Sprinting via Shift
+      if (e.key === 'Shift') this.player.isSprinting = true;
+
+      // Interact via Space or Z or Enter
+      if ((k === ' ' || k === 'z' || k === 'enter') && this.mode === 'overworld') {
+        this.handleActionPress();
+      }
+
+      // Dex / Menu toggle via Esc or X
+      if (k === 'escape' || k === 'x') {
+        if (this.mode === 'dex') this.setMode('overworld');
+        else if (this.mode === 'overworld') this.setMode('dex');
+      }
     });
 
     window.addEventListener('keyup', (e) => {
-      this.keys[e.key.toLowerCase()] = false;
+      const k = e.key.toLowerCase();
+      this.keys[k] = false;
+      if (e.key === 'Shift') this.player.isSprinting = false;
     });
 
-    // Mobile Touch D-Pad
-    document.querySelectorAll('.dpad-btn').forEach(btn => {
+    // Touch D-Pad Handheld Buttons
+    document.querySelectorAll('.pip-handheld-controls .dpad-btn, .pip-touch-dpad .dpad-btn').forEach(btn => {
       const dir = btn.getAttribute('data-dir');
       const startMove = (e) => {
         e.preventDefault();
@@ -779,33 +1100,630 @@ class CatchThatPipGame {
       btn.addEventListener('touchstart', startMove, { passive: false });
       btn.addEventListener('touchend', stopMove, { passive: false });
     });
+
+    // Handheld [A] and [B] buttons
+    document.getElementById('btn-ctrl-a')?.addEventListener('click', () => this.handleActionPress());
+    document.getElementById('btn-ctrl-b')?.addEventListener('mousedown', () => { this.player.isSprinting = true; });
+    document.getElementById('btn-ctrl-b')?.addEventListener('mouseup', () => { this.player.isSprinting = false; });
+    document.getElementById('btn-ctrl-b')?.addEventListener('click', () => {
+      if (this.dialogueActive) this.closeDialogue();
+      else if (this.mode === 'dex') this.setMode('overworld');
+    });
+
+    // Cabinet Top Strip Buttons
+    document.getElementById('game-mode-toggle-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      if (this.mode === 'overworld') this.startBattle(this.currentSpeciesKey);
+      else this.setMode('overworld');
+    });
+
+    document.getElementById('game-dex-toggle-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      if (this.mode === 'dex') this.setMode('overworld');
+      else this.setMode('dex');
+    });
+
+    document.getElementById('dex-close-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.setMode('overworld');
+    });
+
+    // Dialogue Dismiss on click
+    document.getElementById('ow-dialogue-box')?.addEventListener('click', () => {
+      this.closeDialogue();
+    });
+
+    // Battle Action Buttons
+    document.getElementById('btn-pip-fight')?.addEventListener('click', () => this.openSubmenu('fight'));
+    document.getElementById('btn-pip-act')?.addEventListener('click', () => this.openSubmenu('act'));
+    document.getElementById('btn-pip-item')?.addEventListener('click', () => this.openSubmenu('item'));
+    document.getElementById('btn-pip-mercy')?.addEventListener('click', () => this.openSubmenu('mercy'));
+    document.getElementById('submenu-back-btn')?.addEventListener('click', () => this.closeSubmenu());
   }
 
-  selectSpecies(speciesKey) {
-    sfx.playSelect();
+  setMode(targetMode) {
+    this.mode = targetMode;
+
+    const owView = document.getElementById('view-overworld');
+    const battleView = document.getElementById('view-battle');
+    const dexView = document.getElementById('view-dex');
+    const modeBtnText = document.getElementById('game-mode-text');
+
+    if (owView) owView.style.display = targetMode === 'overworld' ? 'block' : 'none';
+    if (battleView) battleView.style.display = targetMode === 'battle' ? 'block' : 'none';
+    if (dexView) dexView.style.display = targetMode === 'dex' ? 'block' : 'none';
+
+    if (modeBtnText) {
+      if (targetMode === 'overworld') modeBtnText.textContent = '🗺️ Open World';
+      else if (targetMode === 'battle') modeBtnText.textContent = '⚔️ Battle Arena';
+      else modeBtnText.textContent = '📖 Pip-Dex';
+    }
+
+    if (targetMode === 'overworld') {
+      this.startOverworldLoop();
+      this.stopDodging();
+    } else if (targetMode === 'battle') {
+      cancelAnimationFrame(this.owAnimId);
+    } else if (targetMode === 'dex') {
+      cancelAnimationFrame(this.owAnimId);
+      this.renderDexUI();
+    }
+  }
+
+  onEnter() {
+    this.updateHUD();
+    this.setMode('overworld');
+    sfx.setBgmForView('game');
+  }
+
+  onLeave() {
+    cancelAnimationFrame(this.owAnimId);
+    this.stopDodging();
+    sfx.stopAllBgm();
+  }
+
+  // ========================================================
+  // 2D OPEN WORLD ENGINE (TILING, ENTITIES, WALKING ANIMATIONS)
+  // ========================================================
+  startOverworldLoop() {
+    cancelAnimationFrame(this.owAnimId);
+    const loop = () => {
+      if (this.mode !== 'overworld') return;
+      this.updateOverworldPhysics();
+      this.drawOverworld();
+      this.owAnimId = requestAnimationFrame(loop);
+    };
+    this.owAnimId = requestAnimationFrame(loop);
+  }
+
+  updateOverworldPhysics() {
+    if (this.dialogueActive) return;
+
+    const p = this.player;
+    let dx = 0;
+    let dy = 0;
+
+    // Movement keys
+    if (this.keys['arrowup'] || this.keys['w'] || this.keys['up']) { dy -= 1; p.dir = 1; }
+    if (this.keys['arrowdown'] || this.keys['s'] || this.keys['down']) { dy += 1; p.dir = 0; }
+    if (this.keys['arrowleft'] || this.keys['a'] || this.keys['left']) { dx -= 1; p.dir = 2; }
+    if (this.keys['arrowright'] || this.keys['d'] || this.keys['right']) { dx += 1; p.dir = 3; }
+
+    const curSpeed = p.isSprinting ? p.sprintSpeed : p.speed;
+
+    if (dx !== 0 || dy !== 0) {
+      p.isMoving = true;
+      p.animTimer++;
+      if (p.animTimer > (p.isSprinting ? 6 : 10)) {
+        p.animFrame = (p.animFrame + 1) % 4;
+        p.animTimer = 0;
+      }
+
+      // Footstep audio
+      sfx.playWalk();
+
+      // Normalize diagonal
+      if (dx !== 0 && dy !== 0) {
+        dx *= 0.7071;
+        dy *= 0.7071;
+      }
+
+      const nextX = p.x + dx * curSpeed;
+      const nextY = p.y + dy * curSpeed;
+
+      // Collision checks with solid tiles
+      if (!this.checkSolidCollision(nextX, p.y)) p.x = nextX;
+      if (!this.checkSolidCollision(p.x, nextY)) p.y = nextY;
+
+      // Sprint dust particles
+      if (p.isSprinting && Math.random() < 0.3) {
+        p.dustParticles.push({
+          x: p.x + 12 + (Math.random() - 0.5) * 8,
+          y: p.y + 24,
+          r: 2 + Math.random() * 2,
+          life: 1.0
+        });
+      }
+
+      // Stepping inside Tall Wild Grass (Tile 5)
+      const tileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
+      const tileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
+      if (this.tiles[tileRow] && this.tiles[tileRow][tileCol] === 5) {
+        p.stepCount++;
+        // 1.8% wild encounter roll per moving step in grass
+        if (p.stepCount > 35 && Math.random() < 0.045) {
+          p.stepCount = 0;
+          const grassSpecies = Math.random() < 0.5 ? 'flamechar' : 'bulbasprout';
+          this.triggerWildEncounter(grassSpecies);
+          return;
+        }
+      }
+
+      // Check collision with roaming wild Pips
+      this.roamingPips.forEach(rp => {
+        if (!rp.active) return;
+        const dist = Math.hypot((p.x + p.w / 2) - (rp.x + 16), (p.y + p.h / 2) - (rp.y + 16));
+        if (dist < 26) {
+          this.triggerWildEncounter(rp.species);
+        }
+      });
+
+      // Update zone banner name
+      this.updateCurrentZoneName(tileCol, tileRow);
+    } else {
+      p.isMoving = false;
+      p.animFrame = 0;
+    }
+
+    // Update dust particles
+    for (let i = p.dustParticles.length - 1; i >= 0; i--) {
+      const dp = p.dustParticles[i];
+      dp.life -= 0.05;
+      dp.y -= 0.4;
+      if (dp.life <= 0) p.dustParticles.splice(i, 1);
+    }
+
+    // Roaming Pips idle wander
+    const time = Date.now() * 0.001;
+    this.roamingPips.forEach((rp, idx) => {
+      rp.x = rp.origX + Math.sin(time + idx) * rp.wander * 8;
+      rp.y = rp.origY + Math.cos(time * 0.8 + idx) * rp.wander * 6;
+    });
+
+    // Center camera on player (clamped)
+    const targetCamX = p.x + p.w / 2 - this.camera.width / 2;
+    const targetCamY = p.y + p.h / 2 - this.camera.height / 2;
+    const maxCamX = this.mapCols * this.tileSize - this.camera.width;
+    const maxCamY = this.mapRows * this.tileSize - this.camera.height;
+
+    this.camera.x = Math.max(0, Math.min(maxCamX, targetCamX));
+    this.camera.y = Math.max(0, Math.min(maxCamY, targetCamY));
+  }
+
+  checkSolidCollision(px, py) {
+    const pad = 3;
+    const left = Math.floor((px + pad) / this.tileSize);
+    const right = Math.floor((px + this.player.w - pad) / this.tileSize);
+    const top = Math.floor((py + 10) / this.tileSize); // allow walking close to top
+    const bottom = Math.floor((py + this.player.h - 1) / this.tileSize);
+
+    const solidTypes = [1, 2, 6, 9]; // Wall, Desk, Water, Trees/Border
+    for (let r = top; r <= bottom; r++) {
+      for (let c = left; c <= right; c++) {
+        if (!this.tiles[r] || solidTypes.includes(this.tiles[r][c])) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  updateCurrentZoneName(c, r) {
+    const pill = document.getElementById('ow-zone-pill');
+    if (!pill) return;
+    let zone = 'Route 1: Python Meadow';
+    if (c <= 15 && r <= 13) zone = 'Pallet Dev Lab';
+    else if (c <= 16 && r >= 16) zone = 'Route 2: Data Lake';
+    else if (c >= 18 && r >= 16) zone = 'Route 3: Cyber Matrix';
+
+    pill.innerHTML = `<span>📍 ${zone}</span>`;
+  }
+
+  drawOverworld() {
+    const ctx = this.owCtx;
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, this.camera.width, this.camera.height);
+    const cx = Math.floor(this.camera.x);
+    const cy = Math.floor(this.camera.y);
+
+    const startCol = Math.floor(cx / this.tileSize);
+    const endCol = Math.min(this.mapCols - 1, startCol + Math.ceil(this.camera.width / this.tileSize) + 1);
+    const startRow = Math.floor(cy / this.tileSize);
+    const endRow = Math.min(this.mapRows - 1, startRow + Math.ceil(this.camera.height / this.tileSize) + 1);
+
+    // 1. Draw Map Tiles
+    const time = Date.now() * 0.003;
+    for (let r = startRow; r <= endRow; r++) {
+      for (let c = startCol; c <= endCol; c++) {
+        const t = this.tiles[r][c];
+        const tx = c * this.tileSize - cx;
+        const ty = r * this.tileSize - cy;
+
+        if (t === 0) {
+          // Lab Parquet Floor
+          ctx.fillStyle = (r + c) % 2 === 0 ? '#d4b996' : '#c9aa83';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.strokeStyle = 'rgba(100, 70, 40, 0.15)';
+          ctx.strokeRect(tx, ty, this.tileSize, this.tileSize);
+        } else if (t === 1) {
+          // Lab Wall
+          ctx.fillStyle = '#475569';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.fillStyle = '#64748b';
+          ctx.fillRect(tx, ty, this.tileSize, 8);
+        } else if (t === 2) {
+          // Lab Desk / PC terminal / Bookshelf
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(tx + 6, ty + 6, 20, 14); // Glowing terminal screen
+        } else if (t === 3) {
+          // Cobble / Dirt Path
+          ctx.fillStyle = '#e2d4b7';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.fillStyle = '#d3c3a1';
+          ctx.fillRect(tx + 4, ty + 4, 8, 8);
+          ctx.fillRect(tx + 18, ty + 16, 6, 6);
+        } else if (t === 4) {
+          // Green Meadow Grass
+          ctx.fillStyle = '#65a30d';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          // Little flower dot
+          if ((r * 7 + c * 13) % 9 === 0) {
+            ctx.fillStyle = '#fef08a';
+            ctx.fillRect(tx + 14, ty + 12, 4, 4);
+          }
+        } else if (t === 5) {
+          // Tall Wild Grass
+          ctx.fillStyle = '#3f6212';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          // Animated rustling stalks
+          const sway = Math.sin(time + c) * 2;
+          ctx.fillStyle = '#84cc16';
+          ctx.fillRect(tx + 4 + sway, ty + 6, 3, 20);
+          ctx.fillRect(tx + 14 - sway, ty + 4, 3, 22);
+          ctx.fillRect(tx + 24 + sway, ty + 8, 3, 18);
+        } else if (t === 6) {
+          // Deep Animated Water
+          ctx.fillStyle = '#0284c7';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          const wave = Math.sin(time + r + c) * 3;
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(tx + 4, ty + 12 + wave, 14, 2);
+          ctx.fillRect(tx + 16, ty + 22 - wave, 12, 2);
+        } else if (t === 7) {
+          // Wooden Bridge
+          ctx.fillStyle = '#92400e';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.strokeStyle = '#451a03';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(tx, ty, this.tileSize, this.tileSize);
+        } else if (t === 8) {
+          // Cyber Matrix Floor
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(tx + 2, ty + 2, 28, 28);
+          // Neon glow circuit trace
+          if ((r + c) % 3 === 0) {
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillRect(tx + 14, ty + 14, 4, 4);
+          }
+        } else if (t === 9) {
+          // Border Trees / Cyber Pillars
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          ctx.fillStyle = '#15803d';
+          ctx.beginPath();
+          ctx.arc(tx + 16, ty + 16, 14, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // 2. Draw Interactive Objects & Ground Items
+    this.interactives.forEach(obj => {
+      const ox = obj.x - cx;
+      const oy = obj.y - cy;
+      if (ox < -32 || ox > this.camera.width || oy < -32 || oy > this.camera.height) return;
+
+      if (obj.type === 'heal') {
+        // Coffee Machine / Nurse Bar
+        ctx.fillStyle = '#b91c1c';
+        ctx.fillRect(ox + 4, oy + 4, 24, 24);
+        ctx.fillStyle = '#fef08a';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText('☕', ox + 8, oy + 21);
+      } else if (obj.type === 'sign') {
+        // Wooden Signpost
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(ox + 13, oy + 16, 6, 14);
+        ctx.fillStyle = '#d97706';
+        ctx.fillRect(ox + 4, oy + 4, 24, 14);
+        ctx.strokeStyle = '#451a03';
+        ctx.strokeRect(ox + 4, oy + 4, 24, 14);
+      } else if (obj.type === 'item' && !obj.collected) {
+        // Ground Pokeball / Pip-Capsule Item
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(ox + 16, oy + 16, 8, Math.PI, 0);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(ox + 16, oy + 16, 8, 0, Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.fillStyle = '#000';
+        ctx.beginPath();
+        ctx.arc(ox + 16, oy + 16, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+
+    // 3. Draw NPCs
+    this.npcs.forEach(npc => {
+      const nx = npc.x - cx;
+      const ny = npc.y - cy;
+      if (nx < -32 || nx > this.camera.width || ny < -32 || ny > this.camera.height) return;
+
+      // NPC Body
+      ctx.fillStyle = npc.color;
+      ctx.fillRect(nx + 8, ny + 10, 16, 18);
+      // Head
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.arc(nx + 16, ny + 8, 7, 0, Math.PI * 2);
+      ctx.fill();
+      // Little shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.beginPath();
+      ctx.ellipse(nx + 16, ny + 28, 8, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 4. Draw Roaming Wild Pips (Mini Sprites in Overworld!)
+    this.roamingPips.forEach(rp => {
+      if (!rp.active) return;
+      const rx = rp.x - cx;
+      const ry = rp.y - cy;
+      if (rx < -32 || rx > this.camera.width || ry < -32 || ry > this.camera.height) return;
+
+      // Cute colored wild creature orb with eyes
+      const data = this.speciesData[rp.species];
+      ctx.save();
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.beginPath();
+      ctx.ellipse(rx + 16, ry + 26, 10, 5, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Floating body
+      const floatY = ry + Math.sin(time * 3 + rp.origX) * 3;
+      if (rp.species === 'flamechar') ctx.fillStyle = '#ea580c';
+      else if (rp.species === 'bulbasprout') ctx.fillStyle = '#16a34a';
+      else if (rp.species === 'buggypip') ctx.fillStyle = '#9333ea';
+      else if (rp.species === 'aquabyte') ctx.fillStyle = '#0284c7';
+      else if (rp.species === 'voltasync') ctx.fillStyle = '#eab308';
+      else ctx.fillStyle = '#ec4899';
+
+      ctx.beginPath();
+      ctx.arc(rx + 16, floatY + 14, 11, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cute big anime eyes
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(rx + 11, floatY + 11, 3, 5);
+      ctx.fillRect(rx + 18, floatY + 11, 3, 5);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(rx + 12, floatY + 13, 2, 3);
+      ctx.fillRect(rx + 19, floatY + 13, 2, 3);
+      ctx.restore();
+    });
+
+    // 5. Draw Dust Particles
+    ctx.fillStyle = 'rgba(254, 240, 138, 0.7)';
+    this.player.dustParticles.forEach(dp => {
+      ctx.beginPath();
+      ctx.arc(dp.x - cx, dp.y - cy, dp.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // 6. Draw Player Trainer Deepshikha
+    const p = this.player;
+    const px = Math.floor(p.x - cx);
+    const py = Math.floor(p.y - cy);
+
+    // Trainer Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.beginPath();
+    ctx.ellipse(px + 12, py + 26, 9, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Leg step offsets based on animFrame
+    const stepOffset = p.isMoving ? (p.animFrame % 2 === 0 ? 3 : -3) : 0;
+
+    // Shoes
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(px + 6, py + 22 + (p.dir === 0 ? stepOffset : 0), 4, 6);
+    ctx.fillRect(px + 14, py + 22 - (p.dir === 0 ? stepOffset : 0), 4, 6);
+
+    // Red / Sage Trainer Jacket Body
+    ctx.fillStyle = '#dc2626';
+    ctx.fillRect(px + 5, py + 11, 14, 12);
+    // Yellow backpack straps
+    ctx.fillStyle = '#facc15';
+    ctx.fillRect(px + 7, py + 12, 2, 10);
+    ctx.fillRect(px + 15, py + 12, 2, 10);
+
+    // Head / Face
+    ctx.fillStyle = '#fcd34d';
+    ctx.beginPath();
+    ctx.arc(px + 12, py + 8, 7, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Flowing dark hair
+    ctx.fillStyle = '#1c1917';
+    ctx.fillRect(px + 4, py + 4, 16, 5);
+    ctx.fillRect(px + 3, py + 6, 4, 9);
+    ctx.fillRect(px + 17, py + 6, 4, 9);
+
+    // Trainer Red Cap
+    ctx.fillStyle = '#ef4444';
+    ctx.fillRect(px + 4, py + 1, 16, 4);
+    // Cap visor facing direction
+    if (p.dir === 0) ctx.fillRect(px + 8, py + 4, 8, 2); // Facing Down
+    else if (p.dir === 2) ctx.fillRect(px + 2, py + 4, 6, 2); // Facing Left
+    else if (p.dir === 3) ctx.fillRect(px + 16, py + 4, 6, 2); // Facing Right
+
+    // Tall Grass Overlay over Player's feet when inside grass (classic Pokemon immersion!)
+    const pTileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
+    const pTileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
+    if (this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] === 5) {
+      ctx.fillStyle = '#84cc16';
+      ctx.fillRect(px + 2, py + 20, 20, 8);
+    }
+  }
+
+  handleActionPress() {
+    if (this.dialogueActive) {
+      this.closeDialogue();
+      return;
+    }
+
+    // Check entity in front of player
+    const p = this.player;
+    let checkX = p.x + p.w / 2;
+    let checkY = p.y + p.h / 2;
+    const reach = 28;
+
+    if (p.dir === 0) checkY += reach;
+    else if (p.dir === 1) checkY -= reach;
+    else if (p.dir === 2) checkX -= reach;
+    else if (p.dir === 3) checkX += reach;
+
+    // Check NPC interaction
+    for (const npc of this.npcs) {
+      const dist = Math.hypot(checkX - (npc.x + 16), checkY - (npc.y + 16));
+      if (dist < 28) {
+        sfx.playClick();
+        this.showDialogue(npc.name, npc.dialogue);
+        return;
+      }
+    }
+
+    // Check Interactive Objects
+    for (const obj of this.interactives) {
+      const dist = Math.hypot(checkX - (obj.x + 16), checkY - (obj.y + 16));
+      if (dist < 28) {
+        sfx.playClick();
+        if (obj.action) obj.action();
+        else if (obj.type === 'sign') this.showDialogue('SIGNPOST', obj.text);
+        else if (obj.type === 'item' && !obj.collected) {
+          obj.collected = true;
+          sfx.playItemChime();
+          obj.grant();
+        }
+        return;
+      }
+    }
+  }
+
+  healTrainer() {
+    sfx.playHeal();
+    this.player.hp = this.player.maxHp;
+    this.updateHUD();
+    this.showDialogue('ESPRESSO NURSE HUB', "Nurse Chai brewed fresh espresso! Deepshikha and all registered Pips were restored to 100% HP!");
+  }
+
+  showDialogue(speaker, message) {
+    this.dialogueActive = true;
+    const box = document.getElementById('ow-dialogue-box');
+    const spkEl = document.getElementById('ow-dialogue-speaker');
+    const msgEl = document.getElementById('ow-dialogue-message');
+
+    if (box && spkEl && msgEl) {
+      spkEl.textContent = speaker;
+      msgEl.textContent = message;
+      box.style.display = 'flex';
+      sfx.playBlip();
+    }
+  }
+
+  closeDialogue() {
+    this.dialogueActive = false;
+    const box = document.getElementById('ow-dialogue-box');
+    if (box) box.style.display = 'none';
+  }
+
+  updateHUD() {
+    const hpEl = document.getElementById('ow-hp-count');
+    const dexEl = document.getElementById('ow-dex-count');
+    const dexNav = document.getElementById('dex-nav-count');
+
+    let count = 0;
+    Object.keys(this.dex).forEach(k => { if (this.dex[k]) count++; });
+
+    if (hpEl) hpEl.textContent = `${this.player.hp}/${this.player.maxHp}`;
+    if (dexEl) dexEl.textContent = `${count}/6`;
+    if (dexNav) dexNav.textContent = count;
+  }
+
+  // ========================================================
+  // BATTLE TRANSITION & TURN-BASED ARENA ENGINE
+  // ========================================================
+  triggerWildEncounter(speciesKey) {
+    sfx.playEncounter();
+    const flash = document.getElementById('ow-flash-overlay');
+    if (flash) {
+      flash.classList.add('flashing');
+      setTimeout(() => flash.classList.remove('flashing'), 600);
+    }
+
+    setTimeout(() => {
+      this.startBattle(speciesKey);
+    }, 450);
+  }
+
+  startBattle(speciesKey) {
     this.currentSpeciesKey = speciesKey;
-    const data = this.speciesData[speciesKey];
+    const data = this.speciesData[speciesKey] || this.speciesData.flamechar;
     this.pip = { ...data };
     this.isRefactored = false;
     this.isTamed = false;
 
-    // Update Stage UI
+    this.setMode('battle');
+
+    // Populate Enemy UI
     const nameEl = document.getElementById('enemy-pip-name');
-    const badge1 = document.getElementById('enemy-type-badge-1');
-    const badge2 = document.getElementById('enemy-type-badge-2');
+    const b1 = document.getElementById('enemy-type-badge-1');
+    const b2 = document.getElementById('enemy-type-badge-2');
     const statusTag = document.getElementById('enemy-status-tag');
     const balloon = document.getElementById('enemy-speech-balloon');
     const mascotImg = document.getElementById('enemy-mascot-img');
 
     if (nameEl) nameEl.textContent = this.pip.name;
-    if (badge1) {
-      badge1.textContent = this.pip.type1;
-      badge1.className = `psc-badge ${this.pip.badgeClass}`;
+    if (b1) {
+      b1.textContent = this.pip.type1;
+      b1.className = `psc-badge ${this.pip.badgeClass}`;
     }
-    if (badge2) badge2.textContent = this.pip.type2;
+    if (b2) b2.textContent = this.pip.type2;
     if (statusTag) {
-      statusTag.textContent = 'WILD';
-      statusTag.style.backgroundColor = '#fef08a';
+      statusTag.textContent = this.dex[speciesKey] ? 'CAUGHT' : 'WILD';
+      statusTag.style.backgroundColor = this.dex[speciesKey] ? '#a3e635' : '#fef08a';
     }
     if (balloon) balloon.innerHTML = `<span>"${this.pip.greeting}"</span>`;
     if (mascotImg && this.pip.spriteSrc) {
@@ -815,15 +1733,6 @@ class CatchThatPipGame {
 
     this.updateHpUI();
     this.typeDialogue(this.pip.greeting);
-  }
-
-  onEnter() {
-    this.selectSpecies(this.currentSpeciesKey);
-    sfx.playEncounter();
-  }
-
-  onLeave() {
-    this.stopDodging();
   }
 
   typeDialogue(text, callback) {
@@ -840,29 +1749,29 @@ class CatchThatPipGame {
         clearInterval(timer);
         if (callback) callback();
       }
-    }, 22);
+    }, 20);
   }
 
   updateHpUI() {
-    // Enemy HP
-    const enemyFill = document.getElementById('enemy-hp-fill');
-    const enemyText = document.getElementById('enemy-hp-text');
-    if (enemyFill && enemyText && this.pip) {
+    const eFill = document.getElementById('enemy-hp-fill');
+    const eText = document.getElementById('enemy-hp-text');
+    if (eFill && eText && this.pip) {
       const pct = Math.max(0, Math.min(100, (this.pip.hp / this.pip.maxHp) * 100));
-      enemyFill.style.width = `${pct}%`;
-      enemyFill.style.backgroundColor = pct > 50 ? '#22c55e' : pct > 25 ? '#eab308' : '#ef4444';
-      enemyText.textContent = `${this.pip.hp} / ${this.pip.maxHp}`;
+      eFill.style.width = `${pct}%`;
+      eFill.style.backgroundColor = pct > 50 ? '#22c55e' : pct > 25 ? '#eab308' : '#ef4444';
+      eText.textContent = `${this.pip.hp} / ${this.pip.maxHp}`;
     }
 
-    // Player HP
-    const playerFill = document.getElementById('player-hp-fill');
-    const playerText = document.getElementById('player-hp-text');
-    if (playerFill && playerText) {
+    const pFill = document.getElementById('player-hp-fill');
+    const pText = document.getElementById('player-hp-text');
+    if (pFill && pText) {
       const pct = Math.max(0, Math.min(100, (this.player.hp / this.player.maxHp) * 100));
-      playerFill.style.width = `${pct}%`;
-      playerFill.style.backgroundColor = pct > 50 ? '#22c55e' : pct > 25 ? '#eab308' : '#ef4444';
-      playerText.textContent = `${this.player.hp} / ${this.player.maxHp}`;
+      pFill.style.width = `${pct}%`;
+      pFill.style.backgroundColor = pct > 50 ? '#22c55e' : pct > 25 ? '#eab308' : '#ef4444';
+      pText.textContent = `${this.player.hp} / ${this.player.maxHp}`;
     }
+
+    this.updateHUD();
   }
 
   openSubmenu(category) {
@@ -876,22 +1785,22 @@ class CatchThatPipGame {
     panel.style.display = 'block';
 
     if (category === 'fight') {
-      title.textContent = 'CHOOSE A CODE ATTACK:';
-      const moves = [
-        { name: 'Code Strike', desc: 'Direct logic pulse (25 DMG)', dmg: 25 },
-        { name: 'Python Whip', desc: 'Fast vectorized slice (35 DMG)', dmg: 35 },
-        { name: 'SQL Query Blast', desc: 'Heavy indexed query (45 DMG)', dmg: 45 },
-        { name: 'Git Hotfix', desc: 'Critical deploy strike (55 DMG)', dmg: 55 }
+      title.textContent = 'CHOOSE A POKÉMON ATTACK:';
+      const trainerMoves = [
+        { name: 'Python Strike', type: 'FIRE', dmg: 35, desc: 'Fiery logic pulse' },
+        { name: 'SQL Query Blast', type: 'DATA', dmg: 45, desc: 'Indexed table impact' },
+        { name: 'React State Shock', type: 'ELECTRIC', dmg: 38, desc: 'High-speed async re-render' },
+        { name: 'Git Commit Patch', type: 'CODE', dmg: 55, desc: 'Critical deploy strike' }
       ];
-      moves.forEach(m => {
+      trainerMoves.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
-        btn.innerHTML = `<span class="sub-item-name">⚔ ${m.name}</span><span class="sub-item-meta">${m.desc}</span>`;
+        btn.innerHTML = `<span class="sub-item-name">⚔ ${m.name}</span><span class="sub-item-meta">${m.desc} (${m.dmg} DMG)</span>`;
         btn.addEventListener('click', () => this.executeAttack(m));
         grid.appendChild(btn);
       });
     } else if (category === 'act') {
-      title.textContent = 'COMMUNE & INTERACT WITH PIP:';
+      title.textContent = 'INTERACT & COMMUNE WITH PIP:';
       const acts = [
         { name: '* Inspect Pip', action: () => this.typeDialogue(this.pip.inspect, () => this.closeSubmenu()) },
         {
@@ -904,23 +1813,23 @@ class CatchThatPipGame {
               tag.textContent = 'REFACTORED';
               tag.style.backgroundColor = '#a7f3d0';
             }
-            this.typeDialogue(`You refactored ${this.pip.name}'s loops! Its rage pacified by 50%!`, () => this.triggerEnemyTurn());
+            this.typeDialogue(`You refactored ${this.pip.name}'s syntax! Catch probability boosted to 95%!`, () => this.triggerEnemyTurn());
           }
         },
         {
-          name: '* Console.log()',
+          name: '* Console.log Debug',
           action: () => {
             sfx.playSelect();
-            this.typeDialogue(`> console.log(${this.pip.name}): Status 200 OK. Memory leak resolved!`, () => this.triggerEnemyTurn());
+            this.typeDialogue(`> console.log(${this.pip.name}): Status 200 OK. Memory leaks resolved!`, () => this.triggerEnemyTurn());
           }
         },
         {
-          name: '* Share Coffee Break',
+          name: '* Share Chai Break',
           action: () => {
             sfx.playHeal();
             this.player.hp = Math.min(this.player.maxHp, this.player.hp + 25);
             this.updateHpUI();
-            this.typeDialogue(`You enjoyed warm chai with ${this.pip.name}! Restored 25 HP!`, () => this.triggerEnemyTurn());
+            this.typeDialogue(`You shared warm chai with ${this.pip.name}! Restored 25 HP!`, () => this.triggerEnemyTurn());
           }
         }
       ];
@@ -932,58 +1841,55 @@ class CatchThatPipGame {
         grid.appendChild(btn);
       });
     } else if (category === 'item') {
-      title.textContent = 'PIP-BAG INVENTORY:';
+      title.textContent = 'TRAINER BAG ITEMS:';
       const items = [
-        { name: 'Hot Espresso (+30 HP)', heal: 30 },
-        { name: 'Stack Overflow Elixir (+60 HP)', heal: 60 },
-        { name: 'Git Revert Serum (+25 HP)', heal: 25 },
-        { name: 'Poké-Patch (+45 HP)', heal: 45 }
+        { name: `Hot Espresso (+30 HP) [x${this.inventory.potions}]`, count: this.inventory.potions, heal: 30, use: () => this.inventory.potions-- },
+        { name: `StackOverflow Elixir (+60 HP) [x${this.inventory.elixirs}]`, count: this.inventory.elixirs, heal: 60, use: () => this.inventory.elixirs-- },
+        { name: `Rare Code Candy (+1 Lvl) [x${this.inventory.candies}]`, count: this.inventory.candies, heal: 0, lvl: true, use: () => this.inventory.candies-- }
       ];
       items.forEach(it => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
         btn.innerHTML = `<span class="sub-item-name">🧪 ${it.name}</span>`;
         btn.addEventListener('click', () => {
+          if (it.count <= 0) {
+            showToast('Item depleted!');
+            return;
+          }
+          it.use();
           sfx.playHeal();
-          this.player.hp = Math.min(this.player.maxHp, this.player.hp + it.heal);
+          if (it.lvl) {
+            this.player.level += 1;
+            showToast(`Deepshikha reached Level ${this.player.level}!`);
+          } else {
+            this.player.hp = Math.min(this.player.maxHp, this.player.hp + it.heal);
+          }
           this.updateHpUI();
-          this.typeDialogue(`Deepshikha used ${it.name}! Restored ${it.heal} HP!`, () => this.triggerEnemyTurn());
+          this.typeDialogue(`Deepshikha used an item from the bag!`, () => this.triggerEnemyTurn());
         });
         grid.appendChild(btn);
       });
     } else if (category === 'mercy') {
-      title.textContent = 'CATCH OR SPARE:';
-      const options = [
+      title.textContent = 'CATCH OR ESCAPE:';
+      const opts = [
         {
-          name: '🔴 Throw Pip-Capsule',
+          name: `🔴 Throw Pip-Capsule (x${this.inventory.capsules})`,
           desc: 'Attempt to catch the wild Pip!',
           action: () => this.attemptCatch()
         },
         {
-          name: '💛 Spare Pip',
-          desc: 'Spare the tamed Pip peacefully',
-          action: () => {
-            if (this.isRefactored || this.pip.hp <= 35) {
-              sfx.playVictory();
-              this.typeDialogue(`★ Deepshikha spared ${this.pip.name}! The encounter ended with pure harmony!`, () => {
-                showToast(`Spared ${this.pip.name} successfully!`);
-              });
-            } else {
-              this.typeDialogue(`${this.pip.name} is not ready to be spared yet! Try Refactoring first!`, () => this.triggerEnemyTurn());
-            }
-          }
-        },
-        {
-          name: '🏃 Flee / Escape',
-          desc: 'Retreat safely to Desktop OS',
+          name: '🏃 RUN / Flee to Open World',
+          desc: 'Escape battle safely back to map',
           action: () => {
             sfx.playClick();
-            switchView('desktop');
-            showToast('Safely escaped from the wild Pip!');
+            this.closeSubmenu();
+            this.typeDialogue('Got away safely!', () => {
+              setTimeout(() => this.setMode('overworld'), 500);
+            });
           }
         }
       ];
-      options.forEach(o => {
+      opts.forEach(o => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
         btn.innerHTML = `<span class="sub-item-name">${o.name}</span><span class="sub-item-meta">${o.desc}</span>`;
@@ -1002,23 +1908,35 @@ class CatchThatPipGame {
   executeAttack(move) {
     this.closeSubmenu();
     sfx.playAttack();
-    // Shake enemy sprite
+
     const sprite = document.getElementById('enemy-sprite');
     if (sprite) {
       sprite.classList.add('arena-shake');
       setTimeout(() => sprite.classList.remove('arena-shake'), 400);
     }
 
-    this.pip.hp = Math.max(0, this.pip.hp - move.dmg);
+    // Type effectiveness check
+    let mult = 1.0;
+    let effectMsg = '';
+    if ((move.type === 'FIRE' && this.pip.type1 === 'GLITCH') ||
+        (move.type === 'DATA' && this.pip.type1 === 'FIRE') ||
+        (move.type === 'ELECTRIC' && this.pip.type1 === 'WATER')) {
+      mult = 1.5;
+      effectMsg = " It's super effective!";
+    }
+
+    const dealt = Math.round(move.dmg * mult);
+    this.pip.hp = Math.max(0, this.pip.hp - dealt);
     this.updateHpUI();
 
     if (this.pip.hp <= 0) {
       sfx.playVictory();
-      this.typeDialogue(`★ Incredible! ${this.pip.name} was defeated and debugged into main branch!`, () => {
+      this.typeDialogue(`★ Incredible! Wild ${this.pip.name} was defeated! Earned 120 EXP!${effectMsg}`, () => {
         showToast(`Defeated ${this.pip.name}!`);
+        setTimeout(() => this.setMode('overworld'), 2000);
       });
     } else {
-      this.typeDialogue(`Deepshikha used ${move.name}! Dealt ${move.dmg} damage!`, () => {
+      this.typeDialogue(`Deepshikha used ${move.name}! Dealt ${dealt} damage!${effectMsg}`, () => {
         this.triggerEnemyTurn();
       });
     }
@@ -1026,42 +1944,52 @@ class CatchThatPipGame {
 
   attemptCatch() {
     this.closeSubmenu();
+    if (this.inventory.capsules <= 0) {
+      showToast('Out of Pip-Capsules! Find more in Route 1!');
+      return;
+    }
+    this.inventory.capsules--;
+
     sfx.playSelect();
     const dialogue = document.getElementById('pip-dialogue-text');
     if (dialogue) {
       dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Deepshikha threw a Pip-Capsule...!`;
     }
 
-    // Wobble sequence
     setTimeout(() => {
       sfx.playCapsuleWobble();
       if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (1)`;
-    }, 900);
+    }, 800);
 
     setTimeout(() => {
       sfx.playCapsuleWobble();
       if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (2)`;
-    }, 1800);
+    }, 1600);
 
     setTimeout(() => {
       sfx.playCapsuleWobble();
       if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (3)`;
-    }, 2700);
+    }, 2400);
 
     setTimeout(() => {
-      const catchRate = this.isRefactored ? 0.95 : (1 - this.pip.hp / this.pip.maxHp) * 0.9;
-      const success = Math.random() < Math.max(0.4, catchRate);
+      const catchRate = this.isRefactored ? 0.95 : (1 - this.pip.hp / this.pip.maxHp) * 0.85;
+      const success = Math.random() < Math.max(0.4, catchRate) || this.pip.hp <= 35;
 
-      if (success || this.pip.hp <= 35) {
+      if (success) {
         sfx.playVictory();
         this.isTamed = true;
+        this.dex[this.currentSpeciesKey] = true; // Registered to Pip-Dex!
+        this.updateHUD();
+
         const tag = document.getElementById('enemy-status-tag');
         if (tag) {
           tag.textContent = 'CAUGHT!';
           tag.style.backgroundColor = '#a3e635';
         }
+
         this.typeDialogue(`🎉 GOTCHA! Wild ${this.pip.name} was caught and registered to your Pip-Dex! ⭐`, () => {
-          showToast(`Caught ${this.pip.name}! Added to collection!`);
+          showToast(`Caught ${this.pip.name}! Added to Pip-Dex!`);
+          setTimeout(() => this.setMode('overworld'), 2200);
         });
       } else {
         sfx.playHurt();
@@ -1069,207 +1997,174 @@ class CatchThatPipGame {
           this.triggerEnemyTurn();
         });
       }
-    }, 3600);
+    }, 3200);
   }
 
-  // ========================================================
-  // UNDERTALE CANVAS BULLET HELL DODGING PHASE (ENEMY TURN)
-  // ========================================================
+  // Undertale Dodging Round (Enemy Turn)
   triggerEnemyTurn() {
     this.closeSubmenu();
-    const dialogueSection = document.getElementById('pip-dialogue-section');
+    const dSection = document.getElementById('pip-dialogue-section');
     const dodgeSection = document.getElementById('pip-dodging-section');
     const timerBadge = document.getElementById('dodge-timer-badge');
 
-    if (dialogueSection) dialogueSection.style.display = 'none';
+    if (dSection) dSection.style.display = 'none';
     if (dodgeSection) dodgeSection.style.display = 'flex';
 
     this.isDodging = true;
-    this.dodgeTimeLeft = 5.0; // 5 seconds dodging round
-    this.player.x = 260;
-    this.player.y = 95;
+    this.dodgeTimeLeft = 4.5;
+    this.dodgePlayer = { x: 260, y: 90, size: 14 };
     this.bullets = [];
 
     // Spawn bullets based on Pip type
-    this.spawnBullets();
+    for (let i = 0; i < 16; i++) {
+      this.bullets.push({
+        x: Math.random() * 520,
+        y: -10 - Math.random() * 180,
+        vx: (Math.random() - 0.5) * 2.6,
+        vy: 2.0 + Math.random() * 2.2,
+        size: 9 + Math.random() * 5,
+        type: this.pip?.bulletType || 'fire',
+        angle: Math.random() * Math.PI * 2
+      });
+    }
 
-    // Start dodge timer countdown
     clearInterval(this.dodgeInterval);
     this.dodgeInterval = setInterval(() => {
       this.dodgeTimeLeft -= 0.1;
-      if (timerBadge) {
-        timerBadge.textContent = `TIME: ${Math.max(0, this.dodgeTimeLeft).toFixed(1)}s`;
-      }
+      if (timerBadge) timerBadge.textContent = `TIME: ${Math.max(0, this.dodgeTimeLeft).toFixed(1)}s`;
       if (this.dodgeTimeLeft <= 0) {
         this.stopDodging();
       }
     }, 100);
 
-    this.startCanvasLoop();
-  }
-
-  spawnBullets() {
-    const count = 18;
-    const bType = this.pip?.bulletType || 'fire';
-
-    for (let i = 0; i < count; i++) {
-      this.bullets.push({
-        x: Math.random() * 520,
-        y: -10 - Math.random() * 200,
-        vx: (Math.random() - 0.5) * 2.5,
-        vy: 1.8 + Math.random() * 2.2,
-        size: 8 + Math.random() * 6,
-        type: bType,
-        angle: Math.random() * Math.PI * 2
-      });
-    }
-  }
-
-  stopDodging() {
-    this.isDodging = false;
-    clearInterval(this.dodgeInterval);
-    cancelAnimationFrame(this.animationFrame);
-
-    const dialogueSection = document.getElementById('pip-dialogue-section');
-    const dodgeSection = document.getElementById('pip-dodging-section');
-
-    if (dodgeSection) dodgeSection.style.display = 'none';
-    if (dialogueSection) dialogueSection.style.display = 'flex';
-
-    this.typeDialogue(`What will PIP-MASTER DEEPSHIKHA do next?`);
-  }
-
-  startCanvasLoop() {
     const loop = () => {
-      if (!this.isDodging || !this.ctx) return;
-      this.updateCanvasPhysics();
-      this.drawCanvas();
-      this.animationFrame = requestAnimationFrame(loop);
+      if (!this.isDodging || !this.dodgeCtx) return;
+      this.updateDodgePhysics();
+      this.drawDodgeCanvas();
+      this.dodgeAnimId = requestAnimationFrame(loop);
     };
-    this.animationFrame = requestAnimationFrame(loop);
+    this.dodgeAnimId = requestAnimationFrame(loop);
   }
 
-  updateCanvasPhysics() {
-    // Player movement via WASD or Arrow Keys
-    const p = this.player;
-    if (this.keys['arrowup'] || this.keys['w'] || this.keys['up']) p.y -= p.speed;
-    if (this.keys['arrowdown'] || this.keys['s'] || this.keys['down']) p.y += p.speed;
-    if (this.keys['arrowleft'] || this.keys['a'] || this.keys['left']) p.x -= p.speed;
-    if (this.keys['arrowright'] || this.keys['d'] || this.keys['right']) p.x += p.speed;
+  updateDodgePhysics() {
+    const dp = this.dodgePlayer;
+    const spd = 4.2;
+    if (this.keys['arrowup'] || this.keys['w'] || this.keys['up']) dp.y -= spd;
+    if (this.keys['arrowdown'] || this.keys['s'] || this.keys['down']) dp.y += spd;
+    if (this.keys['arrowleft'] || this.keys['a'] || this.keys['left']) dp.x -= spd;
+    if (this.keys['arrowright'] || this.keys['d'] || this.keys['right']) dp.x += spd;
 
-    // Boundary constraints
-    const pad = p.size;
-    p.x = Math.max(pad, Math.min(520 - pad, p.x));
-    p.y = Math.max(pad, Math.min(190 - pad, p.y));
+    dp.x = Math.max(dp.size, Math.min(520 - dp.size, dp.x));
+    dp.y = Math.max(dp.size, Math.min(180 - dp.size, dp.y));
 
-    // Bullets update & collision
     this.bullets.forEach(b => {
       b.x += b.vx;
       b.y += b.vy;
       b.angle += 0.05;
 
-      // Recycle bullet when falling off-screen
-      if (b.y > 200) {
+      if (b.y > 190) {
         b.y = -10;
         b.x = Math.random() * 520;
       }
 
-      // Check distance to player
-      const dx = b.x - p.x;
-      const dy = b.y - p.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-
-      if (dist < p.size + b.size * 0.6) {
-        // Player hit!
+      const dist = Math.hypot(b.x - dp.x, b.y - dp.y);
+      if (dist < dp.size + b.size * 0.6) {
         sfx.playHurt();
         this.player.hp = Math.max(0, this.player.hp - 2);
         this.updateHpUI();
-        // Displace bullet
-        b.y = 220;
-
-        // Arena shake visual feedback
-        const arena = document.getElementById('pip-dodging-section');
-        if (arena) {
-          arena.classList.add('arena-shake');
-          setTimeout(() => arena.classList.remove('arena-shake'), 250);
-        }
+        b.y = 200;
       }
     });
   }
 
-  drawCanvas() {
-    const ctx = this.ctx;
-    ctx.clearRect(0, 0, 520, 190);
+  drawDodgeCanvas() {
+    const ctx = this.dodgeCtx;
+    ctx.clearRect(0, 0, 520, 180);
 
-    // Subtle dark matrix grid background
-    ctx.strokeStyle = '#111827';
+    // Matrix grid
+    ctx.strokeStyle = '#1e293b';
     ctx.lineWidth = 1;
     for (let x = 0; x < 520; x += 30) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 190);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 180); ctx.stroke();
     }
-    for (let y = 0; y < 190; y += 30) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(520, y);
-      ctx.stroke();
+    for (let y = 0; y < 180; y += 30) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(520, y); ctx.stroke();
     }
 
-    // Draw Bullets (Flame embers, code brackets, or glitch bugs)
+    // Bullets
     this.bullets.forEach(b => {
       ctx.save();
       ctx.translate(b.x, b.y);
       ctx.rotate(b.angle);
-
       if (b.type === 'fire') {
-        // Fiery Ember bullet
         ctx.fillStyle = '#f97316';
-        ctx.beginPath();
-        ctx.arc(0, 0, b.size * 0.6, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 0.6, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#fde047';
-        ctx.beginPath();
-        ctx.arc(0, 0, b.size * 0.35, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(0, 0, b.size * 0.3, 0, Math.PI * 2); ctx.fill();
       } else if (b.type === 'data') {
-        // Floating code bracket '{ }' or semicolon ';'
-        ctx.font = `bold ${b.size * 1.5}px monospace`;
+        ctx.font = 'bold 16px monospace';
         ctx.fillStyle = '#38bdf8';
         ctx.fillText(';', 0, 0);
       } else {
-        // Glitch bug particle
         ctx.fillStyle = '#ef4444';
         ctx.fillRect(-b.size / 2, -b.size / 2, b.size, b.size);
       }
       ctx.restore();
     });
 
-    // Draw Player Character / Soul in Canvas
-    const p = this.player;
+    // Player heart soul
+    const dp = this.dodgePlayer;
     ctx.save();
-    ctx.translate(p.x, p.y);
-
-    // Glowing Undertale Soul Heart Halo around player's mini avatar
-    ctx.shadowColor = '#ef4444';
-    ctx.shadowBlur = 10;
+    ctx.translate(dp.x, dp.y);
     ctx.fillStyle = '#ef4444';
     ctx.beginPath();
-    ctx.arc(0, 0, p.size + 4, 0, Math.PI * 2);
+    ctx.arc(0, 0, dp.size, 0, Math.PI * 2);
     ctx.fill();
-
-    // Clip and draw Deepshikha's mini pixel avatar inside the heart circle!
-    ctx.beginPath();
-    ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-    ctx.clip();
-    if (this.pfpImage && this.pfpImage.complete) {
-      ctx.drawImage(this.pfpImage, -p.size, -p.size, p.size * 2, p.size * 2);
-    } else {
-      ctx.fillStyle = '#f4d06f';
-      ctx.fill();
-    }
     ctx.restore();
+  }
+
+  stopDodging() {
+    this.isDodging = false;
+    clearInterval(this.dodgeInterval);
+    cancelAnimationFrame(this.dodgeAnimId);
+
+    const dSection = document.getElementById('pip-dialogue-section');
+    const dodgeSection = document.getElementById('pip-dodging-section');
+
+    if (dodgeSection) dodgeSection.style.display = 'none';
+    if (dSection) dSection.style.display = 'flex';
+
+    this.typeDialogue(`What will PIP-MASTER DEEPSHIKHA do next?`);
+  }
+
+  // ========================================================
+  // PIP-DEX & TRAINER CARD RENDERING
+  // ========================================================
+  renderDexUI() {
+    const grid = document.getElementById('dex-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    Object.keys(this.speciesData).forEach(key => {
+      const sp = this.speciesData[key];
+      const isCaught = this.dex[key];
+
+      const card = document.createElement('div');
+      card.className = `dex-card ${isCaught ? 'caught' : ''}`;
+      card.innerHTML = `
+        <span class="dex-card-num">${sp.id}</span>
+        <img src="${sp.spriteSrc}" alt="${sp.name}" class="dex-card-img" style="filter: ${isCaught ? 'none' : 'brightness(0.3) grayscale(1)'};">
+        <span class="dex-card-name">${isCaught ? sp.name : '???'}</span>
+        <div class="dex-card-types">
+          <span class="psc-badge ${sp.badgeClass}">${sp.type1}</span>
+          <span class="psc-badge type-code">${sp.type2}</span>
+        </div>
+        <span class="dex-card-status ${isCaught ? 'caught' : 'wild'}">${isCaught ? '✓ CAUGHT' : 'UNKNOWN'}</span>
+      `;
+      grid.appendChild(card);
+    });
+
+    this.updateHUD();
   }
 }
 

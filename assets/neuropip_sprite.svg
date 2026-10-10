@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <filter id="neuro-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ec4899"/>
+    </filter>
+    <linearGradient id="neuro-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="40%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Psychic Wave Rings Floating Behind -->
+  <circle cx="80" cy="80" r="50" stroke="#f472b6" stroke-width="2" fill="none" opacity="0.4" stroke-dasharray="8 6" filter="url(#neuro-glow)"/>
+  <circle cx="80" cy="80" r="42" stroke="#818cf8" stroke-width="1.5" fill="none" opacity="0.5" stroke-dasharray="6 4"/>
+
+  <!-- Elegant Floating Psychic Tail -->
+  <path d="M75 110 C85 135 120 145 135 125 C145 110 130 95 125 105" stroke="url(#neuro-body)" stroke-width="6" stroke-linecap="round" fill="none" filter="url(#neuro-glow)"/>
+
+  <!-- Floating Body -->
+  <ellipse cx="80" cy="88" rx="24" ry="26" fill="url(#neuro-body)" stroke="#6b21a8" stroke-width="2" filter="url(#neuro-glow)"/>
+
+  <!-- Tiny Floating Arms -->
+  <ellipse cx="64" cy="92" rx="5" ry="7" fill="#f472b6" stroke="#6b21a8" stroke-width="1.5"/>
+  <ellipse cx="96" cy="92" rx="5" ry="7" fill="#f472b6" stroke="#6b21a8" stroke-width="1.5"/>
+
+  <!-- Head -->
+  <circle cx="80" cy="54" r="26" fill="url(#neuro-body)" stroke="#6b21a8" stroke-width="2"/>
+
+  <!-- Forehead Neural Crystal Gem -->
+  <polygon points="80,36 86,44 80,52 74,44" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5" filter="url(#neuro-glow)"/>
+
+  <!-- Cute Cat-like Ears -->
+  <polygon points="62,40 50,22 68,30" fill="#c084fc" stroke="#6b21a8" stroke-width="2"/>
+  <polygon points="98,40 110,22 92,30" fill="#c084fc" stroke="#6b21a8" stroke-width="2"/>
+
+  <!-- Deep Mystical Psychic Eyes -->
+  <ellipse cx="71" cy="54" rx="6" ry="8.5" fill="#1e1b4b"/>
+  <ellipse cx="89" cy="54" rx="6" ry="8.5" fill="#1e1b4b"/>
+  <ellipse cx="71" cy="54" rx="4.5" ry="7" fill="#ec4899"/>
+  <ellipse cx="89" cy="54" rx="4.5" ry="7" fill="#ec4899"/>
+  <circle cx="69" cy="51" r="2.5" fill="#ffffff"/>
+  <circle cx="87" cy="51" r="2.5" fill="#ffffff"/>
+
+  <!-- Soft Calm Smile -->
+  <path d="M77 62 Q80 65 83 62" stroke="#4c1d95" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+</svg>

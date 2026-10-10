@@ -18,75 +18,29 @@
   <!-- ======================================================== -->
   <!-- VIEW 1: RETRO OS DESKTOP (LANDING PAGE - ELAINE STYLE)   -->
   <!-- ======================================================== -->
+  <!-- VIEW 1: RETRO OS DESKTOP (ELAINE STYLE WORKSPACE)        -->
+  <!-- ======================================================== -->
   <section id="desktop-view" class="view active">
     
-    <!-- Top Bar / Header Controls -->
-    <header class="os-header">
-      <div class="os-header-left">
-        <button id="view-about-top-btn" class="retro-icon-btn" title="Open Full About Me Page">
-          <span class="chevron-icon">&lt;</span>
-        </button>
-        <span class="os-clock" id="os-clock">14:15</span>
-      </div>
-      <h1 class="portfolio-title">PORTFOLIO</h1>
-      <div class="os-header-right">
-        <button id="music-toggle-btn" class="retro-icon-btn music-btn" title="Toggle Royalty-Free 8-Bit Game Music">
-          <span id="music-icon">🎵 BGM</span>
-        </button>
-        <button id="sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects (Undertale & Retro SFX)">
-          <span id="sound-icon">🔊 SFX</span>
-        </button>
-        <button id="quick-about-btn" class="pill-btn highlight" title="Open Full About Me Page">
-          <img src="assets/icon_profile_trainer.svg" alt="Badge" class="btn-micro-icon">
-          <span>About Me ↗</span>
-        </button>
-        <button id="quick-works-btn" class="pill-btn highlight-olive" title="Open Works &amp; Repositories Page">
-          <img src="assets/icon_works_game.svg" alt="Bag" class="btn-micro-icon">
-          <span>Works 📁</span>
-        </button>
-        <button id="quick-game-btn" class="pill-btn highlight-red" title="Play Catch That Pip Mini-Game">
-          <img src="assets/icon_pip_capsule.svg" alt="Capsule" class="btn-micro-icon">
-          <span>Catch That Pip 🎮</span>
-        </button>
-      </div>
-    </header>
-
-    <!-- Desktop Pip-Trainer Quest HUD (Game Component) -->
-    <div class="desktop-trainer-hud-bar" id="desktop-quest-hud">
-      <div class="dth-left">
-        <span class="dth-badge">🎮 PIP-MASTER</span>
-        <span class="dth-name">DEEPSHIKHA</span>
-        <span class="dth-level">LV. 28</span>
-      </div>
-      <div class="dth-center">
-        <span class="dth-quest-star">★</span>
-        <span class="dth-quest-text">CURRENT QUEST: Catch wild <strong>FLAMECHAR</strong> in <em>Catch That Pip</em> &amp; explore all GitHub Repositories!</span>
-      </div>
-      <div class="dth-right">
-        <span class="dth-exp-pill">EXP 894/1000 (CGPA 8.94)</span>
-        <span class="dth-dex-pill">PIP-DEX: 4 DISCOVERED</span>
-      </div>
-    </div>
-
     <!-- Main Desktop Workspace with Grid Background -->
     <main class="desktop-workspace">
 
-      <!-- Desktop Sidebar Left Icons (Unique Game-Like Logos) -->
+      <!-- Desktop Sidebar Left Icons (Professional File & Folder Format) -->
       <aside class="desktop-icons-col left-col">
-        <div class="desktop-icon-item" id="icon-profile" tabindex="0" role="button" aria-label="Open Profile and About Me">
+        <div class="desktop-icon-item" id="icon-profile" tabindex="0" role="button" aria-label="Open Profile and Bio">
           <div class="icon-box custom-game-icon-box">
             <img src="assets/icon_profile_trainer.svg" alt="Trainer Profile Badge" class="game-icon-img">
           </div>
-          <span class="icon-label">profile</span>
-          <span class="icon-hint">About Me</span>
+          <span class="icon-label">profile.sys</span>
+          <span class="icon-hint">About &amp; Bio</span>
         </div>
 
-        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Repositories">
+        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Projects Archive">
           <div class="icon-box custom-game-icon-box">
             <img src="assets/icon_works_game.svg" alt="Works Pip-Dex Bag" class="game-icon-img">
           </div>
-          <span class="icon-label">works</span>
-          <span class="icon-hint">GitHub &amp; Apps</span>
+          <span class="icon-label">projects.dir</span>
+          <span class="icon-hint">Code &amp; Repos</span>
         </div>
 
         <div class="desktop-icon-item" id="icon-game" tabindex="0" role="button" aria-label="Play Catch That Pip Mini-Game">
@@ -94,14 +48,14 @@
             <img src="assets/icon_pip_capsule.svg" alt="Catch That Pip Capsule" class="game-icon-img">
           </div>
           <span class="icon-label">catch_pip.exe</span>
-          <span class="icon-hint">Catch That Pip!</span>
+          <span class="icon-hint">Arcade Game</span>
         </div>
       </aside>
 
       <!-- Center Windows Container -->
       <div class="desktop-center-area">
 
-        <!-- Top Social Strip 1 -->
+        <!-- Top Social & Utilities Strip -->
         <div class="social-bar">
           <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="social-pill linkedin" title="LinkedIn Profile">
             <span>in</span>
@@ -114,15 +68,21 @@
           <a href="mailto:dey.deepshikha.283@gmail.com" class="social-pill email" title="Send Email">
             <span>✉</span>
           </a>
-          <button id="open-tableau-pill" class="social-pill tableau" title="Data Science & Dashboards">
+          <button id="open-tableau-pill" class="social-pill tableau" title="Data Science &amp; Dashboards">
             <span>📊</span>
+          </button>
+          <button id="music-toggle-btn" class="social-pill music-pill" title="Toggle Royalty-Free 8-Bit Game Music">
+            <span id="music-icon">🎵 BGM</span>
+          </button>
+          <button id="sound-toggle-btn" class="social-pill sound-btn" title="Toggle Sound Effects">
+            <span id="sound-icon">🔊 SFX</span>
           </button>
         </div>
 
-        <!-- RETRO WINDOW 1: C:\DEEPSHIKHA\portfolio -->
+        <!-- RETRO WINDOW 1: C:\DEEPSHIKHA\profile\overview.sys -->
         <article class="retro-window" id="window-portfolio">
           <div class="window-titlebar">
-            <span class="window-title">C:\DEEPSHIKHA\portfolio</span>
+            <span class="window-title">C:\DEEPSHIKHA\profile\overview.sys</span>
             <div class="window-controls">
               <button class="win-btn minimize" title="Minimize">−</button>
               <button class="win-btn close" title="Close">×</button>
@@ -152,10 +112,10 @@
           </div>
         </article>
 
-        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\toolbox (Tools & Tech Showcase) -->
+        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\skills_and_projects.sys (Tools & Tech Showcase) -->
         <article class="retro-window" id="window-works">
           <div class="window-titlebar">
-            <span class="window-title">C:\DEEPSHIKHA\toolbox</span>
+            <span class="window-title">C:\DEEPSHIKHA\skills_and_projects.sys</span>
             <div class="window-controls">
               <button class="win-btn minimize" title="Minimize">−</button>
               <button class="win-btn close" title="Close">×</button>
@@ -310,7 +270,8 @@
               <circle cx="24" cy="22" r="5" fill="#3D3A2A"/>
             </svg>
           </div>
-          <span class="icon-label">contact</span>
+          <span class="icon-label">contact.msg</span>
+          <span class="icon-hint">Get in Touch</span>
         </div>
 
         <div class="desktop-icon-item" id="icon-resume" tabindex="0" role="button" aria-label="Open Resume &amp; CV">
@@ -320,24 +281,12 @@
               <path d="M16 15H32M16 21H32M16 27H26" stroke="#3D3A2A" stroke-width="2.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <span class="icon-label">resume</span>
+          <span class="icon-label">resume.pdf</span>
+          <span class="icon-hint">Official CV</span>
         </div>
       </aside>
 
     </main>
-
-    <!-- Bottom Status / Help Bar -->
-    <footer class="os-footer-bar">
-      <div class="taskbar-left">
-        <span class="taskbar-start-badge">📁 DEEPSHIKHA-OS</span>
-        <span class="taskbar-item active">portfolio.exe</span>
-        <span class="taskbar-item">works.exe</span>
-      </div>
-      <div class="taskbar-right">
-        <span class="badge-status">● ONLINE</span>
-        <span class="location-badge">Pune, India (Grad 2027)</span>
-      </div>
-    </footer>
 
   </section>
 
@@ -347,27 +296,6 @@
   <!-- ======================================================== -->
   <section id="about-view" class="view">
     
-    <!-- Top Navigation Ribbon -->
-    <nav class="scrapbook-nav">
-      <button id="back-to-desktop-btn" class="back-pill-btn">
-        <span class="back-arrow">&larr;</span> Back to Desktop OS
-      </button>
-      <div class="scrapbook-nav-brand">
-        <span class="heart-pixel">♥</span> Deepshikha Dey &bull; Profile &amp; Resume
-      </div>
-      <div class="scrapbook-nav-actions">
-        <button id="about-to-works-btn" class="back-pill-btn">
-          <span>📁</span> Works
-        </button>
-        <button id="about-to-game-btn" class="back-pill-btn">
-          <span class="pixel-heart-sm">♥</span> Catch That Pips! 🎮
-        </button>
-        <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="download-resume-btn">
-          <span>⬇ Download Official PDF</span>
-        </a>
-      </div>
-    </nav>
-
     <!-- Scrapbook Main Canvas with Red & Cream Gingham Border -->
     <div class="scrapbook-wrapper">
       <div class="scrapbook-page">
@@ -375,10 +303,16 @@
         <!-- Top Header Strip: Pixel Heart & Role Pill -->
         <header class="scrapbook-header">
           <div class="sh-left">
+            <button id="back-to-desktop-btn" class="scrapbook-nav-tag" title="Return to Desktop OS">
+              &larr; Desktop
+            </button>
             <span class="pixel-tag">♥ Resume &amp; Profile</span>
           </div>
           <div class="sh-right">
             <span class="editorial-pill">Computer Science &bull; Data Science &bull; Front-End</span>
+            <button id="about-to-works-btn" class="scrapbook-subnav-btn" title="View Projects &amp; Code">📁 Works</button>
+            <button id="about-to-game-btn" class="scrapbook-subnav-btn" title="Play Arcade Game">🎮 Catch Pip</button>
+            <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="scrapbook-subnav-btn download-accent" title="Download Official PDF">⬇ PDF</a>
           </div>
         </header>
 
@@ -644,27 +578,6 @@
   <!-- ======================================================== -->
   <section id="works-view" class="view">
     
-    <!-- Top Navigation Ribbon -->
-    <nav class="works-nav">
-      <button id="works-back-to-desktop-btn" class="back-pill-btn">
-        <span class="back-arrow">&larr;</span> Back to Desktop OS
-      </button>
-      <div class="works-nav-brand">
-        <span class="folder-pixel">📁</span> Deepshikha Dey &bull; Projects &amp; Code Archive
-      </div>
-      <div class="works-nav-actions">
-        <button id="works-to-about-btn" class="back-pill-btn">
-          <span class="heart-pixel">♥</span> About Me
-        </button>
-        <button id="works-to-game-btn" class="back-pill-btn">
-          <span class="pixel-heart-sm">♥</span> Catch That Pips! 🎮
-        </button>
-        <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="download-resume-btn">
-          <span>⬇ Resume</span>
-        </a>
-      </div>
-    </nav>
-
     <!-- Works Scrapbook Canvas with Red & Cream Gingham Border (Matching Profile Page Aesthetic) -->
     <div class="scrapbook-wrapper works-scrapbook-wrapper">
       <div class="scrapbook-page works-scrapbook-page">
@@ -672,10 +585,16 @@
         <!-- Top Header Strip: Pixel Tag & Role Pill (Matching Daksh / Maryam Aesthetic) -->
         <header class="scrapbook-header">
           <div class="sh-left">
+            <button id="works-back-to-desktop-btn" class="scrapbook-nav-tag" title="Return to Desktop OS">
+              &larr; Desktop
+            </button>
             <span class="pixel-tag">📁 Works &amp; Code Archive</span>
           </div>
           <div class="sh-right">
             <span class="editorial-pill">Computer Science &bull; Data Science &bull; GitHub Live Auto-Sync</span>
+            <button id="works-to-about-btn" class="scrapbook-subnav-btn" title="View Profile &amp; Bio">♥ About Me</button>
+            <button id="works-to-game-btn" class="scrapbook-subnav-btn" title="Play Arcade Game">🎮 Catch Pip</button>
+            <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="scrapbook-subnav-btn download-accent" title="Download Official PDF">⬇ PDF</a>
           </div>
         </header>
 
@@ -753,10 +672,10 @@
               </div>
             </div>
             <div class="psc-actions">
-              <button class="retro-btn primary run-project-btn" data-url="projects/traffic-sim/index.html" data-title="Smart Traffic Grid &amp; Circuit Simulator">
+              <button class="retro-btn primary run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid &amp; Circuit Simulator">
                 <span>🚀 Launch Simulation</span>
               </button>
-              <a href="projects/traffic-sim/index.html" target="_blank" class="retro-btn secondary">
+              <a href="projects/traffic-grid-simulation/index.html" target="_blank" class="retro-btn secondary">
                 <span>Open Full Tab ↗</span>
               </a>
             </div>
@@ -785,10 +704,10 @@
               </div>
             </div>
             <div class="psc-actions">
-              <button class="retro-btn primary run-project-btn" data-url="projects/weather-hub/index.html" data-title="GlobalPulse Weather Hub">
+              <button class="retro-btn primary run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub">
                 <span>🛰️ Launch Weather Hub</span>
               </button>
-              <a href="projects/weather-hub/index.html" target="_blank" class="retro-btn secondary">
+              <a href="projects/weather-telemetry-hub/index.html" target="_blank" class="retro-btn secondary">
                 <span>Open Full Tab ↗</span>
               </a>
             </div>
@@ -817,10 +736,10 @@
               </div>
             </div>
             <div class="psc-actions">
-              <button class="retro-btn primary run-project-btn" data-url="projects/aura-calc/index.html" data-title="AuraCalc Calculator">
+              <button class="retro-btn primary run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator">
                 <span>🔢 Launch AuraCalc</span>
               </button>
-              <a href="projects/aura-calc/index.html" target="_blank" class="retro-btn secondary">
+              <a href="projects/auracalc-suite/index.html" target="_blank" class="retro-btn secondary">
                 <span>Open Full Tab ↗</span>
               </a>
             </div>
@@ -963,30 +882,6 @@
   <section id="game-view" class="view">
     
     <!-- Top Navigation Ribbon -->
-    <nav class="game-nav">
-      <button id="game-back-to-desktop-btn" class="back-pill-btn">
-        <span class="back-arrow">&larr;</span> Back to Desktop OS
-      </button>
-      <div class="game-nav-brand">
-        <img src="assets/icon_pip_capsule.svg" alt="Capsule" class="nav-mini-pip">
-        <span>CATCH THAT PIP! &bull; Pip-Master Dev Arena</span>
-      </div>
-      <div class="game-nav-actions">
-        <button id="game-music-toggle-btn" class="retro-icon-btn music-btn" title="Toggle Royalty-Free 8-Bit Game Music">
-          <span id="game-music-icon">🎵 BGM</span>
-        </button>
-        <button id="game-sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects">
-          <span id="game-sound-icon">🔊 SFX</span>
-        </button>
-        <button id="game-to-works-btn" class="back-pill-btn">
-          <span>📁</span> Works Page
-        </button>
-        <button id="game-to-about-btn" class="back-pill-btn">
-          <span class="heart-pixel">♥</span> About Me
-        </button>
-      </div>
-    </nav>
-
     <!-- Main Game Wrapper with CRT retro console screen -->
     <div class="pip-game-wrapper">
       
@@ -997,196 +892,260 @@
 
       <div class="pip-game-cabinet">
         
-        <!-- Retro Cabinet Top Title Bar -->
+        <!-- Retro Cabinet Top Title Bar (Clean & decluttered) -->
         <div class="cabinet-top-strip">
           <div class="cabinet-brand">
-            <span class="pip-dot red"></span>
-            <span class="pip-dot yellow"></span>
-            <span class="pip-dot green"></span>
-            <span class="cabinet-title">PIP-BOY ADVANCE 2026 // DEV EDITION</span>
+            <button id="game-back-to-desktop-btn" class="cabinet-back-btn" title="Return to Desktop OS">
+              &larr; Desktop OS
+            </button>
+            <span class="cabinet-title">PIP-BOY ADVANCE // OPEN WORLD DEV REGION</span>
           </div>
 
-          <!-- Wild Pip Switcher / Selector Pills -->
-          <div class="pip-species-switcher" id="pip-species-switcher">
-            <span class="switcher-label">WILD PIP:</span>
-            <button class="pip-switch-btn active" data-pip="flamechar">🔥 Flamechar</button>
-            <button class="pip-switch-btn" data-pip="bulbasprout">🌿 Bulbasprout</button>
-            <button class="pip-switch-btn" data-pip="buggypip">👾 Buggypip</button>
+          <div class="cabinet-strip-actions">
+            <button id="game-audio-toggle-btn" class="cabinet-ctrl-pill" title="Toggle Game Audio">
+              <span id="game-audio-icon">🎵 Audio: OFF</span>
+            </button>
+            <button id="game-mode-toggle-btn" class="cabinet-ctrl-pill highlight" title="Toggle Mode">
+              <span id="game-mode-text">🗺️ Open World</span>
+            </button>
+            <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Open Pip-Dex">
+              <span>📖 Pip-Dex (<span id="dex-nav-count">0</span>/6)</span>
+            </button>
           </div>
-
-          <div class="cabinet-mode-badge" id="pip-battle-status-badge">WILD PIP ENCOUNTER!</div>
         </div>
 
-        <!-- Battle Screen Stage -->
-        <div class="pip-battle-stage" id="pip-battle-stage">
+        <!-- SCREEN CONTAINER (Houses Overworld, Battle Arena, and Pip-Dex Menu) -->
+        <div class="pip-screen-container" id="pip-screen-container">
 
-          <!-- ENEMY ROW: Wild Pip (Top-Right) -->
-          <div class="pip-stage-row enemy-row">
+          <!-- SCREEN LAYER 1: 2D POKEMON OPEN WORLD -->
+          <div class="pip-screen-view active" id="view-overworld">
+            <canvas id="pip-overworld-canvas" width="640" height="360"></canvas>
             
-            <!-- Enemy Status Box (Classic creature-taming HUD) -->
-            <div class="pip-status-card enemy-card">
-              <div class="psc-header">
-                <span class="psc-name" id="enemy-pip-name">FLAMECHAR</span>
-                <span class="psc-level" id="enemy-pip-level">:L28</span>
+            <!-- Overworld Top HUD Overlay -->
+            <div class="ow-hud-overlay">
+              <div class="ow-zone-pill" id="ow-zone-pill">
+                <span>📍 Pallet Dev Lab</span>
               </div>
-              <div class="psc-type-row" id="enemy-type-row">
-                <span class="psc-badge type-fire" id="enemy-type-badge-1">FIRE</span>
-                <span class="psc-badge type-code" id="enemy-type-badge-2">CODE</span>
-                <span class="psc-status-tag" id="enemy-status-tag">WILD</span>
-              </div>
-              <div class="psc-hp-wrap">
-                <span class="psc-hp-label">HP</span>
-                <div class="psc-hp-track">
-                  <div class="psc-hp-fill" id="enemy-hp-fill" style="width: 100%;"></div>
-                </div>
-              </div>
-              <div class="psc-hp-numbers">
-                <span id="enemy-hp-text">85 / 85</span>
+              <div class="ow-stats-pill">
+                <span>PIPS: <strong id="ow-dex-count">0/6</strong></span>
+                <span>HP: <strong id="ow-hp-count">100/100</strong></span>
               </div>
             </div>
 
-            <!-- Enemy Pedestal & Sprite Box -->
-            <div class="pip-sprite-pedestal enemy-pedestal">
-              <div class="pedestal-shadow"></div>
-              <div class="pip-creature-sprite" id="enemy-sprite">
-                <div class="pip-sprite-inner" id="enemy-sprite-inner">
-                  <!-- Flamechar Mascot Sprite Image -->
-                  <img src="assets/flamechar_sprite.svg" alt="Flamechar Pip" class="pip-mascot-img" id="enemy-mascot-img">
+            <!-- In-Game Overworld Dialogue Box (For signs, NPCs, item pickups) -->
+            <div class="ow-dialogue-box" id="ow-dialogue-box" style="display: none;">
+              <div class="ow-speaker" id="ow-dialogue-speaker">Dev Mentor</div>
+              <div class="ow-message" id="ow-dialogue-message">Welcome to the Open Dev Region!</div>
+              <div class="ow-prompt">▼ Press [A] or Space to continue</div>
+            </div>
+
+            <!-- Wild Encounter Screen Flash Overlay -->
+            <div class="ow-flash-overlay" id="ow-flash-overlay"></div>
+          </div>
+
+          <!-- SCREEN LAYER 2: CLASSIC POKEMON BATTLE ARENA -->
+          <div class="pip-screen-view" id="view-battle" style="display: none;">
+            
+            <!-- Battle Screen Stage -->
+            <div class="pip-battle-stage" id="pip-battle-stage">
+
+              <!-- ENEMY ROW: Wild Pip (Top-Right) -->
+              <div class="pip-stage-row enemy-row">
+                
+                <!-- Enemy Status Box -->
+                <div class="pip-status-card enemy-card">
+                  <div class="psc-header">
+                    <span class="psc-name" id="enemy-pip-name">FLAMECHAR</span>
+                    <span class="psc-level" id="enemy-pip-level">:L28</span>
+                  </div>
+                  <div class="psc-type-row" id="enemy-type-row">
+                    <span class="psc-badge type-fire" id="enemy-type-badge-1">FIRE</span>
+                    <span class="psc-badge type-code" id="enemy-type-badge-2">CODE</span>
+                    <span class="psc-status-tag" id="enemy-status-tag">WILD</span>
+                  </div>
+                  <div class="psc-hp-wrap">
+                    <span class="psc-hp-label">HP</span>
+                    <div class="psc-hp-track">
+                      <div class="psc-hp-fill" id="enemy-hp-fill" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                  <div class="psc-hp-numbers">
+                    <span id="enemy-hp-text">85 / 85</span>
+                  </div>
+                </div>
+
+                <!-- Enemy Pedestal & Sprite Box -->
+                <div class="pip-sprite-pedestal enemy-pedestal">
+                  <div class="pedestal-shadow"></div>
+                  <div class="pip-creature-sprite" id="enemy-sprite">
+                    <div class="pip-sprite-inner" id="enemy-sprite-inner">
+                      <img src="assets/flamechar_sprite.svg" alt="Flamechar Pip" class="pip-mascot-img" id="enemy-mascot-img">
+                    </div>
+                  </div>
+                  <div class="enemy-speech-balloon" id="enemy-speech-balloon">
+                    <span>"Flamechar sparks with enthusiasm!"</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- PLAYER ROW: Trainer Deepshikha (Bottom-Left) -->
+              <div class="pip-stage-row player-row">
+                
+                <!-- Player Pedestal & Character Sprite -->
+                <div class="pip-sprite-pedestal player-pedestal">
+                  <div class="pedestal-shadow"></div>
+                  <div class="player-trainer-sprite-card" id="player-sprite">
+                    <div class="trainer-avatar-frame">
+                      <img src="assets/profile.jpg" alt="Trainer Deepshikha" class="trainer-pfp-img" id="trainer-pfp-img">
+                      <div class="trainer-badge-pill">DEEPSHIKHA</div>
+                    </div>
+                    <div class="trainer-aura-glow"></div>
+                  </div>
+                </div>
+
+                <!-- Player Status Box -->
+                <div class="pip-status-card player-card">
+                  <div class="psc-header">
+                    <span class="psc-name">DEEPSHIKHA</span>
+                    <span class="psc-level" id="player-level-badge">:L28</span>
+                  </div>
+                  <div class="psc-type-row">
+                    <span class="psc-badge type-trainer">TRAINER</span>
+                    <span class="psc-badge type-cs">DATA &amp; CS</span>
+                  </div>
+                  <div class="psc-hp-wrap">
+                    <span class="psc-hp-label">HP</span>
+                    <div class="psc-hp-track">
+                      <div class="psc-hp-fill player-hp" id="player-hp-fill" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                  <div class="psc-hp-numbers">
+                    <span id="player-hp-text">100 / 100</span>
+                  </div>
+                  <!-- EXP Bar -->
+                  <div class="psc-exp-wrap">
+                    <span class="psc-exp-label">EXP</span>
+                    <div class="psc-exp-track">
+                      <div class="psc-exp-fill" id="player-exp-fill" style="width: 89.4%;" title="EXP Progress"></div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- BATTLE / DODGING INTERACTIVE LOWER BOX -->
+            <div class="pip-interactive-console">
+
+              <!-- Dialogue Stream & Action Options -->
+              <div class="pip-dialogue-section" id="pip-dialogue-section">
+                <div class="dialogue-panel-header">
+                  <span class="dialogue-prompt-icon">▶</span>
+                  <div class="dialogue-text-stream" id="pip-dialogue-text">
+                    What will PIP-MASTER DEEPSHIKHA do?
+                  </div>
+                </div>
+
+                <!-- Submenu List (FIGHT moves, BAG items, etc.) -->
+                <div class="pip-submenu-panel" id="pip-submenu-panel" style="display: none;">
+                  <div class="submenu-title-bar">
+                    <span id="submenu-title">CHOOSE A MOVE:</span>
+                    <button class="submenu-back-btn" id="submenu-back-btn">&times; Back</button>
+                  </div>
+                  <div class="submenu-options-grid" id="submenu-options-grid"></div>
                 </div>
               </div>
-              <div class="enemy-speech-balloon" id="enemy-speech-balloon">
-                <span>"Flamechar sparks with enthusiasm! Its tail flame crackles with Python bytecode!"</span>
+
+              <!-- Undertale Dodging Arena Phase -->
+              <div class="pip-dodging-section" id="pip-dodging-section" style="display: none;">
+                <div class="dodge-header-bar">
+                  <span class="dodge-warning">⚠️ ENEMY TURN! DODGE THE GLITCH ATTACK!</span>
+                  <span class="dodge-timer-badge" id="dodge-timer-badge">TIME: 5.0s</span>
+                </div>
+                <div class="dodge-canvas-frame">
+                  <canvas id="pip-dodge-canvas" width="520" height="180"></canvas>
+                </div>
               </div>
+
+              <!-- 4 Classic Pokemon Battle Command Buttons -->
+              <div class="pip-action-command-bar" id="pip-action-bar">
+                <button class="pip-cmd-btn btn-battle" id="btn-pip-fight" data-action="fight">
+                  <span class="cmd-icon">⚔</span>
+                  <span class="cmd-title">FIGHT</span>
+                  <span class="cmd-sub">4 Attacks</span>
+                </button>
+                <button class="pip-cmd-btn btn-commune" id="btn-pip-act" data-action="act">
+                  <span class="cmd-icon">💬</span>
+                  <span class="cmd-title">ACT</span>
+                  <span class="cmd-sub">Refactor &amp; Chai</span>
+                </button>
+                <button class="pip-cmd-btn btn-bag" id="btn-pip-item" data-action="item">
+                  <span class="cmd-icon">🎒</span>
+                  <span class="cmd-title">BAG</span>
+                  <span class="cmd-sub">Potions &amp; Items</span>
+                </button>
+                <button class="pip-cmd-btn btn-catch" id="btn-pip-mercy" data-action="mercy">
+                  <span class="cmd-icon">🔴</span>
+                  <span class="cmd-title">CATCH</span>
+                  <span class="cmd-sub">Capsule &amp; Run</span>
+                </button>
+              </div>
+
             </div>
 
           </div>
 
-          <!-- PLAYER ROW: Trainer Deepshikha (Bottom-Left) -->
-          <div class="pip-stage-row player-row">
-            
-            <!-- Player Pedestal & Character Sprite (Using user's actual profile picture!) -->
-            <div class="pip-sprite-pedestal player-pedestal">
-              <div class="pedestal-shadow"></div>
-              
-              <div class="player-trainer-sprite-card" id="player-sprite">
-                <div class="trainer-avatar-frame">
-                  <img src="assets/profile.jpg" alt="Pip-Master Deepshikha" class="trainer-pfp-img" id="trainer-pfp-img">
-                  <div class="trainer-badge-pill">DEEPSHIKHA</div>
+          <!-- SCREEN LAYER 3: PIP-DEX & TRAINER MENU -->
+          <div class="pip-screen-view" id="view-dex" style="display: none;">
+            <div class="pip-dex-container">
+              <div class="dex-header-bar">
+                <h3>POKÉMON / PIP-DEX ARCHIVE &mdash; DEV REGION</h3>
+                <button class="dex-close-btn" id="dex-close-btn">&times; Close Dex</button>
+              </div>
+              <div class="dex-grid" id="dex-grid">
+                <!-- Dynamically populated 6 Pips cards -->
+              </div>
+              <div class="dex-trainer-card">
+                <div class="dtc-left">
+                  <img src="assets/profile.jpg" alt="Deepshikha Dey" class="dtc-avatar">
+                  <div>
+                    <h4>TRAINER DEEPSHIKHA DEY</h4>
+                    <p>B.Tech Computer Science &bull; CGPA 8.94 / 10.0 &bull; Grad 2027</p>
+                  </div>
                 </div>
-                <div class="trainer-aura-glow"></div>
-              </div>
-            </div>
-
-            <!-- Player Status Box -->
-            <div class="pip-status-card player-card">
-              <div class="psc-header">
-                <span class="psc-name">DEEPSHIKHA</span>
-                <span class="psc-level">:L28</span>
-              </div>
-              <div class="psc-type-row">
-                <span class="psc-badge type-trainer">PIP-MASTER</span>
-                <span class="psc-badge type-cs">DATA &amp; CODE</span>
-              </div>
-              <div class="psc-hp-wrap">
-                <span class="psc-hp-label">HP</span>
-                <div class="psc-hp-track">
-                  <div class="psc-hp-fill player-hp" id="player-hp-fill" style="width: 100%;"></div>
-                </div>
-              </div>
-              <div class="psc-hp-numbers">
-                <span id="player-hp-text">100 / 100</span>
-              </div>
-              <!-- EXP Bar -->
-              <div class="psc-exp-wrap">
-                <span class="psc-exp-label">EXP</span>
-                <div class="psc-exp-track">
-                  <div class="psc-exp-fill" style="width: 89.4%;" title="CGPA: 8.94"></div>
+                <div class="dtc-badges-row">
+                  <div class="badge-item active" title="Python Hub Badge">🏆 PYTHON</div>
+                  <div class="badge-item active" title="Data Analytics Badge">📊 DATA VIZ</div>
+                  <div class="badge-item active" title="SevraOS Telemetry Badge">🛰️ TELEMETRY</div>
+                  <div class="badge-item active" title="Frontend Web Badge">⚛️ REACT</div>
                 </div>
               </div>
             </div>
-
           </div>
 
         </div>
 
-        <!-- BATTLE / DODGING INTERACTIVE LOWER BOX -->
-        <div class="pip-interactive-console">
-
-          <!-- MODE 1: Dialogue & Submenu Grid (Player Turn) -->
-          <div class="pip-dialogue-section" id="pip-dialogue-section">
-            
-            <div class="dialogue-panel-header">
-              <span class="dialogue-prompt-icon">▶</span>
-              <div class="dialogue-text-stream" id="pip-dialogue-text">
-                What will PIP-MASTER DEEPSHIKHA do?
-              </div>
-            </div>
-
-            <!-- Submenu List (Opened when an action button is clicked) -->
-            <div class="pip-submenu-panel" id="pip-submenu-panel" style="display: none;">
-              <div class="submenu-title-bar">
-                <span id="submenu-title">CHOOSE A MOVE:</span>
-                <button class="submenu-back-btn" id="submenu-back-btn">&times; Cancel</button>
-              </div>
-              <div class="submenu-options-grid" id="submenu-options-grid">
-                <!-- Dynamically populated options for FIGHT, COMMUNE, ITEMS, CATCH -->
-              </div>
-            </div>
-
-          </div>
-
-          <!-- MODE 2: Undertale-Style Bullet Hell Dodging Arena (Enemy Turn) -->
-          <div class="pip-dodging-section" id="pip-dodging-section" style="display: none;">
-            <div class="dodge-header-bar">
-              <span class="dodge-warning">⚠️ ENEMY TURN! DODGE THE GLITCH ATTACK!</span>
-              <span class="dodge-timer-badge" id="dodge-timer-badge">TIME: 5.0s</span>
-            </div>
-            
-            <!-- Canvas Dodge Arena -->
-            <div class="dodge-canvas-frame">
-              <canvas id="pip-dodge-canvas" width="520" height="190"></canvas>
-            </div>
-            
-            <!-- On-Screen Touch D-Pad for Mobile Dodging -->
-            <div class="pip-touch-dpad" id="pip-touch-dpad">
-              <button class="dpad-btn up" data-dir="up">▲</button>
-              <div class="dpad-mid-row">
-                <button class="dpad-btn left" data-dir="left">◀</button>
-                <button class="dpad-btn down" data-dir="down">▼</button>
-                <button class="dpad-btn right" data-dir="right">▶</button>
-              </div>
+        <!-- Integrated Handheld D-Pad & Control Deck (Clean, Minimal, No Unnecessary Icons) -->
+        <div class="pip-handheld-controls">
+          <div class="handheld-dpad">
+            <button class="dpad-btn up" data-dir="up" aria-label="Up">▲</button>
+            <div class="dpad-mid-row">
+              <button class="dpad-btn left" data-dir="left" aria-label="Left">◀</button>
+              <button class="dpad-btn down" data-dir="down" aria-label="Down">▼</button>
+              <button class="dpad-btn right" data-dir="right" aria-label="Right">▶</button>
             </div>
           </div>
 
-          <!-- 4 Iconic Action Command Buttons -->
-          <div class="pip-action-command-bar" id="pip-action-bar">
-            <button class="pip-cmd-btn btn-battle" id="btn-pip-fight" data-action="fight">
-              <span class="cmd-icon">⚔</span>
-              <span class="cmd-title">BATTLE</span>
-              <span class="cmd-sub">Code Attacks</span>
-            </button>
-            <button class="pip-cmd-btn btn-commune" id="btn-pip-act" data-action="act">
-              <span class="cmd-icon">💬</span>
-              <span class="cmd-title">COMMUNE</span>
-              <span class="cmd-sub">Act &amp; Debug</span>
-            </button>
-            <button class="pip-cmd-btn btn-bag" id="btn-pip-item" data-action="item">
-              <span class="cmd-icon">🎒</span>
-              <span class="cmd-title">PIP-BAG</span>
-              <span class="cmd-sub">Potions &amp; Tools</span>
-            </button>
-            <button class="pip-cmd-btn btn-catch" id="btn-pip-mercy" data-action="mercy">
-              <span class="cmd-icon">🔴</span>
-              <span class="cmd-title">CATCH</span>
-              <span class="cmd-sub">Capsule &amp; Spare</span>
-            </button>
+          <div class="handheld-middle-lore">
+            <span class="lore-text">WASD / Arrow Keys: Move &bull; Shift / [B]: Sprint &bull; [A] / Space: Interact &amp; Talk &bull; [ESC]: Dex</span>
           </div>
 
-        </div>
-
-        <!-- Cabinet Bottom Helper / Lore Bar -->
-        <div class="cabinet-footer-bar">
-          <span>🎮 Battle tips: Lower Buggy-Pip's HP or Refactor its code to make it easier to CATCH with your Pip-Capsule! Use Arrow Keys or WASD to dodge in the arena.</span>
+          <div class="handheld-action-keys">
+            <button class="action-round-btn btn-b" id="btn-ctrl-b" title="Sprint / Cancel">B</button>
+            <button class="action-round-btn btn-a" id="btn-ctrl-a" title="Action / Interact / Confirm">A</button>
+          </div>
         </div>
 
       </div>
@@ -1201,7 +1160,7 @@
   <div class="retro-modal-overlay" id="project-runner-modal" role="dialog" aria-modal="true" aria-labelledby="runner-modal-title">
     <div class="retro-modal-box xl-runner">
       <div class="window-titlebar">
-        <span class="window-title" id="runner-modal-title">C:\DEEPSHIKHA\app_runner.exe</span>
+        <span class="window-title" id="runner-modal-title">C:\DEEPSHIKHA\live_demos\app_runner.exe</span>
         <div class="window-controls">
           <a id="runner-external-link" href="#" target="_blank" class="win-btn maximize" title="Open in New Tab">↗</a>
           <button class="win-btn close close-runner-btn" title="Close">×</button>
@@ -1220,7 +1179,7 @@
   <div class="retro-modal-overlay" id="contact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-contact-title">
     <div class="retro-modal-box">
       <div class="window-titlebar">
-        <span class="window-title" id="modal-contact-title">C:\DEEPSHIKHA\contact.exe</span>
+        <span class="window-title" id="modal-contact-title">C:\DEEPSHIKHA\contact_information.sys</span>
         <div class="window-controls">
           <button class="win-btn close close-modal-btn">×</button>
         </div>
@@ -1287,7 +1246,7 @@
   <div class="retro-modal-overlay" id="resume-modal" role="dialog" aria-modal="true" aria-labelledby="modal-resume-title">
     <div class="retro-modal-box large">
       <div class="window-titlebar">
-        <span class="window-title" id="modal-resume-title">C:\DEEPSHIKHA\resume.pdf</span>
+        <span class="window-title" id="modal-resume-title">C:\DEEPSHIKHA\documents\resume_deepshikha_dey.pdf</span>
         <div class="window-controls">
           <button class="win-btn close close-modal-btn">×</button>
         </div>
