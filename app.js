@@ -18,9 +18,10 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
 class RetroAudioEngine {
   constructor() {
     this.sfxEnabled = true;
-    this.bgmEnabled = false;
+    this.bgmEnabled = true; // Automatically ON by default
     this.currentView = 'desktop';
     this.lastWalkTime = 0;
+    this.isUnlocked = false;
 
     // Real audio files provided by user in assets/sounds/
     this.audioFiles = {
@@ -33,9 +34,13 @@ class RetroAudioEngine {
 
     try {
       this.audioFiles.websiteBgm.loop = true;
-      this.audioFiles.websiteBgm.volume = 0.35;
+      this.audioFiles.websiteBgm.volume = 0.40;
+      this.audioFiles.websiteBgm.preload = 'auto';
+
       this.audioFiles.gameBgm.loop = true;
-      this.audioFiles.gameBgm.volume = 0.40;
+      this.audioFiles.gameBgm.volume = 0.45;
+      this.audioFiles.gameBgm.preload = 'auto';
+
       this.audioFiles.click.volume = 0.50;
       this.audioFiles.death.volume = 0.55;
       this.audioFiles.walk.volume = 0.28;
@@ -210,17 +215,32 @@ class RetroAudioEngine {
     this.currentView = view;
     if (!this.bgmEnabled) {
       this.stopAllBgm();
+      this.syncUi(false);
       return;
     }
 
+    const targetAudio = (view === 'game') ? this.audioFiles.gameBgm : this.audioFiles.websiteBgm;
+    const otherAudio = (view === 'game') ? this.audioFiles.websiteBgm : this.audioFiles.gameBgm;
+
     try {
-      if (view === 'game') {
-        this.audioFiles.websiteBgm.pause();
-        this.audioFiles.gameBgm.currentTime = 0;
-        this.audioFiles.gameBgm.play().catch(() => {});
+      otherAudio.pause();
+      if (view === 'game' && targetAudio.paused) {
+        targetAudio.currentTime = 0;
+      }
+      if (targetAudio.paused) {
+        const p = targetAudio.play();
+        if (p !== undefined) {
+          p.then(() => {
+            this.isUnlocked = true;
+            this.syncUi(true);
+          }).catch(() => {
+            // Browser autoplay blocked until user gesture
+            this.isUnlocked = false;
+            this.syncUi(true);
+          });
+        }
       } else {
-        this.audioFiles.gameBgm.pause();
-        this.audioFiles.websiteBgm.play().catch(() => {});
+        this.syncUi(true);
       }
     } catch (e) {}
   }
@@ -232,6 +252,7 @@ class RetroAudioEngine {
     } else {
       this.stopAllBgm();
     }
+    this.syncUi(this.bgmEnabled);
     return this.bgmEnabled;
   }
 
@@ -240,6 +261,36 @@ class RetroAudioEngine {
       this.audioFiles.websiteBgm.pause();
       this.audioFiles.gameBgm.pause();
     } catch (e) {}
+  }
+
+  syncUi(isPlaying) {
+    const musicBtn = document.getElementById('music-toggle-btn');
+    const musicIcon = document.getElementById('music-icon');
+    if (musicBtn && musicIcon) {
+      musicBtn.classList.toggle('active', isPlaying);
+      musicBtn.classList.toggle('muted', !isPlaying);
+      musicBtn.title = isPlaying ? 'Audio is ON (Click for Silent)' : 'Audio is SILENT (Click to Play)';
+      musicIcon.innerHTML = isPlaying ? `
+        <svg class="audio-svg playing-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>` : `
+        <svg class="audio-svg muted-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>`;
+    }
+
+    const gameAudioIcon = document.getElementById('game-audio-icon');
+    if (gameAudioIcon) {
+      gameAudioIcon.textContent = isPlaying ? '🎵 Audio: ON' : '🔇 Audio: OFF';
+    }
+    const gameAudioBtn = document.getElementById('game-audio-toggle-btn');
+    if (gameAudioBtn) {
+      gameAudioBtn.classList.toggle('active', isPlaying);
+    }
   }
 }
 
@@ -320,11 +371,27 @@ window.addEventListener('popstate', () => {
   switchView(hash, false);
 });
 
-// Initial hash inspection on boot
-const initialHash = location.hash.replace('#', '');
+// Initial hash inspection on boot & background music auto-start
+const initialHash = location.hash.replace('#', '') || 'desktop';
 if (['about', 'works', 'game'].includes(initialHash)) {
   switchView(initialHash, false);
+} else {
+  sfx.setBgmForView('desktop');
 }
+
+// User-gesture audio unlocker for modern browsers autoplay policies
+const unlockAudioOnGesture = () => {
+  sfx.init();
+  if (sfx.bgmEnabled) {
+    sfx.setBgmForView(sfx.currentView);
+  }
+  ['click', 'pointerdown', 'touchstart', 'keydown'].forEach(evt => {
+    window.removeEventListener(evt, unlockAudioOnGesture);
+  });
+};
+['click', 'pointerdown', 'touchstart', 'keydown'].forEach(evt => {
+  window.addEventListener(evt, unlockAudioOnGesture, { once: true, passive: true });
+});
 
 
 // ========================================================
@@ -341,48 +408,14 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
-// Sound effects toggle
-const soundBtn = document.getElementById('sound-toggle-btn');
-const gameSoundBtn = document.getElementById('game-sound-toggle-btn');
-const soundIcon = document.getElementById('sound-icon');
-const gameSoundIcon = document.getElementById('game-sound-icon');
-
-function toggleSound() {
-  sfx.sfxEnabled = !sfx.sfxEnabled;
-  const label = sfx.sfxEnabled ? '🔊 SFX' : '🔇 Muted';
-  if (soundIcon) soundIcon.textContent = label;
-  if (gameSoundIcon) gameSoundIcon.textContent = label;
-  showToast(sfx.sfxEnabled ? 'Retro Sound Effects Enabled' : 'Sound Effects Muted');
-}
-
-soundBtn?.addEventListener('click', toggleSound);
-gameSoundBtn?.addEventListener('click', toggleSound);
-
-// Royalty-Free Chiptune & Ambient Music toggle
-const musicBtn = document.getElementById('music-toggle-btn');
-const gameAudioBtn = document.getElementById('game-audio-toggle-btn');
-
-function handleBgmToggle() {
+// Silent mode toggle (Modern audio button)
+function handleSilentToggle() {
   const isPlaying = sfx.toggleBgm();
-  const label = isPlaying ? '🎵 BGM: ON' : '🎵 BGM: OFF';
-  const gameLabel = isPlaying ? '🎵 Audio: ON' : '🔇 Audio: OFF';
-  if (musicBtn) {
-    const span = musicBtn.querySelector('span');
-    if (span) span.textContent = label;
-    musicBtn.classList.toggle('active', isPlaying);
-  }
-  const gameAudioIcon = document.getElementById('game-audio-icon');
-  if (gameAudioIcon) {
-    gameAudioIcon.textContent = gameLabel;
-  }
-  if (gameAudioBtn) {
-    gameAudioBtn.classList.toggle('active', isPlaying);
-  }
-  showToast(isPlaying ? 'Audio Soundtrack Playing 🎶' : 'Music Paused');
+  showToast(isPlaying ? 'Soundtrack Playing 🎶' : 'Silent Mode (Muted) 🔇');
 }
 
-musicBtn?.addEventListener('click', handleBgmToggle);
-gameAudioBtn?.addEventListener('click', handleBgmToggle);
+document.getElementById('music-toggle-btn')?.addEventListener('click', handleSilentToggle);
+document.getElementById('game-audio-toggle-btn')?.addEventListener('click', handleSilentToggle);
 
 
 // ========================================================
@@ -2267,20 +2300,6 @@ document.getElementById('icon-contact')?.addEventListener('click', () => openMod
 document.getElementById('quick-contact-pill')?.addEventListener('click', () => openModal(contactModal));
 document.getElementById('icon-resume')?.addEventListener('click', () => openModal(resumeModal));
 document.getElementById('quick-resume-btn-bar')?.addEventListener('click', () => openModal(resumeModal));
-
-// Tableau / Telemetry pill button on desktop
-document.getElementById('open-tableau-pill')?.addEventListener('click', () => {
-  sfx.playClick();
-  switchView('desktop');
-  const winWorks = document.getElementById('window-works');
-  if (winWorks) winWorks.style.display = 'block';
-  tabButtons.forEach(b => b.classList.remove('active'));
-  tabPanes.forEach(p => p.classList.remove('active'));
-  const telemetryTabBtn = document.querySelector('.win-tab-btn[data-tab="telemetry"]');
-  const telemetryPane = document.getElementById('tab-telemetry');
-  telemetryTabBtn?.classList.add('active');
-  telemetryPane?.classList.add('active');
-});
 
 // Toggle between Formatted HTML Resume and Embedded PDF
 const toggleResumeBtn = document.getElementById('toggle-resume-format-btn');

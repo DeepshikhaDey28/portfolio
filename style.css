@@ -335,13 +335,35 @@ html, body {
 }
 
 .social-pill.email {
-  background-color: #f77f00;
+  background-color: #ea580c;
   color: #fff;
 }
 
-.social-pill.tableau {
-  background-color: #e97627;
+.social-pill.audio-silent-pill {
+  background-color: #059669;
   color: #fff;
+}
+
+.social-pill.audio-silent-pill.muted {
+  background-color: #475569;
+  color: #cbd5e1;
+}
+
+.audio-silent-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.audio-silent-pill .audio-svg {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.audio-silent-pill:hover .audio-svg {
+  transform: scale(1.12);
 }
 
 .social-pill.cv-pill {
