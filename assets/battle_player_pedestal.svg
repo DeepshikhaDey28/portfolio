@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 72" width="280" height="72">
+  <defs>
+    <!-- Earth/shadow depth gradient -->
+    <linearGradient id="playerDirtGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2a661b"/>
+      <stop offset="60%" stop-color="#1c4712"/>
+      <stop offset="100%" stop-color="#102e09"/>
+    </linearGradient>
+    <!-- Grass surface gradient -->
+    <radialGradient id="playerGrassGrad" cx="50%" cy="35%" r="52%">
+      <stop offset="0%" stop-color="#84ee5c"/>
+      <stop offset="45%" stop-color="#52c537"/>
+      <stop offset="80%" stop-color="#349b20"/>
+      <stop offset="100%" stop-color="#216a13"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Ground Drop Shadow -->
+  <ellipse cx="140" cy="46" rx="132" ry="18" fill="#000000" fill-opacity="0.35"/>
+
+  <!-- Earth base / mound depth -->
+  <ellipse cx="140" cy="40" rx="134" ry="24" fill="url(#playerDirtGrad)" stroke="#113309" stroke-width="2.5"/>
+
+  <!-- Main Grass Platform -->
+  <ellipse cx="140" cy="30" rx="132" ry="25" fill="url(#playerGrassGrad)" stroke="#174f0d" stroke-width="2"/>
+
+  <!-- Jagged Grass Tuft Rim -->
+  <path d="M 10,30
+    L 16,23 L 22,29 L 28,21 L 36,28 L 46,20 L 56,27 L 68,18 L 80,26
+    L 94,16 L 108,25 L 122,15 L 138,24 L 154,15 L 170,25 L 186,17
+    L 200,26 L 214,19 L 226,27 L 238,21 L 248,28 L 258,22 L 266,29
+    L 270,24 L 274,30
+    Q 278,46 140,56
+    Q 4,46 10,30 Z"
+    fill="url(#playerGrassGrad)" stroke="#174f0d" stroke-width="2"/>
+
+  <!-- Vibrant highlights & soft inner shine -->
+  <ellipse cx="140" cy="28" rx="104" ry="14" fill="#88f25f" fill-opacity="0.4"/>
+  <ellipse cx="140" cy="27" rx="66" ry="8" fill="#bcf99e" fill-opacity="0.5"/>
+</svg>

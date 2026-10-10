@@ -219,30 +219,57 @@ class RetroAudioEngine {
       return;
     }
 
-    const targetAudio = (view === 'game') ? this.audioFiles.gameBgm : this.audioFiles.websiteBgm;
-    const otherAudio = (view === 'game') ? this.audioFiles.websiteBgm : this.audioFiles.gameBgm;
+    if (view === 'game') {
+      // STRICT GAME PAGE AUDIO ISOLATION:
+      // Completely silence, pause, and reset website ambient music
+      try {
+        this.audioFiles.websiteBgm.pause();
+        this.audioFiles.websiteBgm.currentTime = 0;
+      } catch (e) {}
 
-    try {
-      otherAudio.pause();
-      if (view === 'game' && targetAudio.paused) {
-        targetAudio.currentTime = 0;
-      }
-      if (targetAudio.paused) {
-        const p = targetAudio.play();
-        if (p !== undefined) {
-          p.then(() => {
-            this.isUnlocked = true;
-            this.syncUi(true);
-          }).catch(() => {
-            // Browser autoplay blocked until user gesture
-            this.isUnlocked = false;
-            this.syncUi(true);
-          });
+      // Play ONLY game background music
+      try {
+        if (this.audioFiles.gameBgm.paused) {
+          const p = this.audioFiles.gameBgm.play();
+          if (p !== undefined) {
+            p.then(() => {
+              this.isUnlocked = true;
+              this.syncUi(true);
+            }).catch(() => {
+              this.isUnlocked = false;
+              this.syncUi(true);
+            });
+          }
+        } else {
+          this.syncUi(true);
         }
-      } else {
-        this.syncUi(true);
-      }
-    } catch (e) {}
+      } catch (e) {}
+    } else {
+      // NON-GAME PAGES (Desktop, About, Works):
+      // Completely silence, pause, and reset game music
+      try {
+        this.audioFiles.gameBgm.pause();
+        this.audioFiles.gameBgm.currentTime = 0;
+      } catch (e) {}
+
+      // Play ONLY website ambient background music
+      try {
+        if (this.audioFiles.websiteBgm.paused) {
+          const p = this.audioFiles.websiteBgm.play();
+          if (p !== undefined) {
+            p.then(() => {
+              this.isUnlocked = true;
+              this.syncUi(true);
+            }).catch(() => {
+              this.isUnlocked = false;
+              this.syncUi(true);
+            });
+          }
+        } else {
+          this.syncUi(true);
+        }
+      } catch (e) {}
+    }
   }
 
   toggleBgm() {
@@ -259,7 +286,9 @@ class RetroAudioEngine {
   stopAllBgm() {
     try {
       this.audioFiles.websiteBgm.pause();
+      this.audioFiles.websiteBgm.currentTime = 0;
       this.audioFiles.gameBgm.pause();
+      this.audioFiles.gameBgm.currentTime = 0;
     } catch (e) {}
   }
 
