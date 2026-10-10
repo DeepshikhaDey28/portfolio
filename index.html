@@ -66,26 +66,28 @@
 
       <!-- 2. Large Hero Editorial Feature Card (Reference Top Card) -->
       <article class="editorial-hero-card">
-        <!-- Main Featured Photo Frame (Unobstructed Portrait) -->
+        <!-- Main Featured Photo Frame (Unobstructed Portrait - Only PFP on Desktop) -->
         <div class="ehc-image-wrap">
           <img src="assets/profile.jpg" alt="Deepshikha Dey Portrait" class="ehc-main-photo">
         </div>
 
         <!-- Underneath Image Content Row -->
         <div class="ehc-content-row">
-          <!-- Relocated Pills (Replaces red-circled icons with clean widgets) -->
+          <!-- Relocated Pills (Clean icon-less widgets) -->
           <div class="ehc-pills-col">
             <!-- Music Pill Widget -->
             <button type="button" class="ehc-music-pill inline-hero-pill" id="ehc-music-toggle" title="Toggle Soundtrack">
-              <div class="emp-cover-wrap">
-                <img src="assets/profile.jpg" alt="Now Playing" class="emp-cover">
+              <div class="emp-wave-icon">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
               </div>
               <span class="emp-text">Ambient Lofi Music</span>
             </button>
 
             <!-- Identity Pill Widget -->
             <div class="ehc-badge-pill inline-hero-pill" id="ehc-badge-pill">
-              <img src="assets/profile.jpg" alt="Deepshikha Dey" class="ebp-avatar">
+              <span class="ebp-status-dot">✦</span>
               <div class="ebp-text-col">
                 <span class="ebp-name">Deepshikha Dey</span>
                 <span class="ebp-role">Data Scientist &amp; SWE</span>
@@ -96,18 +98,59 @@
           <div class="ehc-bio-col">
             <h2 class="ehc-name-heading">Deepshikha Dey</h2>
             <p class="ehc-bio-text">
-              Deepshikha Dey was born with a passion for building and discovering. As she grew, curiosity seemed to bloom brighter around her, turning complex datasets and front-end architectures into small adventures. Her world is full of clean code, real-time telemetry, and intentional digital experiences that feel like magic.
+              Computer Science undergraduate specializing in Data Science and Cyber Security at Symbiosis Skills and Professional University. Pairing academic excellence (8.94 CGPA / recent 9.45 SGPA) with hands-on leadership across three industry internships, she engineers end-to-end solutions—from reactive front-end interfaces to high-throughput data telemetry pipelines.
             </p>
           </div>
         </div>
       </article>
 
-      <!-- 3. Second Row (Two Columns: Square Photo & Social Profile Card) -->
+      <!-- 3. Second Row (Two Columns: Academic Credentials & Social Profile Card) -->
       <div class="editorial-grid-two">
-        <!-- Left: Square Photo Card -->
-        <div class="editorial-photo-card">
-          <img src="assets/editorial_gallery_portrait.jpg" alt="Deepshikha Dey" class="epc-photo-img">
-        </div>
+        <!-- Left: Academic Rigor & Technical Foundation (Replaces former photo card with rich info) -->
+        <article class="editorial-credentials-card">
+          <div class="ecc-top-bar">
+            <span class="ecc-badge">★ ACADEMIC FOUNDATION</span>
+            <span class="ecc-timeline">2023 – 2027</span>
+          </div>
+          <div class="ecc-main-body">
+            <h3 class="ecc-institution">Symbiosis Skills &amp; Professional University</h3>
+            <p class="ecc-degree">B.Tech in Computer Science &bull; <span class="ecc-spec">Cyber Security</span></p>
+            <p class="ecc-location">Pune, Maharashtra, India</p>
+
+            <div class="ecc-metrics-grid">
+              <div class="ecc-metric-box highlight">
+                <span class="ecc-metric-val">9.45</span>
+                <span class="ecc-metric-lbl">Recent SGPA</span>
+              </div>
+              <div class="ecc-metric-box">
+                <span class="ecc-metric-val">8.94</span>
+                <span class="ecc-metric-lbl">Cumulative CGPA</span>
+              </div>
+              <div class="ecc-metric-box">
+                <span class="ecc-metric-val">3+</span>
+                <span class="ecc-metric-lbl">Internships</span>
+              </div>
+            </div>
+
+            <div class="ecc-coursework-group">
+              <span class="ecc-section-title">Verified Certifications &amp; Foundations:</span>
+              <div class="ecc-tags-flow">
+                <span class="ecc-tag">Cybersecurity Fundamentals</span>
+                <span class="ecc-tag">Data Structures &amp; Algorithms</span>
+                <span class="ecc-tag">C Programming</span>
+                <span class="ecc-tag">Git &amp; Version Control</span>
+                <span class="ecc-tag">Telemetry Analytics</span>
+              </div>
+            </div>
+
+            <div class="ecc-domains-group">
+              <span class="ecc-section-title">Core Engineering Domains:</span>
+              <p class="ecc-domains-text">
+                Telemetry Pipelines &bull; Full-Stack React Architecture &bull; SQL &amp; Tableau Dashboards &bull; Cyber Security Protocols &bull; Real-Time Web Simulations
+              </p>
+            </div>
+          </div>
+        </article>
 
         <!-- Right: Social Profile Stats Card with Wine Border -->
         <article class="editorial-profile-card">
@@ -155,19 +198,21 @@
         </article>
       </div>
 
-      <!-- 4. Third Row (Two Columns: Stats + Mini Gallery & Pinterest Card) -->
+      <!-- 4. Third Row (Two Columns: Stats + Mini Gallery & Experience/Languages Card) -->
       <div class="editorial-grid-three">
-        <!-- Left: Stats Avatar + Mini Projects Window -->
+        <!-- Left: Stats Monogram + Mini Projects Window -->
         <div class="eg3-left-col">
           <div class="eg3-profile-stamp">
-            <div class="eg3-avatar-circle">
-              <img src="assets/profile.jpg" alt="Deepshikha Dey">
+            <div class="eg3-monogram-badge">
+              <span class="emb-star">✦</span>
+              <span class="emb-title">DEEPSHIKHA DEY</span>
             </div>
-            <span class="eg3-handle">@deepshikha28</span>
+            <span class="eg3-handle">@deepshikha28 &bull; Data Science &amp; SWE</span>
             <div class="eg3-counter-row">
-              <div class="eg3-counter"><strong>3+</strong><span>Internships</span></div>
-              <div class="eg3-counter"><strong>4</strong><span>Deployed</span></div>
-              <div class="eg3-counter"><strong>100%</strong><span>Commitment</span></div>
+              <div class="eg3-counter"><strong>3</strong><span>Internships</span></div>
+              <div class="eg3-counter"><strong>12+</strong><span>Projects</span></div>
+              <div class="eg3-counter"><strong>5</strong><span>Languages</span></div>
+              <div class="eg3-counter"><strong>8.94</strong><span>CGPA</span></div>
             </div>
           </div>
 
@@ -202,22 +247,61 @@
           </article>
         </div>
 
-        <!-- Right: Pinterest-Style Editorial Card with Wine Border -->
-        <article class="editorial-pinterest-card">
-          <div class="epc-avatar-ring">
-            <img src="assets/profile.jpg" alt="Deepshikha Dey">
+        <!-- Right: Industry Experience & Global Languages Showcase (Image-Free Card) -->
+        <article class="editorial-internships-card">
+          <div class="eic-header-strip">
+            <span class="eic-badge">INDUSTRY TRACK RECORD</span>
+            <span class="eic-city-tag">Pune, Maharashtra</span>
           </div>
-          <h3 class="pinterest-name">Deepshikha</h3>
-          <p class="pinterest-role">Front-End Engineer &bull; Data Analyst</p>
-          <p class="pinterest-contact-line">
-            Pune, Maharashtra &bull; India
-          </p>
-          <div class="pinterest-stats-line">
-            <span>Specializing in Cyber Security &amp; Python Telemetry</span>
+          <div class="eic-body-inner">
+            <h3 class="eic-name-title">Deepshikha Dey</h3>
+            <p class="eic-subtitle">Front-End Engineer &bull; Data Analyst &bull; Cyber Security</p>
+
+            <div class="eic-internships-summary">
+              <div class="eic-intern-item">
+                <div class="eii-top">
+                  <strong class="eii-company">Sevra AI (MyCare)</strong>
+                  <span class="eii-badge">Team Lead</span>
+                </div>
+                <span class="eii-role">Front-End &amp; Telemetry Intern &bull; June–July 2026</span>
+                <p class="eii-desc">Led dev team architecting SevraOS interface using Figma, HTML, CSS, React.js; built Python &amp; SQL data telemetry pipelines.</p>
+              </div>
+
+              <div class="eic-intern-item">
+                <div class="eii-top">
+                  <strong class="eii-company">Erfinden Technologies</strong>
+                  <span class="eii-badge">E-Commerce</span>
+                </div>
+                <span class="eii-role">Web Developer Intern &bull; May–July 2025</span>
+                <p class="eii-desc">Engineered full-scale e-commerce platform with catalog filters, shopping cart, auth, and order processing workflows.</p>
+              </div>
+
+              <div class="eic-intern-item">
+                <div class="eii-top">
+                  <strong class="eii-company">Yhills</strong>
+                  <span class="eii-badge">Data Science</span>
+                </div>
+                <span class="eii-role">Data Science Intern &bull; May–July 2024</span>
+                <p class="eii-desc">Cleaned and preprocessed raw telemetry datasets; developed high-impact interactive business dashboards with Tableau.</p>
+              </div>
+            </div>
+
+            <!-- Additional Information: Spoken Languages -->
+            <div class="eic-languages-section">
+              <span class="eic-lang-title">Spoken Languages:</span>
+              <div class="eic-lang-badges">
+                <span class="eic-lang-pill">English (Professional)</span>
+                <span class="eic-lang-pill">German (A2 Level)</span>
+                <span class="eic-lang-pill">Hindi (Native)</span>
+                <span class="eic-lang-pill">Marathi (Bilingual)</span>
+                <span class="eic-lang-pill">Bengali (Native)</span>
+              </div>
+            </div>
+
+            <button class="pinterest-contact-btn" id="pinterest-contact-btn">
+              Get In Touch / Contact
+            </button>
           </div>
-          <button class="pinterest-contact-btn" id="pinterest-contact-btn">
-            Get In Touch / Contact
-          </button>
         </article>
       </div>
 

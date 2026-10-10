@@ -387,20 +387,171 @@ html, body {
   gap: 1rem;
 }
 
-.editorial-photo-card {
-  background: #ebe2d5;
-  border-radius: 26px;
-  overflow: hidden;
-  height: 100%;
-  min-height: 290px;
-  box-shadow: 0 8px 24px rgba(45, 20, 15, 0.12);
+/* Audio & Badge Pill Icons (Clean SVG & Dot) */
+.emp-wave-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fde047;
+  flex-shrink: 0;
 }
 
-.epc-photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.ebp-status-dot {
+  color: #fde047;
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Academic Rigor & Core Technical Competencies Card */
+.editorial-credentials-card {
+  background: #ebe2d5;
+  border: 4px solid #541219;
+  border-radius: 26px;
+  padding: 1.35rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 8px 24px rgba(45, 20, 15, 0.12);
+  box-sizing: border-box;
+}
+
+.ecc-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px dashed rgba(84, 18, 25, 0.25);
+  padding-bottom: 0.5rem;
+}
+
+.ecc-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #541219;
+  background: #fdf2f2;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(84, 18, 25, 0.3);
+  letter-spacing: 0.05em;
+}
+
+.ecc-timeline {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #541219;
+}
+
+.ecc-main-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ecc-institution {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1c1917;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.ecc-degree {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #541219;
+  margin: -0.25rem 0 0;
+}
+
+.ecc-spec {
+  color: #831843;
+  font-weight: 800;
+}
+
+.ecc-location {
+  font-size: 0.73rem;
+  color: #5a4538;
+  margin: -0.45rem 0 0;
+}
+
+.ecc-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.2rem 0;
+}
+
+.ecc-metric-box {
+  background: #ffffff;
+  border: 1.5px solid rgba(84, 18, 25, 0.2);
+  border-radius: 12px;
+  padding: 0.5rem 0.35rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ecc-metric-box.highlight {
+  background: #fdf2f2;
+  border-color: #541219;
+}
+
+.ecc-metric-val {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #541219;
+  line-height: 1.1;
+}
+
+.ecc-metric-lbl {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #5a4538;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.ecc-coursework-group, .ecc-domains-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ecc-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #541219;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ecc-tags-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ecc-tag {
+  background: #ffffff;
+  border: 1px solid rgba(84, 18, 25, 0.25);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #1c1917;
+}
+
+.ecc-domains-text {
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: #5a4538;
+  margin: 0;
 }
 
 .editorial-profile-card {
@@ -674,65 +825,173 @@ html, body {
   color: #541219;
 }
 
-/* Pinterest-Style Editorial Card with Wine Border */
+/* Monogram Badge (Image-Free Verified Badge) */
+.eg3-monogram-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(254, 205, 211, 0.2);
+  border: 1px solid rgba(254, 205, 211, 0.4);
+  border-radius: 9999px;
+  padding: 0.25rem 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.emb-star {
+  color: #fde047;
+  font-size: 0.85rem;
+}
+
+.emb-title {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.1em;
+}
+
+/* Industry Experience & Global Languages Showcase Card (Image-Free) */
+.editorial-internships-card,
 .editorial-pinterest-card {
   border: 4px solid #541219;
   border-radius: 26px;
-  min-height: 330px;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(84, 18, 25, 0.5) 0%, rgba(30, 8, 12, 0.9) 100%), url('assets/profile.jpg') center/cover;
-  padding: 1.75rem 1.25rem;
+  background: linear-gradient(135deg, #541219 0%, #3a0d12 60%, #20070a 100%);
+  padding: 1.4rem 1.35rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   color: #ffffff;
   box-shadow: 0 8px 24px rgba(45, 20, 15, 0.15);
   box-sizing: border-box;
+  gap: 0.85rem;
 }
 
-.epc-avatar-ring {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 3.5px solid #ffffff;
-  overflow: hidden;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+.eic-header-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px dashed rgba(254, 205, 211, 0.25);
+  padding-bottom: 0.5rem;
 }
 
-.epc-avatar-ring img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.pinterest-name {
-  font-family: var(--font-sans);
-  font-size: 1.45rem;
-  font-weight: 800;
-  margin: 0 0 0.25rem;
-  letter-spacing: 0.02em;
-}
-
-.pinterest-role {
-  font-size: 0.8rem;
-  color: #fca5a5;
-  margin: 0 0 0.35rem;
-}
-
-.pinterest-contact-line {
-  font-size: 0.74rem;
-  color: #e5e7eb;
-  margin: 0 0 0.25rem;
-}
-
-.pinterest-stats-line {
-  font-size: 0.7rem;
-  color: #cbd5e1;
+.eic-badge {
   font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fecdd3;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.05em;
+}
+
+.eic-city-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #fca5a5;
+}
+
+.eic-body-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.eic-name-title {
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+}
+
+.eic-subtitle {
+  font-size: 0.78rem;
+  color: #fca5a5;
+  margin: -0.5rem 0 0;
+  font-weight: 600;
+}
+
+.eic-internships-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.eic-intern-item {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(254, 205, 211, 0.2);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eii-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eii-company {
+  font-size: 0.86rem;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.eii-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  background: #facc15;
+  color: #0f172a;
+  padding: 1px 6px;
+  border-radius: 9999px;
+}
+
+.eii-role {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #fca5a5;
+}
+
+.eii-desc {
+  font-size: 0.73rem;
+  line-height: 1.35;
+  color: #e5e7eb;
+  margin: 2px 0 0;
+}
+
+.eic-languages-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(254, 205, 211, 0.25);
+}
+
+.eic-lang-title {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fecdd3;
+  text-transform: uppercase;
+}
+
+.eic-lang-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.eic-lang-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(254, 205, 211, 0.25);
+  border-radius: 9999px;
+  padding: 2px 8px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .pinterest-contact-btn {
@@ -744,9 +1003,14 @@ html, body {
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 1.15rem;
+  margin-top: 0.5rem;
   transition: transform 0.2s, background-color 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pinterest-contact-btn:hover {
+  background: #781d27;
+  transform: translateY(-2px);
 }
 
 .pinterest-contact-btn:hover {
@@ -998,6 +1262,7 @@ html, body {
     font-size: 0.72rem;
   }
 
+  .editorial-internships-card,
   .editorial-pinterest-card {
     min-height: 440px;
     padding: 2.75rem 2rem;
@@ -5665,6 +5930,7 @@ html, body {
     font-size: 0.75rem;
   }
 
+  .editorial-internships-card,
   .editorial-pinterest-card {
     min-height: 280px;
     border-radius: 20px;
