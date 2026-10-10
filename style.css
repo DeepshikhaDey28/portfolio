@@ -76,27 +76,31 @@ html, body {
    VIEW 1: RETRO OS DESKTOP (ELAINE STYLE)
    ======================================================== */
 #desktop-view {
-  background-color: #9f8e7d;
+  background-color: #120205;
   background-image: 
-    radial-gradient(ellipse at 50% 10%, rgba(255, 255, 255, 0.15) 0%, transparent 60%),
-    radial-gradient(circle at 15% 30%, rgba(84, 18, 25, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 85% 70%, rgba(45, 25, 20, 0.12) 0%, transparent 50%);
+    radial-gradient(circle at 50% 15%, rgba(220, 38, 38, 0.16) 0%, transparent 65%),
+    linear-gradient(rgba(10, 1, 3, 0.28), rgba(10, 1, 3, 0.52)),
+    url('assets/desktop_wine_grid_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   min-height: 100vh;
   position: relative;
-  padding: 1.25rem 0.85rem 3.5rem;
+  padding: 1.5rem 1.5rem 4rem;
   box-sizing: border-box;
 }
 
 /* ========================================================
-   EDITORIAL DESKTOP SCRAPBOOK LAYOUT (IMAGE 1 REFERENCE)
+   EDITORIAL DESKTOP SCRAPBOOK LAYOUT (EXPANDED DESKTOP)
    ======================================================== */
 .editorial-desktop-container {
-  max-width: 680px;
+  max-width: 1320px;
+  width: 95%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  width: 100%;
+  gap: 1.6rem;
   box-sizing: border-box;
 }
 
@@ -724,6 +728,287 @@ html, body {
 .pinterest-contact-btn:hover {
   transform: scale(1.05);
   background: #3b0b11;
+}
+
+/* ========================================================
+   EDITORIAL EXPANSIVE DESKTOP LAYOUT (COVERS FULL MONITOR)
+   ======================================================== */
+@media (min-width: 901px) {
+  /* 1. Nav Bar expands across the container */
+  .editorial-nav-bar {
+    padding: 0.85rem 2.25rem;
+    gap: 1.5rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+
+  .enb-links-row {
+    gap: 2.75rem;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .eli-title {
+    font-size: 0.96rem;
+  }
+
+  .eli-sub {
+    font-size: 0.7rem;
+  }
+
+  .enb-icon-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* 2. Hero Card becomes a spacious 2-column luxury editorial spread */
+  .editorial-hero-card {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 2.25rem 2.5rem;
+    border-radius: 34px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  }
+
+  .ehc-image-wrap {
+    height: 440px;
+    border-radius: 26px;
+  }
+
+  .ehc-music-pill {
+    bottom: 18px;
+    left: 18px;
+    padding: 7px 15px;
+    font-size: 0.82rem;
+    border-radius: 18px;
+  }
+
+  .ehc-badge-pill {
+    bottom: 18px;
+    right: 18px;
+    padding: 7px 15px 7px 10px;
+    border-radius: 18px;
+  }
+
+  .ebp-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ebp-name {
+    font-size: 0.88rem;
+  }
+
+  .ebp-role {
+    font-size: 0.7rem;
+  }
+
+  .ehc-content-row {
+    margin-top: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .ehc-bio-col {
+    order: 1;
+    width: 100%;
+  }
+
+  .ehc-name-heading {
+    font-size: 2.1rem;
+    margin-bottom: 0.75rem;
+    color: #2b1416;
+  }
+
+  .ehc-bio-text {
+    font-size: 1.06rem;
+    line-height: 1.75;
+    color: #4a3429;
+  }
+
+  .ehc-thumbs-col {
+    order: 2;
+    gap: 1.25rem;
+    padding-top: 0.4rem;
+  }
+
+  .ehc-thumb-btn {
+    width: 62px;
+    height: 62px;
+    border-width: 3px;
+    box-shadow: 0 4px 14px rgba(84, 18, 25, 0.2);
+  }
+
+  /* 3. Second Row (Two Columns) Expands */
+  .editorial-grid-two {
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1.75rem;
+  }
+
+  .editorial-photo-card {
+    min-height: 440px;
+    border-radius: 30px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .editorial-profile-card {
+    min-height: 440px;
+    padding: 2.25rem 2.25rem;
+    border-radius: 30px;
+    border-width: 4px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+    gap: 1.15rem;
+  }
+
+  .epc-name {
+    font-size: 1.85rem;
+  }
+
+  .epc-network {
+    font-size: 0.98rem;
+  }
+
+  .epc-lock-handle {
+    font-size: 0.92rem;
+  }
+
+  .epc-social-icons {
+    gap: 0.75rem;
+  }
+
+  .epc-icon-link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .epc-bio-snippet {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .epc-stats-row {
+    padding: 0.95rem 0;
+  }
+
+  .epc-stat strong {
+    font-size: 1.5rem;
+  }
+
+  .epc-stat span {
+    font-size: 0.8rem;
+  }
+
+  .epc-actions-row {
+    gap: 0.75rem;
+  }
+
+  .epc-action-pill {
+    padding: 0.8rem 1.35rem;
+    font-size: 0.9rem;
+  }
+
+  /* 4. Third Row (Two Columns) Expands */
+  .editorial-grid-three {
+    grid-template-columns: 1.15fr 1fr;
+    gap: 1.75rem;
+  }
+
+  .eg3-left-col {
+    gap: 1.25rem;
+  }
+
+  .eg3-avatar-circle {
+    width: 82px;
+    height: 82px;
+    border-width: 4px;
+  }
+
+  .eg3-handle {
+    font-size: 1.05rem;
+  }
+
+  .eg3-counter-row {
+    gap: 2rem;
+  }
+
+  .eg3-counter strong {
+    font-size: 1.15rem;
+  }
+
+  .eg3-counter span {
+    font-size: 0.78rem;
+  }
+
+  .editorial-mini-gallery {
+    border-radius: 26px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .emg-top-bar {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.92rem;
+  }
+
+  .emg-grid {
+    gap: 0.85rem;
+    padding: 1.15rem;
+  }
+
+  .emg-card {
+    padding: 1rem 0.65rem;
+    border-radius: 16px;
+  }
+
+  .emg-card-thumb {
+    font-size: 1.8rem;
+  }
+
+  .emg-card-title {
+    font-size: 0.88rem;
+  }
+
+  .emg-card-tag {
+    font-size: 0.72rem;
+  }
+
+  .editorial-pinterest-card {
+    min-height: 440px;
+    padding: 2.75rem 2rem;
+    border-radius: 30px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .epc-avatar-ring {
+    width: 90px;
+    height: 90px;
+    border-width: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .pinterest-name {
+    font-size: 1.95rem;
+  }
+
+  .pinterest-role {
+    font-size: 1.05rem;
+  }
+
+  .pinterest-contact-line {
+    font-size: 0.92rem;
+  }
+
+  .pinterest-stats-line {
+    font-size: 0.85rem;
+  }
+
+  .pinterest-contact-btn {
+    padding: 0.85rem 2.25rem;
+    font-size: 0.95rem;
+    margin-top: 1.4rem;
+  }
 }
 
 /* Top OS Header */
@@ -5490,6 +5775,35 @@ html, body {
 
   .ehc-image-wrap {
     height: 230px;
+  }
+
+  .ehc-music-pill {
+    padding: 3px 7px;
+    font-size: 0.62rem;
+    gap: 5px;
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .emp-text {
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ehc-badge-pill {
+    padding: 3px 7px 3px 5px;
+    gap: 5px;
+    bottom: 8px;
+    right: 8px;
+  }
+
+  .ebp-name {
+    font-size: 0.66rem;
+  }
+
+  .ebp-role {
+    font-size: 0.52rem;
   }
 
   .resume-skills-grid {
