@@ -184,10 +184,10 @@ html, body {
 .desktop-workspace {
   flex: 1;
   display: grid;
-  grid-template-columns: 110px 1fr 110px;
-  gap: 1.5rem;
-  padding: 1.5rem 1.25rem 3rem;
-  max-width: 1200px;
+  grid-template-columns: 120px 1fr 120px;
+  gap: 2rem;
+  padding: 1.5rem 1.5rem 3.5rem;
+  max-width: 1380px;
   margin: 0 auto;
   width: 100%;
   align-items: start;
@@ -294,12 +294,12 @@ html, body {
   justify-content: center;
   gap: 1.25rem;
   background-color: var(--os-sage);
-  padding: 0.75rem 2rem;
+  padding: 0.85rem 2.25rem;
   border-radius: 12px;
   border: 2.5px solid var(--os-border);
   box-shadow: 4px 4px 0 rgba(59, 68, 50, 0.25);
   width: 100%;
-  max-width: 650px;
+  max-width: 860px;
 }
 
 .social-pill {
@@ -381,7 +381,7 @@ html, body {
    ======================================================== */
 .retro-window {
   width: 100%;
-  max-width: 650px;
+  max-width: 860px;
   background-color: var(--os-card-bg);
   border: 2.5px solid var(--os-border);
   border-radius: 14px;
@@ -396,7 +396,7 @@ html, body {
 
 .window-titlebar {
   background-color: var(--os-sage);
-  padding: 0.5rem 0.85rem;
+  padding: 0.65rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -407,7 +407,7 @@ html, body {
 .window-title {
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   color: #fffdf8;
   letter-spacing: 0.05em;
 }
@@ -457,7 +457,8 @@ html, body {
 .portfolio-body {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+  padding: 1.85rem 2.25rem;
 }
 
 .portfolio-avatar-wrap {
@@ -466,21 +467,21 @@ html, body {
 }
 
 .portfolio-avatar {
-  width: 125px;
-  height: 125px;
+  width: 145px;
+  height: 145px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--os-border);
+  border: 3.5px solid var(--os-border);
   box-shadow: 4px 4px 0 rgba(59, 68, 50, 0.25);
   background-color: #ecebe2;
 }
 
 .avatar-status-dot {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 18px;
-  height: 18px;
+  bottom: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: #2ec4b6;
   border: 2.5px solid #fff;
@@ -495,14 +496,14 @@ html, body {
 
 .greeting-sub {
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--os-sage-dark);
 }
 
 .name-heading {
   font-family: var(--font-serif);
-  font-size: 2.15rem;
+  font-size: 2.45rem;
   font-weight: 700;
   color: #c05c2e;
   line-height: 1.15;
@@ -511,7 +512,7 @@ html, body {
 
 .role-badge-tag {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--os-sage-dark);
   letter-spacing: 0.08em;
@@ -522,16 +523,16 @@ html, body {
 .quote-text {
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: 1.05rem;
-  line-height: 1.4;
+  font-size: 1.14rem;
+  line-height: 1.45;
   color: #4a543f;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .window-cta-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.85rem;
   margin-top: 0.25rem;
 }
 
@@ -540,12 +541,12 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.6rem 1.15rem;
+  padding: 0.72rem 1.4rem;
   border-radius: 10px;
   border: 2px solid var(--os-border);
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.94rem;
   cursor: pointer;
   text-decoration: none;
   box-shadow: 3px 3px 0 rgba(59, 68, 50, 0.25);
@@ -600,13 +601,13 @@ html, body {
 
 .win-tab-btn {
   flex: 1;
-  padding: 0.65rem 0.5rem;
+  padding: 0.8rem 1rem;
   background: transparent;
   border: none;
   border-right: 1.5px solid var(--os-border);
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   color: var(--os-text-muted);
   cursor: pointer;
   transition: background-color 0.15s, color 0.15s;
@@ -625,7 +626,7 @@ html, body {
 
 .tab-pane {
   display: none;
-  padding: 1.25rem 1.5rem 1.5rem;
+  padding: 1.6rem 2.25rem 2.25rem;
 }
 
 .tab-pane.active {
@@ -634,10 +635,10 @@ html, body {
 
 .pane-title {
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   letter-spacing: 0.12em;
   color: var(--os-sage-dark);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   text-align: center;
 }
 
@@ -645,7 +646,7 @@ html, body {
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1rem 0.75rem;
+  gap: 1.25rem 1rem;
 }
 
 .tool-card {
@@ -662,21 +663,21 @@ html, body {
 }
 
 .tool-icon-circle {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   border: 2px solid var(--os-border);
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.65rem;
   box-shadow: 2px 2px 0 rgba(59, 68, 50, 0.2);
 }
 
 .tool-name {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--os-text-main);
 }
@@ -952,6 +953,65 @@ html, body {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 3px dashed rgba(143, 28, 36, 0.3);
+}
+
+.single-nav-header {
+  justify-content: flex-start;
+  border-bottom: 2px dashed rgba(143, 28, 36, 0.25);
+  padding-bottom: 0.85rem;
+}
+
+.cute-desktop-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background-color: #fffaf0;
+  color: #1e251a;
+  border: 2px solid #1e251a;
+  border-radius: 9999px;
+  padding: 0.45rem 1.35rem;
+  font-family: var(--font-hand), 'Patrick Hand', 'Gaegu', cursive, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 2.5px 3.5px 0 #1e251a;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease, background-color 0.15s ease;
+  user-select: none;
+}
+
+.cute-desktop-btn:hover {
+  transform: translateY(-2.5px) scale(1.04);
+  box-shadow: 3.5px 5.5px 0 #1e251a;
+  background-color: #ffffff;
+}
+
+.cute-desktop-btn:active {
+  transform: translateY(1.5px) scale(0.97);
+  box-shadow: 1px 1px 0 #1e251a;
+}
+
+.cute-desktop-arrow {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--gingham-red-dark, #8f1c24);
+  transition: transform 0.2s ease;
+}
+
+.cute-desktop-btn:hover .cute-desktop-arrow {
+  transform: translateX(-4px);
+}
+
+.single-nav-cabinet-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.single-nav-cabinet-strip .cute-desktop-btn {
+  font-size: 1.05rem;
+  padding: 0.35rem 1.1rem;
 }
 
 .pixel-tag {
@@ -2489,6 +2549,92 @@ html, body {
   max-width: 900px;
   margin: 1.5rem auto 3rem;
   padding: 0 1rem;
+}
+
+/* Fullscreen Game Mode */
+#game-view:fullscreen,
+#game-view.fullscreen-mode {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1e16;
+  overflow: hidden;
+}
+
+#game-view:fullscreen .pip-game-wrapper,
+#game-view.fullscreen-mode .pip-game-wrapper {
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+#game-view:fullscreen .pip-game-cabinet,
+#game-view.fullscreen-mode .pip-game-cabinet {
+  height: 100%;
+  flex: 1;
+  border-radius: 8px;
+  border-width: 2.5px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+
+#game-view:fullscreen .pip-screen-container,
+#game-view.fullscreen-mode .pip-screen-container {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#game-view:fullscreen #view-overworld,
+#game-view.fullscreen-mode #view-overworld {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game-view:fullscreen #pip-overworld-canvas,
+#game-view.fullscreen-mode #pip-overworld-canvas {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#game-view:fullscreen #view-battle,
+#game-view.fullscreen-mode #view-battle {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: none;
+}
+
+#game-view:fullscreen .pip-battle-stage,
+#game-view.fullscreen-mode .pip-battle-stage {
+  flex: 1;
+  min-height: 280px;
 }
 
 .pip-game-cabinet {

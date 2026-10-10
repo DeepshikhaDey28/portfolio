@@ -710,8 +710,17 @@ class CatchThatPipGame {
       isMoving: false,
       isSprinting: false,
       stepCount: 0,
-      dustParticles: []
+      dustParticles: [],
+      grassParticles: [],
+      grassTravel: 0
     };
+
+    // Encounter and Step Progression State
+    this.graceSteps = 0; // Cooldown steps after battle so encounters are not annoying
+    this.grassStepCount = 0; // 5% step 1 ... 100% step 20
+    this.dialogueTimer = null;
+    this.currentDialogueText = '';
+    this.currentDialogueCb = null;
 
     // Camera
     this.camera = { x: 0, y: 0, width: 640, height: 360 };
@@ -724,20 +733,24 @@ class CatchThatPipGame {
       candies: 1
     };
 
-    // Pip-Dex Caught Registry (6 Unique Species)
+    // Pip-Dex Caught Registry (Classic 150 Reference Species)
     this.dex = {
       flamechar: false,
       bulbasprout: false,
-      buggypip: false,
       aquabyte: false,
+      sparkpip: false,
+      jigglypip: false,
+      buggypip: false,
+      spectrepip: false,
       voltasync: false,
+      snorlaxpip: false,
       neuropip: false
     };
 
-    // 6 Species Catalog
+    // Species Catalog referencing original 150 Pokémon
     this.speciesData = {
       flamechar: {
-        id: '#001',
+        id: '#004',
         name: 'FLAMECHAR',
         level: 28,
         hp: 85,
@@ -748,59 +761,38 @@ class CatchThatPipGame {
         spriteSrc: 'assets/flamechar_sprite.svg',
         zone: 'Route 1: Python Meadow',
         greeting: 'Wild FLAMECHAR sparks with enthusiasm! Its tail flame crackles with Python bytecode!',
-        inspect: 'FLAMECHAR: Fire/Code Pip! Known for fiery performance. Weak to clean formatting and iced chai.',
+        inspect: 'FLAMECHAR (#004 Charmander ref): Fire Pip! Known for fiery performance and fast execution.',
         bulletType: 'fire',
         moves: [
           { name: 'Python Strike', type: 'FIRE', dmg: 35, desc: 'Fiery bytecode pulse' },
           { name: 'Vector Blast', type: 'CODE', dmg: 45, desc: 'Vectorized tensor beam' },
-          { name: 'Flame Byte', type: 'FIRE', dmg: 25, desc: 'Ember compilation slice' },
+          { name: 'Flamethrower', type: 'FIRE', dmg: 40, desc: 'Blazing flame stream' },
           { name: 'Overclock Hotfix', type: 'CODE', dmg: 55, desc: 'Critical deploy burst' }
         ]
       },
       bulbasprout: {
-        id: '#002',
+        id: '#001',
         name: 'BULBASPROUT',
         level: 28,
         hp: 90,
         maxHp: 90,
-        type1: 'DATA',
-        type2: 'GRASS',
+        type1: 'GRASS',
+        type2: 'DATA',
         badgeClass: 'type-trainer',
         spriteSrc: 'assets/bulbasprout_sprite.svg',
         zone: 'Route 1: Python Meadow',
-        greeting: 'Wild BULBASPROUT emerged from the Pandas DataFrame! It wields data decision trees!',
-        inspect: 'BULBASPROUT: Data/Tree Pip! Grows rapidly with clean SQL tables and Tableau charts.',
+        greeting: 'Wild BULBASPROUT emerged from the Pandas DataFrame with fresh decision trees!',
+        inspect: 'BULBASPROUT (#001 Bulbasaur ref): Grass/Data Pip! Rapidly grows with clean datasets.',
         bulletType: 'data',
         moves: [
-          { name: 'DataFrame Vine', type: 'GRASS', dmg: 30, desc: 'Pandas column whip' },
+          { name: 'Vine Whip', type: 'GRASS', dmg: 30, desc: 'Pandas column whip' },
           { name: 'SQL Query Splash', type: 'DATA', dmg: 40, desc: 'Heavy indexed query' },
-          { name: 'Tableau Bloom', type: 'DATA', dmg: 45, desc: 'KPI metric blast' },
-          { name: 'Decision Root', type: 'GRASS', dmg: 25, desc: 'Root node shock' }
-        ]
-      },
-      buggypip: {
-        id: '#003',
-        name: 'BUGGYPIP',
-        level: 28,
-        hp: 75,
-        maxHp: 75,
-        type1: 'GLITCH',
-        type2: 'CYBER',
-        badgeClass: 'type-glitch',
-        spriteSrc: 'assets/buggypip_sprite.svg',
-        zone: 'Route 3: Cyber Matrix',
-        greeting: 'Wild BUGGYPIP threatens production release! "Uncaught TypeError at index.js:42"!',
-        inspect: 'BUGGYPIP: Glitch Pip! Feeds on missing semicolons. Can be pacified by Refactoring Code.',
-        bulletType: 'glitch',
-        moves: [
-          { name: 'TypeError Spike', type: 'GLITCH', dmg: 35, desc: 'Null reference crash' },
-          { name: 'Memory Leak', type: 'CYBER', dmg: 45, desc: 'RAM exhaustion wave' },
-          { name: 'Infinite Loop', type: 'GLITCH', dmg: 50, desc: 'Thread blocking spike' },
-          { name: 'Patch Reject', type: 'CYBER', dmg: 30, desc: 'Merge conflict pulse' }
+          { name: 'Razor Leaf', type: 'GRASS', dmg: 45, desc: 'Sharp leaf storm' },
+          { name: 'Solar Beam', type: 'GRASS', dmg: 60, desc: 'High-energy beam' }
         ]
       },
       aquabyte: {
-        id: '#004',
+        id: '#007',
         name: 'AQUABYTE',
         level: 28,
         hp: 92,
@@ -810,39 +802,144 @@ class CatchThatPipGame {
         badgeClass: 'type-code',
         spriteSrc: 'assets/aquabyte_sprite.svg',
         zone: 'Route 2: Data Lake',
-        greeting: 'Wild AQUABYTE surfaced from the SQL telemetry stream! Its database shell glistens with queries!',
-        inspect: 'AQUABYTE: Water/SQL Pip! Hardened database shell. Highly resistant to unindexed queries.',
+        greeting: 'Wild AQUABYTE surfaced from the SQL stream! Its database shell glistens with queries!',
+        inspect: 'AQUABYTE (#007 Squirtle ref): Water/SQL Pip! Hardened shell resistant to unindexed queries.',
         bulletType: 'data',
         moves: [
-          { name: 'SQL Splash', type: 'WATER', dmg: 35, desc: 'High-speed relational stream' },
-          { name: 'Telemetry Pump', type: 'SQL', dmg: 45, desc: 'Live sensor pressure surge' },
-          { name: 'Pipeline Wave', type: 'WATER', dmg: 50, desc: 'Data cleansing tsunami' },
-          { name: 'Schema Jet', type: 'SQL', dmg: 30, desc: 'Table schema pulse' }
+          { name: 'Water Gun', type: 'WATER', dmg: 35, desc: 'High-speed relational stream' },
+          { name: 'Hydro Pump', type: 'WATER', dmg: 55, desc: 'Pressurized water tsunami' },
+          { name: 'Telemetry Pulse', type: 'SQL', dmg: 40, desc: 'Live sensor pressure surge' },
+          { name: 'Bubble Beam', type: 'WATER', dmg: 38, desc: 'Cleansing bubble barrage' }
+        ]
+      },
+      sparkpip: {
+        id: '#025',
+        name: 'SPARKPIP',
+        level: 28,
+        hp: 82,
+        maxHp: 82,
+        type1: 'ELECTRIC',
+        type2: 'SPEED',
+        badgeClass: 'type-fire',
+        spriteSrc: 'assets/sparkpip_sprite.svg',
+        zone: 'Route 1: Python Meadow',
+        greeting: 'Wild SPARKPIP crackles with 60 FPS electric speed! "Pika-pip!"',
+        inspect: 'SPARKPIP (#025 Pikachu ref): Electric Mouse Pip! Generates pure lightning from rosy cheeks.',
+        bulletType: 'fire',
+        moves: [
+          { name: 'Thunderbolt', type: 'ELECTRIC', dmg: 48, desc: 'High-voltage lightning strike' },
+          { name: 'Quick Attack', type: 'SPEED', dmg: 32, desc: 'High-priority agile dash' },
+          { name: 'Volt Tackle', type: 'ELECTRIC', dmg: 58, desc: 'Electrified tackle charge' },
+          { name: 'Thunder Wave', type: 'ELECTRIC', dmg: 25, desc: 'Paralyzing spark pulse' }
+        ]
+      },
+      jigglypip: {
+        id: '#039',
+        name: 'JIGGLYPIP',
+        level: 28,
+        hp: 110,
+        maxHp: 110,
+        type1: 'FAIRY',
+        type2: 'SOUND',
+        badgeClass: 'type-trainer',
+        spriteSrc: 'assets/jigglypip_sprite.svg',
+        zone: 'Route 1: Python Meadow',
+        greeting: 'Wild JIGGLYPIP puffed up its cheeks and began singing a soothing melody!',
+        inspect: 'JIGGLYPIP (#039 Jigglypuff ref): Balloon Fairy Pip! Soothing songs calm any runtime bugs.',
+        bulletType: 'data',
+        moves: [
+          { name: 'Singing Lullaby', type: 'FAIRY', dmg: 25, desc: 'Hypnotic melodic vibration' },
+          { name: 'Double Slap', type: 'SOUND', dmg: 35, desc: 'Rhythmic double slap' },
+          { name: 'Dazzling Gleam', type: 'FAIRY', dmg: 50, desc: 'Radiant fairy sparkle blast' },
+          { name: 'Body Slam', type: 'NORMAL', dmg: 40, desc: 'Heavy full-weight bounce' }
+        ]
+      },
+      buggypip: {
+        id: '#054',
+        name: 'BUGGYPIP',
+        level: 28,
+        hp: 75,
+        maxHp: 75,
+        type1: 'GLITCH',
+        type2: 'PSYCHIC',
+        badgeClass: 'type-glitch',
+        spriteSrc: 'assets/buggypip_sprite.svg',
+        zone: 'Route 3: Cyber Matrix',
+        greeting: 'Wild BUGGYPIP clutches its head in confusion! "Uncaught TypeError at index.js:42"!',
+        inspect: 'BUGGYPIP (#054 Psyduck ref): Glitch Duck Pip! Unleashes raw psychic power when confused.',
+        bulletType: 'glitch',
+        moves: [
+          { name: 'Confusion', type: 'PSYCHIC', dmg: 38, desc: 'Null reference psychic shock' },
+          { name: 'Memory Leak', type: 'GLITCH', dmg: 45, desc: 'RAM exhaustion wave' },
+          { name: 'Water Pulse', type: 'WATER', dmg: 40, desc: 'Confusing ultrasonic ring' },
+          { name: 'Infinite Loop', type: 'GLITCH', dmg: 52, desc: 'Thread blocking spike' }
+        ]
+      },
+      spectrepip: {
+        id: '#094',
+        name: 'SPECTREPIP',
+        level: 28,
+        hp: 78,
+        maxHp: 78,
+        type1: 'GHOST',
+        type2: 'POISON',
+        badgeClass: 'type-glitch',
+        spriteSrc: 'assets/spectrepip_sprite.svg',
+        zone: 'Route 3: Cyber Matrix',
+        greeting: 'Wild SPECTREPIP materialized from asynchronous shadows with a mischievous grin!',
+        inspect: 'SPECTREPIP (#094 Gengar ref): Shadow Ghost Pip! Lurks in event loops with playful tricks.',
+        bulletType: 'glitch',
+        moves: [
+          { name: 'Shadow Ball', type: 'GHOST', dmg: 50, desc: 'Dark blob of ghostly energy' },
+          { name: 'Night Shade', type: 'GHOST', dmg: 38, desc: 'Phantom mirage strike' },
+          { name: 'Sludge Bomb', type: 'POISON', dmg: 45, desc: 'Toxic sludge detonation' },
+          { name: 'Hypnosis', type: 'PSYCHIC', dmg: 20, desc: 'Deep sleep suggestion wave' }
         ]
       },
       voltasync: {
-        id: '#005',
+        id: '#081',
         name: 'VOLTASYNC',
         level: 28,
         hp: 80,
         maxHp: 80,
         type1: 'ELECTRIC',
-        type2: 'REACT',
+        type2: 'STEEL',
         badgeClass: 'type-fire',
         spriteSrc: 'assets/voltasync_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
         greeting: 'Wild VOLTASYNC discharged async promises! Lightning sparks from its React state ears!',
-        inspect: 'VOLTASYNC: Electric/React Pip! Bounces through the Virtual DOM at 120 FPS!',
+        inspect: 'VOLTASYNC (#081 Magnemite ref): Electric/Steel Pip! Rotates electromagnetic state at 120 FPS!',
         bulletType: 'fire',
         moves: [
-          { name: 'React Spark', type: 'ELECTRIC', dmg: 35, desc: 'Virtual DOM re-render zap' },
-          { name: 'Async Bolt', type: 'REACT', dmg: 45, desc: 'Await promise lightning' },
-          { name: 'State Thunder', type: 'ELECTRIC', dmg: 55, desc: 'High-voltage hook surge' },
-          { name: 'Prop Shock', type: 'REACT', dmg: 28, desc: 'Direct prop collision' }
+          { name: 'Spark Wave', type: 'ELECTRIC', dmg: 35, desc: 'Virtual DOM re-render zap' },
+          { name: 'Flash Cannon', type: 'STEEL', dmg: 45, desc: 'Concentrated steel ray' },
+          { name: 'Thunder Shock', type: 'ELECTRIC', dmg: 50, desc: 'High-voltage hook surge' },
+          { name: 'Sonic Boom', type: 'NORMAL', dmg: 30, desc: 'Direct shockwave pulse' }
+        ]
+      },
+      snorlaxpip: {
+        id: '#143',
+        name: 'SNORLAXPIP',
+        level: 28,
+        hp: 140,
+        maxHp: 140,
+        type1: 'NORMAL',
+        type2: 'COZY',
+        badgeClass: 'type-code',
+        spriteSrc: 'assets/snorlaxpip_sprite.svg',
+        zone: 'Route 2: Data Lake',
+        greeting: 'Wild SNORLAXPIP is peacefully snoozing across the bridge! "Zzz..."',
+        inspect: 'SNORLAXPIP (#143 Snorlax ref): Slumber Bear Pip! Massive HP. Only wakes for delicious snacks.',
+        bulletType: 'data',
+        moves: [
+          { name: 'Body Slam', type: 'NORMAL', dmg: 50, desc: 'Heavy full-weight drop' },
+          { name: 'Snore Blast', type: 'NORMAL', dmg: 35, desc: 'Echoing slumber shockwave' },
+          { name: 'Mega Punch', type: 'NORMAL', dmg: 42, desc: 'Heavy paw blow' },
+          { name: 'Headbutt', type: 'NORMAL', dmg: 38, desc: 'Rock-solid forehead charge' }
         ]
       },
       neuropip: {
-        id: '#006',
+        id: '#150',
         name: 'NEUROPIP',
         level: 28,
         hp: 88,
@@ -853,13 +950,13 @@ class CatchThatPipGame {
         spriteSrc: 'assets/neuropip_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
         greeting: 'Wild NEUROPIP hovered into reality! Its neural crystal glows with deep learning embeddings!',
-        inspect: 'NEUROPIP: Psychic/AI Pip! Analyzes multi-dimensional patterns and optimizes neural layers.',
+        inspect: 'NEUROPIP (#150 Mewtwo ref): Genetic AI Pip! Analyzes and optimizes deep neural architectures.',
         bulletType: 'glitch',
         moves: [
-          { name: 'Neural Beam', type: 'PSYCHIC', dmg: 40, desc: 'Multi-layer perceptron ray' },
-          { name: 'Tensor Strike', type: 'AI', dmg: 50, desc: 'Multi-dimensional matrix hit' },
-          { name: 'Deep Learning', type: 'PSYCHIC', dmg: 60, desc: 'Gradient descent wave' },
-          { name: 'Attention Wave', type: 'AI', dmg: 32, desc: 'Transformer attention pulse' }
+          { name: 'Psychic Beam', type: 'PSYCHIC', dmg: 52, desc: 'Multi-layer perceptron ray' },
+          { name: 'Tensor Strike', type: 'AI', dmg: 45, desc: 'Multi-dimensional matrix hit' },
+          { name: 'Psywave', type: 'PSYCHIC', dmg: 40, desc: 'Harmonic brainwave blast' },
+          { name: 'Barrier', type: 'PSYCHIC', dmg: 0, desc: 'Hardened cognitive firewall' }
         ]
       }
     };
@@ -1087,24 +1184,59 @@ class CatchThatPipGame {
     this.pfpImage = new Image();
     this.pfpImage.src = 'assets/profile.jpg';
 
-    // Keyboard controls
+    // Keyboard controls (WASD to move, Shift to sprint, E to interact, Q for Pokédex, F for fullscreen, Esc to minimize, R to escape battle)
     window.addEventListener('keydown', (e) => {
+      // Only process when game view is active
+      const gameViewActive = document.getElementById('game-view')?.classList.contains('active');
+      if (!gameViewActive) return;
+
       const k = e.key.toLowerCase();
-      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', ' '].includes(k)) {
-        if (this.mode === 'overworld' || this.isDodging) e.preventDefault();
+      if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd', ' ', 'e', 'q', 'r', 'f', 'escape'].includes(k)) {
+        if (this.mode === 'overworld' || this.isDodging || this.mode === 'battle' || this.mode === 'dex') e.preventDefault();
       }
       this.keys[k] = true;
 
       // Sprinting via Shift
       if (e.key === 'Shift') this.player.isSprinting = true;
 
-      // Interact via Space or Z or Enter
-      if ((k === ' ' || k === 'z' || k === 'enter') && this.mode === 'overworld') {
-        this.handleActionPress();
+      // Fullscreen toggle via [F]
+      if (k === 'f') {
+        this.toggleFullscreen();
+        return;
       }
 
-      // Dex / Menu toggle via Esc or X
-      if (k === 'escape' || k === 'x') {
+      // Minimize game to desktop via [Escape]
+      if (k === 'escape') {
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        }
+        const gView = document.getElementById('game-view');
+        if (gView) gView.classList.remove('fullscreen-mode');
+        switchView('desktop');
+        return;
+      }
+
+      // Escape wild Pokémon encounter via [R]
+      if (k === 'r') {
+        if (this.mode === 'battle') {
+          this.escapeBattle();
+          return;
+        }
+      }
+
+      // Interact via [E], Space, Enter, or Z
+      if (k === 'e' || k === ' ' || k === 'enter' || k === 'z') {
+        if (this.dialogueActive) {
+          this.closeDialogue();
+        } else if (this.mode === 'overworld') {
+          this.handleActionPress();
+        } else if (this.mode === 'battle') {
+          this.finishDialogueInstantly();
+        }
+      }
+
+      // Pokédex toggle via [Q]
+      if (k === 'q' || k === 'x') {
         if (this.mode === 'dex') this.setMode('overworld');
         else if (this.mode === 'overworld') this.setMode('dex');
       }
@@ -1172,6 +1304,19 @@ class CatchThatPipGame {
     document.getElementById('btn-pip-item')?.addEventListener('click', () => this.openSubmenu('item'));
     document.getElementById('btn-pip-mercy')?.addEventListener('click', () => this.openSubmenu('mercy'));
     document.getElementById('submenu-back-btn')?.addEventListener('click', () => this.closeSubmenu());
+
+    // Instant dialogue skip on clicking dialogue box in battle
+    document.getElementById('pip-dialogue-section')?.addEventListener('click', () => {
+      this.finishDialogueInstantly();
+    });
+
+    // Sync fullscreen mode class on native fullscreen change
+    document.addEventListener('fullscreenchange', () => {
+      const gView = document.getElementById('game-view');
+      if (gView) {
+        gView.classList.toggle('fullscreen-mode', !!document.fullscreenElement);
+      }
+    });
   }
 
   setMode(targetMode) {
@@ -1212,6 +1357,11 @@ class CatchThatPipGame {
   onLeave() {
     cancelAnimationFrame(this.owAnimId);
     this.stopDodging();
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    }
+    const gView = document.getElementById('game-view');
+    if (gView) gView.classList.remove('fullscreen-mode');
     sfx.stopAllBgm();
   }
 
@@ -1281,15 +1431,46 @@ class CatchThatPipGame {
       // Stepping inside Tall Wild Grass (Tile 5)
       const tileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
       const tileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
-      if (this.tiles[tileRow] && this.tiles[tileRow][tileCol] === 5) {
-        p.stepCount++;
-        // 1.8% wild encounter roll per moving step in grass
-        if (p.stepCount > 35 && Math.random() < 0.045) {
-          p.stepCount = 0;
-          const grassSpecies = Math.random() < 0.5 ? 'flamechar' : 'bulbasprout';
-          this.triggerWildEncounter(grassSpecies);
-          return;
+      const inGrass = (this.tiles[tileRow] && this.tiles[tileRow][tileCol] === 5);
+
+      if (inGrass) {
+        // Dynamic grass rustle particles
+        if (Math.random() < 0.28) {
+          p.grassParticles.push({
+            x: p.x + 12 + (Math.random() - 0.5) * 12,
+            y: p.y + 24 + (Math.random() - 0.5) * 4,
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: -Math.random() * 1.5 - 0.5,
+            life: 1.0,
+            color: Math.random() < 0.5 ? '#15803d' : '#86efac'
+          });
         }
+
+        const distMoved = Math.hypot(dx * curSpeed, dy * curSpeed);
+        p.grassTravel = (p.grassTravel || 0) + distMoved;
+
+        // A discrete footstep is ~26 pixels moved:
+        if (p.grassTravel >= 26) {
+          p.grassTravel = 0;
+
+          // Grace period cooldown after battle so encounters are not annoying
+          if (this.graceSteps > 0) {
+            this.graceSteps--;
+          } else {
+            this.grassStepCount = (this.grassStepCount || 0) + 1;
+            // 5% in 1 step, 10% in 2 steps, ... 100% in 20 steps!
+            const encounterChance = Math.min(1.0, this.grassStepCount * 0.05);
+
+            if (Math.random() < encounterChance) {
+              this.grassStepCount = 0;
+              this.graceSteps = 10; // 10 steps grace cooldown so encounters never get annoying!
+              this.triggerWildEncounter(); // Random encounter with ANY Pip!
+              return;
+            }
+          }
+        }
+      } else {
+        p.grassTravel = 0;
       }
 
       // Check collision with roaming wild Pips
@@ -1308,12 +1489,19 @@ class CatchThatPipGame {
       p.animFrame = 0;
     }
 
-    // Update dust particles
+    // Update dust & grass particles
     for (let i = p.dustParticles.length - 1; i >= 0; i--) {
       const dp = p.dustParticles[i];
       dp.life -= 0.05;
       dp.y -= 0.4;
       if (dp.life <= 0) p.dustParticles.splice(i, 1);
+    }
+    for (let i = p.grassParticles.length - 1; i >= 0; i--) {
+      const gp = p.grassParticles[i];
+      gp.x += gp.vx;
+      gp.y += gp.vy;
+      gp.life -= 0.04;
+      if (gp.life <= 0) p.grassParticles.splice(i, 1);
     }
 
     // Roaming Pips idle wander
@@ -1564,16 +1752,35 @@ class CatchThatPipGame {
       ctx.fillStyle = '#000';
       ctx.fillRect(rx + 12, floatY + 13, 2, 3);
       ctx.fillRect(rx + 19, floatY + 13, 2, 3);
+
+      // Alert bubble "!" when trainer approaches within 56px
+      const distToTrainer = Math.hypot((this.player.x + this.player.w / 2) - (rp.x + 16), (this.player.y + this.player.h / 2) - (rp.y + 16));
+      if (distToTrainer < 56) {
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(rx + 16, floatY - 4, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('!', rx + 16, floatY - 1);
+      }
       ctx.restore();
     });
 
-    // 5. Draw Dust Particles
+    // 5. Draw Dust & Grass Particles
     ctx.fillStyle = 'rgba(254, 240, 138, 0.7)';
     this.player.dustParticles.forEach(dp => {
       ctx.beginPath();
       ctx.arc(dp.x - cx, dp.y - cy, dp.r, 0, Math.PI * 2);
       ctx.fill();
     });
+    this.player.grassParticles.forEach(gp => {
+      ctx.fillStyle = gp.color;
+      ctx.globalAlpha = Math.max(0, gp.life);
+      ctx.fillRect(gp.x - cx, gp.y - cy, 3, 3);
+    });
+    ctx.globalAlpha = 1.0;
 
     // 6. Draw Player Trainer Deepshikha
     const p = this.player;
@@ -1711,7 +1918,7 @@ class CatchThatPipGame {
     Object.keys(this.dex).forEach(k => { if (this.dex[k]) count++; });
 
     if (hpEl) hpEl.textContent = `${this.player.hp}/${this.player.maxHp}`;
-    if (dexEl) dexEl.textContent = `${count}/6`;
+    if (dexEl) dexEl.textContent = `${count}/${Object.keys(this.dex).length}`;
     if (dexNav) dexNav.textContent = count;
   }
 
@@ -1719,6 +1926,10 @@ class CatchThatPipGame {
   // BATTLE TRANSITION & TURN-BASED ARENA ENGINE
   // ========================================================
   triggerWildEncounter(speciesKey) {
+    if (!speciesKey) {
+      const keys = Object.keys(this.speciesData);
+      speciesKey = keys[Math.floor(Math.random() * keys.length)];
+    }
     sfx.playEncounter();
     const flash = document.getElementById('ow-flash-overlay');
     if (flash) {
@@ -1732,6 +1943,10 @@ class CatchThatPipGame {
   }
 
   startBattle(speciesKey) {
+    if (!speciesKey) {
+      const keys = Object.keys(this.speciesData);
+      speciesKey = keys[Math.floor(Math.random() * keys.length)];
+    }
     this.currentSpeciesKey = speciesKey;
     const data = this.speciesData[speciesKey] || this.speciesData.flamechar;
     this.pip = { ...data };
@@ -1765,24 +1980,83 @@ class CatchThatPipGame {
     }
 
     this.updateHpUI();
-    this.typeDialogue(this.pip.greeting);
+    this.typeDialogue(`Wild ${this.pip.name} appeared! What will DEEPSHIKHA do?`);
   }
 
   typeDialogue(text, callback) {
     const el = document.getElementById('pip-dialogue-text');
     if (!el) return;
+    if (this.dialogueTimer) {
+      clearInterval(this.dialogueTimer);
+      this.dialogueTimer = null;
+    }
+    this.currentDialogueText = text;
+    this.currentDialogueCb = callback;
     el.textContent = '';
     let i = 0;
-    const timer = setInterval(() => {
+    this.dialogueTimer = setInterval(() => {
       if (i < text.length) {
         el.textContent += text[i];
         if (i % 3 === 0 && text[i] !== ' ') sfx.playBlip();
         i++;
       } else {
-        clearInterval(timer);
-        if (callback) callback();
+        clearInterval(this.dialogueTimer);
+        this.dialogueTimer = null;
+        const cb = this.currentDialogueCb;
+        this.currentDialogueCb = null;
+        if (cb) cb();
       }
     }, 20);
+  }
+
+  finishDialogueInstantly() {
+    if (this.dialogueTimer) {
+      clearInterval(this.dialogueTimer);
+      this.dialogueTimer = null;
+      const el = document.getElementById('pip-dialogue-text');
+      if (el && this.currentDialogueText) {
+        el.textContent = this.currentDialogueText;
+      }
+      const cb = this.currentDialogueCb;
+      this.currentDialogueCb = null;
+      if (cb) cb();
+    }
+  }
+
+  escapeBattle() {
+    if (this.mode !== 'battle') return;
+    sfx.playClick();
+    this.closeSubmenu();
+    this.graceSteps = 10;
+    this.grassStepCount = 0;
+    this.typeDialogue('Got away safely!', () => {
+      setTimeout(() => this.setMode('overworld'), 500);
+    });
+  }
+
+  toggleFullscreen() {
+    const gameView = document.getElementById('game-view');
+    if (!gameView) return;
+
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      if (gameView.requestFullscreen) {
+        gameView.requestFullscreen().catch(() => {});
+      } else if (gameView.webkitRequestFullscreen) {
+        gameView.webkitRequestFullscreen();
+      } else if (gameView.msRequestFullscreen) {
+        gameView.msRequestFullscreen();
+      }
+      gameView.classList.add('fullscreen-mode');
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      gameView.classList.remove('fullscreen-mode');
+    }
   }
 
   updateHpUI() {
@@ -1911,15 +2185,9 @@ class CatchThatPipGame {
           action: () => this.attemptCatch()
         },
         {
-          name: '🏃 RUN / Flee to Open World',
-          desc: 'Escape battle safely back to map',
-          action: () => {
-            sfx.playClick();
-            this.closeSubmenu();
-            this.typeDialogue('Got away safely!', () => {
-              setTimeout(() => this.setMode('overworld'), 500);
-            });
-          }
+          name: '🏃 RUN / Flee ([R])',
+          desc: 'Escape battle safely back to overworld (Press [R])',
+          action: () => this.escapeBattle()
         }
       ];
       opts.forEach(o => {

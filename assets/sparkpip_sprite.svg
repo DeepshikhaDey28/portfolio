@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <radialGradient id="spark-body" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </radialGradient>
+  </defs>
+  <!-- Long Pointy Ears with Black Tips -->
+  <polygon points="18,22 8,4 16,14" fill="#000000"/>
+  <polygon points="18,22 14,10 24,18" fill="url(#spark-body)"/>
+  <polygon points="46,22 56,4 48,14" fill="#000000"/>
+  <polygon points="46,22 50,10 40,18" fill="url(#spark-body)"/>
+  <!-- Lightning Tail -->
+  <path d="M48 44 L56 38 L52 32 L60 24 L52 28 L54 36 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+  <!-- Round Chubby Body -->
+  <ellipse cx="32" cy="38" rx="20" ry="18" fill="url(#spark-body)" stroke="#ca8a04" stroke-width="2"/>
+  <!-- Spark Eyes -->
+  <circle cx="25" cy="33" r="3.5" fill="#1e293b"/>
+  <circle cx="24" cy="32" r="1.2" fill="#ffffff"/>
+  <circle cx="39" cy="33" r="3.5" fill="#1e293b"/>
+  <circle cx="38" cy="32" r="1.2" fill="#ffffff"/>
+  <!-- Red Rosy Electric Cheeks -->
+  <circle cx="18" cy="40" r="4.5" fill="#ef4444"/>
+  <circle cx="46" cy="40" r="4.5" fill="#ef4444"/>
+  <!-- Cute Nose and Smile -->
+  <circle cx="32" cy="37" r="1" fill="#78350f"/>
+  <path d="M29 41 Q32 44 35 41" stroke="#78350f" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Paws -->
+  <ellipse cx="26" cy="52" rx="4" ry="2.5" fill="#eab308"/>
+  <ellipse cx="38" cy="52" rx="4" ry="2.5" fill="#eab308"/>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <radialGradient id="snorlax-blue" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="60%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+  </defs>
+  <!-- Snorlax Pointy Bear Ears -->
+  <polygon points="18,18 12,6 26,12" fill="#0284c7" stroke="#0f172a" stroke-width="1.5"/>
+  <polygon points="46,18 52,6 38,12" fill="#0284c7" stroke="#0f172a" stroke-width="1.5"/>
+  <!-- Giant Cozy Bear Body -->
+  <ellipse cx="32" cy="40" rx="24" ry="20" fill="url(#snorlax-blue)" stroke="#0f172a" stroke-width="2"/>
+  <!-- Head -->
+  <ellipse cx="32" cy="22" rx="16" ry="14" fill="url(#snorlax-blue)" stroke="#0f172a" stroke-width="1.8"/>
+  <!-- Cream Belly & Face Patch -->
+  <ellipse cx="32" cy="42" rx="16" ry="14" fill="#fef3c7"/>
+  <path d="M22 24 Q32 16 42 24 Q38 32 32 30 Q26 32 22 24 Z" fill="#fef3c7"/>
+  <!-- Sleeping Slanted Eyes (Closed Happy Lines: ^_^) -->
+  <line x1="24" y1="23" x2="28" y2="23" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+  <line x1="36" y1="23" x2="40" y2="23" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+  <!-- Tiny Cute Snoozing Mouth with Little Fangs -->
+  <path d="M29 27 Q32 29 35 27" stroke="#1e293b" stroke-width="1.5" fill="none"/>
+  <polygon points="29,26 30,28 31,26" fill="#ffffff"/>
+  <polygon points="33,26 34,28 35,26" fill="#ffffff"/>
+  <!-- Big Cozy Sleeping Feet -->
+  <ellipse cx="18" cy="56" rx="8" ry="5" fill="#fef3c7" stroke="#0f172a" stroke-width="1.5"/>
+  <ellipse cx="46" cy="56" rx="8" ry="5" fill="#fef3c7" stroke="#0f172a" stroke-width="1.5"/>
+</svg>

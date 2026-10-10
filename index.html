@@ -305,20 +305,11 @@
     <div class="scrapbook-wrapper">
       <div class="scrapbook-page">
 
-        <!-- Top Header Strip: Pixel Heart & Role Pill -->
-        <header class="scrapbook-header">
-          <div class="sh-left">
-            <button id="back-to-desktop-btn" class="scrapbook-nav-tag" title="Return to Desktop OS">
-              &larr; Desktop
-            </button>
-            <span class="pixel-tag">♥ Resume &amp; Profile</span>
-          </div>
-          <div class="sh-right">
-            <span class="editorial-pill">Computer Science &bull; Data Science &bull; Front-End</span>
-            <button id="about-to-works-btn" class="scrapbook-subnav-btn" title="View Projects &amp; Code">📁 Works</button>
-            <button id="about-to-game-btn" class="scrapbook-subnav-btn" title="Play Arcade Game">🎮 Catch Pip</button>
-            <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="scrapbook-subnav-btn download-accent" title="Download Official PDF">⬇ PDF</a>
-          </div>
+        <!-- Top Header Strip: Single Cute Go to Desktop Button -->
+        <header class="scrapbook-header single-nav-header">
+          <button id="back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
+            <span class="cute-desktop-arrow">←</span> Go to desktop
+          </button>
         </header>
 
         <!-- Main 2-Column Content Layout (Directly matching Daksh / Maryam format) -->
@@ -587,20 +578,11 @@
     <div class="scrapbook-wrapper works-scrapbook-wrapper">
       <div class="scrapbook-page works-scrapbook-page">
 
-        <!-- Top Header Strip: Pixel Tag & Role Pill (Matching Daksh / Maryam Aesthetic) -->
-        <header class="scrapbook-header">
-          <div class="sh-left">
-            <button id="works-back-to-desktop-btn" class="scrapbook-nav-tag" title="Return to Desktop OS">
-              &larr; Desktop
-            </button>
-            <span class="pixel-tag">📁 Works &amp; Code Archive</span>
-          </div>
-          <div class="sh-right">
-            <span class="editorial-pill">Computer Science &bull; Data Science &bull; GitHub Live Auto-Sync</span>
-            <button id="works-to-about-btn" class="scrapbook-subnav-btn" title="View Profile &amp; Bio">♥ About Me</button>
-            <button id="works-to-game-btn" class="scrapbook-subnav-btn" title="Play Arcade Game">🎮 Catch Pip</button>
-            <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="scrapbook-subnav-btn download-accent" title="Download Official PDF">⬇ PDF</a>
-          </div>
+        <!-- Top Header Strip: Single Cute Go to Desktop Button -->
+        <header class="scrapbook-header single-nav-header">
+          <button id="works-back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
+            <span class="cute-desktop-arrow">←</span> Go to desktop
+          </button>
         </header>
 
         <!-- Scrapbook Intro Banner with Washi Tape and Marker Title -->
@@ -897,26 +879,15 @@
 
       <div class="pip-game-cabinet">
         
-        <!-- Retro Cabinet Top Title Bar (Clean & decluttered) -->
-        <div class="cabinet-top-strip">
-          <div class="cabinet-brand">
-            <button id="game-back-to-desktop-btn" class="cabinet-back-btn" title="Return to Desktop OS">
-              &larr; Desktop OS
-            </button>
-            <span class="cabinet-title">PIP-BOY ADVANCE // OPEN WORLD DEV REGION</span>
-          </div>
-
-          <div class="cabinet-strip-actions">
-            <button id="game-audio-toggle-btn" class="cabinet-ctrl-pill" title="Toggle Game Audio">
-              <span id="game-audio-icon">🎵 Audio: OFF</span>
-            </button>
-            <button id="game-mode-toggle-btn" class="cabinet-ctrl-pill highlight" title="Toggle Mode">
-              <span id="game-mode-text">🗺️ Open World</span>
-            </button>
-            <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Open Pip-Dex">
-              <span>📖 Pip-Dex (<span id="dex-nav-count">0</span>/6)</span>
-            </button>
-          </div>
+        <!-- Retro Cabinet Top Title Bar (Cute Go to Desktop Button) -->
+        <div class="cabinet-top-strip single-nav-cabinet-strip">
+          <button id="game-back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
+            <span class="cute-desktop-arrow">←</span> Go to desktop
+          </button>
+          <span class="cabinet-title">PIP-BOY ADVANCE // OPEN WORLD DEV REGION</span>
+          <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Press [Q] for Pip-Dex" style="display: none;">
+            <span>📖 Pip-Dex</span>
+          </button>
         </div>
 
         <!-- SCREEN CONTAINER (Houses Overworld, Battle Arena, and Pip-Dex Menu) -->
@@ -932,7 +903,7 @@
                 <span>📍 Pallet Dev Lab</span>
               </div>
               <div class="ow-stats-pill">
-                <span>PIPS: <strong id="ow-dex-count">0/6</strong></span>
+                <span>PIPS: <strong id="ow-dex-count">0/10</strong></span>
                 <span>HP: <strong id="ow-hp-count">100/100</strong></span>
               </div>
             </div>
@@ -941,7 +912,7 @@
             <div class="ow-dialogue-box" id="ow-dialogue-box" style="display: none;">
               <div class="ow-speaker" id="ow-dialogue-speaker">Dev Mentor</div>
               <div class="ow-message" id="ow-dialogue-message">Welcome to the Open Dev Region!</div>
-              <div class="ow-prompt">▼ Press [A] or Space to continue</div>
+              <div class="ow-prompt">▼ Press [E] or Space to continue</div>
             </div>
 
             <!-- Wild Encounter Screen Flash Overlay -->
@@ -1144,7 +1115,7 @@
           </div>
 
           <div class="handheld-middle-lore">
-            <span class="lore-text">WASD / Arrow Keys: Move &bull; Shift / [B]: Sprint &bull; [A] / Space: Interact &amp; Talk &bull; [ESC]: Dex</span>
+            <span class="lore-text">WASD: Move &bull; Shift: Sprint &bull; [E] / Space: Interact &bull; [Q]: Pip-Dex &bull; [F]: Fullscreen &bull; [ESC]: Minimize &bull; [R]: Run from Battle</span>
           </div>
 
           <div class="handheld-action-keys">
