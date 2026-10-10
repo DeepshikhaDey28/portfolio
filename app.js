@@ -365,6 +365,19 @@ document.getElementById('works-back-to-desktop-btn')?.addEventListener('click', 
 document.getElementById('works-bottom-back-btn')?.addEventListener('click', () => switchView('desktop'));
 document.getElementById('game-back-to-desktop-btn')?.addEventListener('click', () => switchView('desktop'));
 
+// Editorial Landing Page Triggers (Image 1 Reference)
+document.getElementById('enb-home-btn')?.addEventListener('click', () => switchView('desktop'));
+document.getElementById('enb-link-bio')?.addEventListener('click', () => switchView('about'));
+document.getElementById('ehc-thumb-bio')?.addEventListener('click', () => switchView('about'));
+document.getElementById('ehc-badge-pill')?.addEventListener('click', () => switchView('about'));
+
+document.getElementById('enb-link-projects')?.addEventListener('click', () => switchView('works'));
+document.getElementById('epc-btn-projects')?.addEventListener('click', () => switchView('works'));
+document.getElementById('emg-card-all')?.addEventListener('click', () => switchView('works'));
+
+document.getElementById('enb-link-game')?.addEventListener('click', () => switchView('game'));
+document.getElementById('epc-btn-game')?.addEventListener('click', () => switchView('game'));
+
 // Browser popstate handler
 window.addEventListener('popstate', () => {
   const hash = location.hash.replace('#', '') || 'desktop';
@@ -416,6 +429,8 @@ function handleSilentToggle() {
 
 document.getElementById('music-toggle-btn')?.addEventListener('click', handleSilentToggle);
 document.getElementById('game-audio-toggle-btn')?.addEventListener('click', handleSilentToggle);
+document.getElementById('enb-audio-btn')?.addEventListener('click', handleSilentToggle);
+document.getElementById('ehc-music-toggle')?.addEventListener('click', handleSilentToggle);
 
 
 // ========================================================
@@ -2701,8 +2716,12 @@ document.querySelectorAll('.close-modal-btn').forEach(btn => {
 
 document.getElementById('icon-contact')?.addEventListener('click', () => openModal(contactModal));
 document.getElementById('quick-contact-pill')?.addEventListener('click', () => openModal(contactModal));
+document.getElementById('pinterest-contact-btn')?.addEventListener('click', () => openModal(contactModal));
+
 document.getElementById('icon-resume')?.addEventListener('click', () => openModal(resumeModal));
 document.getElementById('quick-resume-btn-bar')?.addEventListener('click', () => openModal(resumeModal));
+document.getElementById('enb-link-resume')?.addEventListener('click', () => openModal(resumeModal));
+document.getElementById('epc-btn-resume')?.addEventListener('click', () => openModal(resumeModal));
 
 // Toggle between Formatted HTML Resume and Embedded PDF
 const toggleResumeBtn = document.getElementById('toggle-resume-format-btn');

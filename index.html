@@ -20,254 +20,219 @@
   <!-- ======================================================== -->
   <!-- VIEW 1: RETRO OS DESKTOP (ELAINE STYLE WORKSPACE)        -->
   <!-- ======================================================== -->
+  <!-- ======================================================== -->
+  <!-- VIEW 1: AESTHETIC EDITORIAL DESKTOP (IMAGE 1 REFERENCE)  -->
+  <!-- ======================================================== -->
   <section id="desktop-view" class="view active">
     
-    <!-- Main Desktop Workspace with Grid Background -->
-    <main class="desktop-workspace">
+    <div class="editorial-desktop-container">
 
-      <!-- Desktop Sidebar Left Icons (Professional Modern Format) -->
-      <aside class="desktop-icons-col left-col">
-        <div class="desktop-icon-item" id="icon-profile" tabindex="0" role="button" aria-label="Open Profile and Bio">
-          <div class="icon-box custom-game-icon-box">
-            <img src="assets/profile.jpg" alt="Profile and Bio" class="game-icon-img" style="border-radius: 12px; object-fit: cover;">
-          </div>
-          <span class="icon-label">profile.sys</span>
-          <span class="icon-hint">About &amp; Bio</span>
-        </div>
+      <!-- 1. Top Deep Wine Maroon Nav Capsule Bar -->
+      <header class="editorial-nav-bar">
+        <button class="enb-icon-btn home-btn" id="enb-home-btn" title="Home View" aria-label="Home">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </button>
 
-        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Projects Archive">
-          <div class="icon-box custom-game-icon-box">
-            <img src="assets/icon_projects_laptop.png" alt="Projects Directory" class="game-icon-img" style="image-rendering: pixelated; transform: scale(1.15);">
-          </div>
-          <span class="icon-label">projects.dir</span>
-          <span class="icon-hint">Code &amp; Repos</span>
-        </div>
-
-        <div class="desktop-icon-item" id="icon-game" tabindex="0" role="button" aria-label="Play Catch That Pip Mini-Game">
-          <div class="icon-box custom-game-icon-box pulse-capsule">
-            <img src="assets/icon_game_modern.svg" alt="Catch That Pip Arcade Console" class="game-icon-img">
-          </div>
-          <span class="icon-label">catch_pip.exe</span>
-          <span class="icon-hint">Arcade Game</span>
-        </div>
-      </aside>
-
-      <!-- Center Windows Container -->
-      <div class="desktop-center-area">
-
-        <!-- Top Social & Utilities Strip -->
-        <div class="social-bar">
-          <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="social-pill linkedin" title="LinkedIn Profile" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.76v8.37H6.46v-8.37M7.84 6.2a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/>
-            </svg>
-          </a>
-          <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="social-pill github" title="GitHub Profile" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-          </a>
-          <a href="mailto:dey.deepshikha.283@gmail.com" class="social-pill email" title="Send Email" aria-label="Email">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect width="20" height="16" x="2" y="4" rx="3"/>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
-          </a>
-          <button id="music-toggle-btn" class="social-pill audio-silent-pill active" title="Audio is ON (Click to Mute / Silent)" aria-label="Toggle Sound">
-            <span id="music-icon" class="audio-silent-icon-wrap">
-              <svg class="audio-svg playing-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-              </svg>
-            </span>
+        <nav class="enb-links-row">
+          <button class="enb-link-item" id="enb-link-bio" title="Deepshikha Dey Bio">
+            <span class="eli-title">Deepshikha Dey</span>
+            <span class="eli-sub">Developer &amp; Data Science</span>
           </button>
+          <button class="enb-link-item" id="enb-link-projects" title="Explore Projects">
+            <span class="eli-title">Projects</span>
+            <span class="eli-sub">Code &amp; Repos</span>
+          </button>
+          <button class="enb-link-item" id="enb-link-resume" title="View Resume">
+            <span class="eli-title">Resume</span>
+            <span class="eli-sub">Official CV</span>
+          </button>
+          <button class="enb-link-item" id="enb-link-game" title="Play Arcade Game">
+            <span class="eli-title">Mini-Game</span>
+            <span class="eli-sub">Pip Arcade</span>
+          </button>
+        </nav>
+
+        <button class="enb-icon-btn music-btn active" id="enb-audio-btn" title="Toggle Soundtrack" aria-label="Toggle Soundtrack">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- 2. Large Hero Editorial Feature Card (Reference Top Card) -->
+      <article class="editorial-hero-card">
+        <!-- Main Featured Photo Frame with Floating Widgets -->
+        <div class="ehc-image-wrap">
+          <img src="assets/profile.jpg" alt="Deepshikha Dey Portrait" class="ehc-main-photo">
+          
+          <!-- Bottom-Left Music Floating Pill Widget -->
+          <button type="button" class="ehc-music-pill" id="ehc-music-toggle" title="Toggle Soundtrack">
+            <div class="emp-cover-wrap">
+              <img src="assets/profile.jpg" alt="Now Playing" class="emp-cover">
+            </div>
+            <span class="emp-notes">🎵</span>
+            <span class="emp-text">Ambient Lofi Music</span>
+          </button>
+
+          <!-- Bottom-Right Identity Floating Pill Widget -->
+          <div class="ehc-badge-pill" id="ehc-badge-pill">
+            <img src="assets/profile.jpg" alt="Deepshikha Dey" class="ebp-avatar">
+            <div class="ebp-text-col">
+              <span class="ebp-name">Deepshikha Dey</span>
+              <span class="ebp-role">Data Scientist &amp; SWE</span>
+            </div>
+          </div>
         </div>
 
-        <!-- RETRO WINDOW 1: C:\DEEPSHIKHA\profile\overview.sys -->
-        <article class="retro-window" id="window-portfolio">
-          <div class="window-titlebar">
-            <span class="window-title">C:\DEEPSHIKHA\profile\overview.sys</span>
-            <div class="window-controls">
-              <button class="win-btn minimize" title="Minimize">−</button>
-              <button class="win-btn close" title="Close">×</button>
+        <!-- Underneath Image Content Row -->
+        <div class="ehc-content-row">
+          <div class="ehc-thumbs-col">
+            <button class="ehc-thumb-btn run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" title="Smart Traffic Grid Simulation">
+              <img src="assets/icon_projects_laptop.png" alt="Traffic Simulator">
+            </button>
+            <button class="ehc-thumb-btn run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" title="GlobalPulse Weather Hub">
+              <img src="assets/icon_game_modern.svg" alt="Weather Telemetry">
+            </button>
+            <button class="ehc-thumb-btn" id="ehc-thumb-bio" title="Open Full Biography">
+              <img src="assets/profile.jpg" alt="Deepshikha Dey">
+            </button>
+          </div>
+          <div class="ehc-bio-col">
+            <h2 class="ehc-name-heading">Deepshikha Dey</h2>
+            <p class="ehc-bio-text">
+              Deepshikha Dey was born with a passion for building and discovering. As she grew, curiosity seemed to bloom brighter around her, turning complex datasets and front-end architectures into small adventures. Her world is full of clean code, real-time telemetry, and intentional digital experiences that feel like magic.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Second Row (Two Columns: Square Photo & Social Profile Card) -->
+      <div class="editorial-grid-two">
+        <!-- Left: Square Photo Card -->
+        <div class="editorial-photo-card">
+          <img src="assets/profile.jpg" alt="Deepshikha Dey" class="epc-photo-img">
+        </div>
+
+        <!-- Right: Social Profile Stats Card with Wine Border -->
+        <article class="editorial-profile-card">
+          <div class="epc-header">
+            <h3 class="epc-name">Deepshikha Dey</h3>
+            <span class="epc-network">1K+ network &bull; Pune, India</span>
+          </div>
+
+          <div class="epc-handle-row">
+            <div class="epc-lock-handle">
+              <span class="epc-lock-icon">🔒</span>
+              <span class="epc-email">dey.deepshikha.283@gmail.com</span>
+            </div>
+            <div class="epc-social-icons">
+              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="epc-icon-link" title="LinkedIn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.76v8.37H6.46v-8.37M7.84 6.2a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+              </a>
+              <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="epc-icon-link" title="GitHub">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              </a>
             </div>
           </div>
-          <div class="window-body portfolio-body">
-            <div class="portfolio-avatar-wrap">
-              <img src="assets/profile.jpg" alt="Deepshikha Dey" class="portfolio-avatar" title="Deepshikha Dey">
-              <span class="avatar-status-dot" title="Available for roles"></span>
+
+          <p class="epc-bio-snippet">Data Science &bull; Front-End Developer &bull; Cyber Security</p>
+
+          <div class="epc-stats-row">
+            <div class="epc-stat">
+              <strong>12+</strong>
+              <span>projects</span>
             </div>
-            <div class="portfolio-text-content">
-              <span class="greeting-sub">hi! i'm</span>
-              <h2 class="name-heading">Deepshikha Dey</h2>
-              <div class="role-badge-tag">DATA SCIENTIST &amp; FRONT-END DEVELOPER</div>
-              <p class="quote-text">
-                &ldquo;Bridging the gap between data analytics and front-end engineering with intention.&rdquo;
-              </p>
-              <div class="window-cta-row">
-                <button class="retro-btn primary" id="win-about-open-btn">
-                  <span>Open Full Profile / About Me &rarr;</span>
-                </button>
-                <button class="retro-btn secondary" id="win-quick-works-btn">
-                  <span>Explore Projects Page &rarr;</span>
-                </button>
-              </div>
+            <div class="epc-stat">
+              <strong>8.94</strong>
+              <span>cgpa</span>
+            </div>
+            <div class="epc-stat">
+              <strong>9.45</strong>
+              <span>sgpa</span>
             </div>
           </div>
-        </article>
 
-        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\skills_and_projects.sys (Tools & Tech Showcase) -->
-        <article class="retro-window" id="window-works">
-          <div class="window-titlebar">
-            <span class="window-title">C:\DEEPSHIKHA\skills_and_projects.sys</span>
-            <div class="window-controls">
-              <button class="win-btn minimize" title="Minimize">−</button>
-              <button class="win-btn close" title="Close">×</button>
-            </div>
-          </div>
-          <div class="window-body works-body">
-            <div class="works-accent-stripe"></div>
-            
-            <!-- Tab Navigation inside window -->
-            <div class="window-nav-tabs">
-              <button class="win-tab-btn active" data-tab="tools">TOOLS &amp; TECH</button>
-              <button class="win-tab-btn" data-tab="featured">FEATURED WORK</button>
-              <button class="win-tab-btn" data-tab="telemetry">SEVRAOS &amp; DATA</button>
-            </div>
-
-            <!-- Tab 1: Tools Grid (Authentic to Elaine's Window 2) -->
-            <div class="tab-pane active" id="tab-tools">
-              <h3 class="pane-title">CORE TOOLSET</h3>
-              <div class="tools-grid">
-                <div class="tool-card">
-                  <div class="tool-icon-circle python">🐍</div>
-                  <span class="tool-name">Python</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle react">⚛️</div>
-                  <span class="tool-name">React.js</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle sql">🗄️</div>
-                  <span class="tool-name">SQL (MySQL)</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle tableau">📊</div>
-                  <span class="tool-name">Tableau</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle pandas">🐼</div>
-                  <span class="tool-name">Pandas / NumPy</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle html">🌐</div>
-                  <span class="tool-name">HTML5 / CSS3</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle figma">🎨</div>
-                  <span class="tool-name">Figma</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle git">🐙</div>
-                  <span class="tool-name">Git / GitHub</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle vscode">💻</div>
-                  <span class="tool-name">VS Code</span>
-                </div>
-                <div class="tool-card">
-                  <div class="tool-icon-circle security">🛡️</div>
-                  <span class="tool-name">Cyber Security</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tab 2: Featured Work -->
-            <div class="tab-pane" id="tab-featured">
-              <div class="projects-list-mini">
-                <div class="project-mini-card">
-                  <div class="pmc-header">
-                    <h4>B2B Business &amp; E-Commerce Platform</h4>
-                    <span class="pmc-tag">Frontend &amp; Retail</span>
-                  </div>
-                  <p>Full e-commerce platform with product catalog, cart flows, authentication, and order workflows.</p>
-                  <div class="pmc-footer">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="pmc-link">GitHub Repo &rarr;</a>
-                  </div>
-                </div>
-
-                <div class="project-mini-card">
-                  <div class="pmc-header">
-                    <h4>SevraOS Telemetry &amp; Device UI</h4>
-                    <span class="pmc-tag">Team Lead / React</span>
-                  </div>
-                  <p>Architected front-end UI for SevraOS device and engineered telemetry analytics data pipelines using Python &amp; SQL.</p>
-                  <div class="pmc-footer">
-                    <span class="tech-tag">React</span>
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">SQL</span>
-                    <span class="tech-tag">Figma</span>
-                    <span class="badge-role">Sevra AI</span>
-                  </div>
-                </div>
-
-                <div class="project-mini-card">
-                  <div class="pmc-header">
-                    <h4>Python Data &amp; Algorithmic Hub</h4>
-                    <span class="pmc-tag">Algorithms &amp; Core CS</span>
-                  </div>
-                  <p>Core algorithmic foundations, data structures, variables, and type casting operations implemented in Python.</p>
-                  <div class="pmc-footer">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Data Structures</span>
-                    <span class="tech-tag">OOP</span>
-                    <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="pmc-link">GitHub Repo &rarr;</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tab 3: Telemetry & Data Science -->
-            <div class="tab-pane" id="tab-telemetry">
-              <div class="telemetry-info-box">
-                <h4>Data Science &amp; Business Intelligence Highlights</h4>
-                <ul>
-                  <li><strong>Yhills Intern:</strong> Executed data cleaning and preprocessing pipelines on raw datasets; designed interactive Tableau dashboards for actionable KPIs.</li>
-                  <li><strong>Sevra AI Team Lead:</strong> Streamlined telemetry data pipelines, integrating Python and SQL to monitor device performance metrics in real-time.</li>
-                  <li><strong>Python Hub:</strong> Data structure implementations and algorithmic scripts in public repository <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank">First_Python</a>.</li>
-                </ul>
-              </div>
-            </div>
-
+          <div class="epc-actions-row">
+            <button class="epc-action-pill" id="epc-btn-projects">Explore Projects</button>
+            <button class="epc-action-pill" id="epc-btn-resume">Official Resume</button>
+            <button class="epc-action-pill epc-wine-pill" id="epc-btn-game">Play Game 🎮</button>
           </div>
         </article>
-
       </div>
 
-      <!-- Desktop Sidebar Right Icons -->
-      <aside class="desktop-icons-col right-col">
-        <div class="desktop-icon-item" id="icon-contact" tabindex="0" role="button" aria-label="Open Contact Information">
-          <div class="icon-box custom-game-icon-box">
-            <img src="assets/icon_contact_modern.svg" alt="Contact Message" class="game-icon-img">
+      <!-- 4. Third Row (Two Columns: Stats + Mini Gallery & Pinterest Card) -->
+      <div class="editorial-grid-three">
+        <!-- Left: Stats Avatar + Mini Projects Window -->
+        <div class="eg3-left-col">
+          <div class="eg3-profile-stamp">
+            <div class="eg3-avatar-circle">
+              <img src="assets/profile.jpg" alt="Deepshikha Dey">
+            </div>
+            <span class="eg3-handle">@deepshikha28</span>
+            <div class="eg3-counter-row">
+              <div class="eg3-counter"><strong>3+</strong><span>Internships</span></div>
+              <div class="eg3-counter"><strong>4</strong><span>Deployed</span></div>
+              <div class="eg3-counter"><strong>100%</strong><span>Commitment</span></div>
+            </div>
           </div>
-          <span class="icon-label">contact.msg</span>
-          <span class="icon-hint">Get in Touch</span>
+
+          <!-- Mini Gallery Window with Wine Header -->
+          <article class="editorial-mini-gallery">
+            <div class="emg-top-bar">
+              <span class="emg-icon">🏠</span>
+              <span class="emg-title">Projects &amp; Repositories</span>
+              <span class="emg-icon">🔍</span>
+            </div>
+            <div class="emg-grid">
+              <div class="emg-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" role="button" tabindex="0">
+                <div class="emg-card-thumb sim-thumb">🚦</div>
+                <span class="emg-card-title">Traffic Simulator</span>
+                <span class="emg-card-tag">Interactive</span>
+              </div>
+              <div class="emg-card run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" role="button" tabindex="0">
+                <div class="emg-card-thumb weather-thumb">🌦️</div>
+                <span class="emg-card-title">Weather Hub</span>
+                <span class="emg-card-tag">Telemetry</span>
+              </div>
+              <div class="emg-card run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator Suite" role="button" tabindex="0">
+                <div class="emg-card-thumb calc-thumb">🧮</div>
+                <span class="emg-card-title">AuraCalc Suite</span>
+                <span class="emg-card-tag">Utility</span>
+              </div>
+              <div class="emg-card" id="emg-card-all" role="button" tabindex="0">
+                <div class="emg-card-thumb repo-thumb">💻</div>
+                <span class="emg-card-title">All Repositories</span>
+                <span class="emg-card-tag">View All &rarr;</span>
+              </div>
+            </div>
+          </article>
         </div>
 
-        <div class="desktop-icon-item" id="icon-resume" tabindex="0" role="button" aria-label="Open Resume &amp; CV">
-          <div class="icon-box custom-game-icon-box">
-            <img src="assets/icon_resume_modern.svg" alt="Resume Document" class="game-icon-img">
+        <!-- Right: Pinterest-Style Editorial Card with Wine Border -->
+        <article class="editorial-pinterest-card">
+          <div class="epc-avatar-ring">
+            <img src="assets/profile.jpg" alt="Deepshikha Dey">
           </div>
-          <span class="icon-label">resume.pdf</span>
-          <span class="icon-hint">Official CV</span>
-        </div>
-      </aside>
+          <h3 class="pinterest-name">Deepshikha</h3>
+          <p class="pinterest-role">Front-End Engineer &bull; Data Analyst</p>
+          <p class="pinterest-contact-line">
+            dey.deepshikha.283@gmail.com &bull; Pune, India
+          </p>
+          <div class="pinterest-stats-line">
+            <span>Specializing in Cyber Security &amp; Python Telemetry</span>
+          </div>
+          <button class="pinterest-contact-btn" id="pinterest-contact-btn">
+            Get In Touch / Contact ✉️
+          </button>
+        </article>
+      </div>
 
-    </main>
+    </div>
 
   </section>
 
