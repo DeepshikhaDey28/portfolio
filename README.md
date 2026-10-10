@@ -1,6 +1,6 @@
 # Deepshikha Dey — Developer Portfolio & "Catch That Pip!" 🎮
 
-> **Computer Science (Cyber Security) &bull; Front-End Engineering &bull; Data Science**  
+> **Computer Science &amp; Information Technology (Cyber Security) &bull; Keen Interest in Data Science &bull; Front-End Engineering**  
 > *Symbiosis Skills and Professional University (SSPU), Pune, India (Graduation 2027)*  
 > CGPA: **8.94 / 10.0** &bull; Recent SGPA: **9.45 / 10.0**
 
