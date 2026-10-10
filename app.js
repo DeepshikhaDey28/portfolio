@@ -850,7 +850,7 @@ function renderRepos(repos) {
       <div>
         <div class="repo-top">
           <a href="${repo.html_url}" target="_blank" class="repo-name-link" title="Open repository on GitHub">
-            <span>🐙</span> ${repo.name}
+            <span>${repo.name}</span>
           </a>
           <div class="repo-top-badges">
             ${liveBadgeHtml}
