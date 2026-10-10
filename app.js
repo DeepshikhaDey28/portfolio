@@ -589,6 +589,44 @@ const langColors = {
   Default: '#64748b'
 };
 
+const WORKING_REPOS_MAP = {
+  'smart_traffic_simulation': {
+    url: 'projects/traffic-grid-simulation/index.html',
+    title: 'smart_traffic_simulation',
+    desc: 'Autonomous traffic grid simulator with 4-phase signal timing, emergency vehicle corridors & circuit racer.',
+    tag: 'SIMULATION & ALGORITHMS',
+    lang: 'JavaScript'
+  },
+  'weatherwhether': {
+    url: 'projects/weather-telemetry-hub/index.html',
+    title: 'weatherwhether',
+    desc: 'Real-time meteorological telemetry & atmospheric condition monitoring dashboard across Indian & German stations.',
+    tag: 'LIVE TELEMETRY',
+    lang: 'JavaScript / API'
+  },
+  'deep_thoughts_app_for_notes': {
+    url: 'projects/deep_thoughts_app_for_notes/index.html',
+    title: 'deep_thoughts_app_for_notes',
+    desc: 'Interactive responsive Markdown notes & creative journaling application with live preview and local persistence.',
+    tag: 'PRODUCTIVITY APP',
+    lang: 'HTML / CSS / JS'
+  },
+  'B2B-bussiness-website-': {
+    url: 'projects/B2B-bussiness-website-/index.html',
+    title: 'B2B-bussiness-website-',
+    desc: 'Front-end multi-category commercial wholesale & retail storefront catalog template with interactive shopping cart.',
+    tag: 'COMMERCE UI',
+    lang: 'HTML / CSS'
+  },
+  'auracalc-suite': {
+    url: 'projects/auracalc-suite/index.html',
+    title: 'auracalc-suite',
+    desc: 'Precision algorithmic calculator suite with standard, scientific, unit conversion, and financial splitters.',
+    tag: 'MATH UTILITY',
+    lang: 'JavaScript'
+  }
+};
+
 async function fetchGitHubRepos(forceRefresh = false) {
   const statusBadge = document.getElementById('github-sync-status-badge');
   const countBadge = document.getElementById('works-count-badge');
@@ -645,40 +683,58 @@ async function fetchGitHubRepos(forceRefresh = false) {
       // Fallback seed repositories based on user's GitHub
       const fallbackRepos = [
         {
+          name: 'smart_traffic_simulation',
+          html_url: 'https://github.com/DeepshikhaDey28/smart_traffic_simulation',
+          description: 'Autonomous traffic grid simulator with 4-phase signal timing, emergency vehicle corridors & circuit racer.',
+          language: 'JavaScript',
+          stargazers_count: 1,
+          forks_count: 0,
+          updated_at: '2026-09-01T14:20:00Z'
+        },
+        {
+          name: 'weatherwhether',
+          html_url: 'https://github.com/DeepshikhaDey28/weatherwhether',
+          description: 'Real-time meteorological telemetry & atmospheric condition monitoring dashboard across Indian & German stations.',
+          language: 'JavaScript',
+          stargazers_count: 1,
+          forks_count: 0,
+          updated_at: '2026-08-20T10:15:00Z'
+        },
+        {
+          name: 'deep_thoughts_app_for_notes',
+          html_url: 'https://github.com/DeepshikhaDey28/deep_thoughts_app_for_notes',
+          description: 'Interactive responsive Markdown notes & creative journaling application with instant live rendering.',
+          language: 'HTML',
+          stargazers_count: 1,
+          forks_count: 0,
+          updated_at: '2026-07-15T09:30:00Z'
+        },
+        {
           name: 'B2B-bussiness-website-',
           html_url: 'https://github.com/DeepshikhaDey28/B2B-bussiness-website-',
-          description: 'Front-end multi-product commercial web application for retail and wholesale catalog operations.',
+          description: 'Commercial front-end multi-product wholesale & retail storefront catalog template with shopping cart.',
           language: 'HTML',
           stargazers_count: 1,
           forks_count: 0,
           updated_at: '2026-06-01T11:49:52Z'
         },
         {
-          name: 'weatherwhether',
-          html_url: 'https://github.com/DeepshikhaDey28/weatherwhether',
-          description: 'Real-time weather forecast and atmospheric condition telemetry dashboard.',
-          language: 'HTML',
-          stargazers_count: 0,
-          forks_count: 0,
-          updated_at: '2026-08-20T10:15:00Z'
-        },
-        {
           name: 'First_Python',
           html_url: 'https://github.com/DeepshikhaDey28/First_Python',
-          description: 'Core computational and algorithmic hub in Python covering data structures and memory scope.',
+          description: 'Core computational and algorithmic hub in Python covering data structures, scope, and algorithmic efficiency.',
           language: 'Python',
           stargazers_count: 0,
           forks_count: 0,
           updated_at: '2026-08-25T14:41:50Z'
         },
         {
-          name: 'deep_thoughts_app_for_notes',
-          html_url: 'https://github.com/DeepshikhaDey28/deep_thoughts_app_for_notes',
-          description: 'Interactive responsive web notes and idea journaling application.',
+          name: 'portfolio',
+          html_url: 'https://github.com/DeepshikhaDey28/portfolio',
+          description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
           language: 'HTML',
-          stargazers_count: 0,
+          stargazers_count: 2,
           forks_count: 0,
-          updated_at: '2026-07-15T09:30:00Z'
+          updated_at: '2026-10-10T22:00:00Z'
         }
       ];
       renderRepos(fallbackRepos);
@@ -711,10 +767,31 @@ function renderRepos(repos) {
     card.className = 'repo-card';
     card.setAttribute('data-category', 'github ' + (repo.language ? repo.language.toLowerCase() : ''));
 
+    const workingApp = WORKING_REPOS_MAP[repo.name];
     const lang = repo.language || 'Code';
     const langColor = langColors[lang] || langColors.Default;
-    const desc = repo.description || 'No description provided. Public repository under @DeepshikhaDey28.';
-    const date = repo.updated_at ? new Date(repo.updated_at).toLocaleDateString() : 'Recent';
+    const desc = (workingApp && workingApp.desc) ? workingApp.desc : (repo.description || 'Public repository under @DeepshikhaDey28.');
+
+    const liveBadgeHtml = workingApp
+      ? `<span class="repo-live-tag" title="Interactive application runnable in popup window">● RUNNABLE</span>`
+      : '';
+
+    const actionsHtml = workingApp
+      ? `
+        <div class="repo-action-group">
+          <button class="repo-action-btn live-preview-btn run-project-btn" data-url="${workingApp.url}" data-title="${repo.name}" title="Open working project in popup window">
+            <span>▶ Live Preview</span>
+          </button>
+          <a href="${repo.html_url}" target="_blank" class="repo-action-btn code-link-btn" title="View repository source code on GitHub">
+            <span>GitHub</span>
+          </a>
+        </div>
+      `
+      : `
+        <a href="${repo.html_url}" target="_blank" class="repo-action-btn" title="View repository source code on GitHub">
+          <span>View Code</span>
+        </a>
+      `;
 
     card.innerHTML = `
       <div>
@@ -722,19 +799,20 @@ function renderRepos(repos) {
           <a href="${repo.html_url}" target="_blank" class="repo-name-link" title="Open repository on GitHub">
             <span>🐙</span> ${repo.name}
           </a>
-          <span class="repo-badge">${lang}</span>
+          <div class="repo-top-badges">
+            ${liveBadgeHtml}
+            <span class="repo-badge">${lang}</span>
+          </div>
         </div>
         <p class="repo-desc">${desc}</p>
       </div>
       <div class="repo-footer">
         <div class="repo-meta-left">
           <span><span class="repo-lang-dot" style="background-color: ${langColor};"></span>${lang}</span>
-          <span class="repo-stars">Stars: ${repo.stargazers_count || 0}</span>
-          <span class="repo-forks">Forks: ${repo.forks_count || 0}</span>
+          <span class="repo-stars">★ ${repo.stargazers_count || 0}</span>
+          <span class="repo-forks">⑂ ${repo.forks_count || 0}</span>
         </div>
-        <a href="${repo.html_url}" target="_blank" class="repo-action-btn">
-          <span>View Code</span>
-        </a>
+        ${actionsHtml}
       </div>
     `;
     container.appendChild(card);
@@ -788,7 +866,7 @@ filterButtons.forEach(btn => {
 
 
 // ========================================================
-// 5. PROJECT RUNNER MODAL (Interactive Canvas/Apps Launcher)
+// 5. PROJECT RUNNER MODAL (Interactive In-App Popup Window)
 // ========================================================
 const runnerModal = document.getElementById('project-runner-modal');
 const runnerIframe = document.getElementById('runner-iframe');
@@ -797,8 +875,17 @@ const runnerExternalLink = document.getElementById('runner-external-link');
 
 function launchProjectApp(url, title) {
   sfx.playSelect();
-  if (runnerTitle) runnerTitle.textContent = `C:\\DEEPSHIKHA\\apps\\${title}.exe`;
-  if (runnerExternalLink) runnerExternalLink.href = url;
+  if (runnerTitle) {
+    runnerTitle.innerHTML = `
+      <span class="runner-dot"></span>
+      <span class="runner-repo-name">${title}</span>
+      <span class="runner-live-badge">IN-APP PREVIEW</span>
+    `;
+  }
+  if (runnerExternalLink) {
+    runnerExternalLink.href = url;
+    runnerExternalLink.title = `Open ${title} in a full browser tab`;
+  }
   if (runnerIframe) runnerIframe.src = url;
   if (runnerModal) {
     runnerModal.classList.add('active');
@@ -806,21 +893,43 @@ function launchProjectApp(url, title) {
   }
 }
 
-document.querySelectorAll('.run-project-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const url = btn.getAttribute('data-url');
-    const title = btn.getAttribute('data-title') || 'Interactive App';
+function closeProjectRunner() {
+  sfx.playClick();
+  if (runnerModal) runnerModal.classList.remove('active');
+  if (runnerIframe) runnerIframe.src = '';
+  document.body.style.overflow = '';
+}
+
+// Global Event Delegation for all .run-project-btn and runner controls
+document.addEventListener('click', (e) => {
+  const runBtn = e.target.closest('.run-project-btn');
+  if (runBtn) {
+    e.preventDefault();
+    const url = runBtn.getAttribute('data-url');
+    const title = runBtn.getAttribute('data-title') || 'Interactive App';
     if (url) launchProjectApp(url, title);
-  });
+    return;
+  }
+
+  const closeBtn = e.target.closest('.close-runner-btn');
+  if (closeBtn) {
+    e.preventDefault();
+    closeProjectRunner();
+    return;
+  }
+
+  // Click outside popup window (backdrop overlay click)
+  if (runnerModal && runnerModal.classList.contains('active') && e.target === runnerModal) {
+    closeProjectRunner();
+  }
 });
 
-document.querySelectorAll('.close-runner-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    sfx.playClick();
-    if (runnerModal) runnerModal.classList.remove('active');
-    if (runnerIframe) runnerIframe.src = '';
-    document.body.style.overflow = '';
-  });
+// Close popup on Escape key
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && runnerModal && runnerModal.classList.contains('active')) {
+    e.stopPropagation();
+    closeProjectRunner();
+  }
 });
 
 

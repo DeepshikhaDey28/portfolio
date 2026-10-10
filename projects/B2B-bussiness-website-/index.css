@@ -1,0 +1,206 @@
+* {
+  margin: 0 ;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #bc9e82;
+  color: #333;
+}
+
+/* Top Header */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background-color: #e0c0a6;
+  border-bottom: 1px solid #ccc;
+  height: 70px;
+}
+.top-bar a{
+    text-decoration: none;
+    color:#452A19;
+}
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color:#43270f;
+  font-family:Georgia, 'Times New Roman', Times, serif
+}
+
+.search-bar {
+  flex: 1;
+  margin: 0 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.header-links {
+  display: flex;
+  gap: 15px;
+  font-size: 14px;
+  align-items: center;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+/* Navigation Bar */
+.nav-bar {
+  background:#d8cbc4;
+  padding: 10px 30px;
+  overflow-x: auto;
+  border-bottom: 1px solid #eee;
+  
+}
+
+.nav-bar ul {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.nav-bar a{
+    text-decoration: none;
+    color:#452A19;
+}
+
+/* Hero Banner */
+.hero-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background: linear-gradient(to right, #7e481c, #3a1f04);
+  color: white;
+  height: 300px;
+}
+
+.banner-text h1 {
+  font-size: 32px;
+}
+
+.banner-discount h2 {
+  font-size: 28px;
+}
+
+.banner-discount span {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.banner-discount button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border: none;
+  background: white;
+  color: #452A19;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.banner-discount button:hover {
+  background: #ffe4f0;
+}
+
+/* Trust Section */
+.trust-features {
+  display: flex;
+  justify-content: space-around;
+  background: #d8cbc4;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+/* Category Section */
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 30px 15px;
+  gap: 20px;
+  text-align: center;
+}
+
+.category img {
+  border-radius: 50%;
+  border: 3px solid;
+  width: 285px;
+  height: 285px;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+.categories img:hover{
+    border:4px solid;
+    width: 300px;
+    height: 300px;
+}
+.categories a{
+    text-decoration: none;
+    color: #452A19;
+}
+.category p {
+  font-size: 30px;
+  font-family:'Times New Roman', Times, serif;
+  font-weight:bold;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.footer {
+  background-color: #2b1700;
+  color: white;
+  padding: 40px 60px;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-column {
+  flex: 1 1 200px;
+  margin: 10px 20px;
+}
+
+.footer-column h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-column ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.footer-column ul li a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+
