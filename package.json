@@ -1,18 +1,17 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "description": "Deepshikha Dey - Personal Portfolio, Scrapbook Resume, and Catch That Pip Interactive Experience",
-  "main": "app.js",
+  "private": true,
+  "description": "Deepshikha Dey - Personal Portfolio, Scrapbook Resume, and Catch That Pip Game",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"No test specified\" && exit 0"
+    "start": "node local-dev-server.cjs"
   },
   "keywords": [
     "portfolio",
     "developer",
+    "frontend",
     "data-science",
     "cybersecurity",
-    "frontend",
     "retro-os",
     "scrapbook",
     "catch-that-pip"

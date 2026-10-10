@@ -80,7 +80,7 @@ Follow the interactive prompts (use default settings for static deployment).
 ├── app.js                     # Unified logic (audio synth, routing, GitHub sync, Pip game)
 ├── vercel.json                # Vercel deployment configuration & security headers
 ├── package.json               # Project manifest
-├── server.js                  # Lightweight zero-dependency local Node server
+├── local-dev-server.cjs       # Lightweight zero-dependency local Node server
 ├── .gitignore                 # Clean repository rules
 ├── assets/                    # Optimized SVGs, user portrait, and PDF resume
 │   ├── profile.jpg            # Deepshikha's portrait photo
@@ -111,7 +111,7 @@ cd portfolio
 
 # Run the built-in development server
 npm start
-# or: node server.js
+# or: node local-dev-server.cjs
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.

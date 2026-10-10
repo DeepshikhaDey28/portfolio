@@ -7,6 +7,9 @@
  * - Project runner iframe modal & scrapbook view navigation
  */
 
+// Guard against server-side Node.js execution
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+
 // ========================================================
 // 1. ROYALTY-FREE 8-BIT CHIPTUNE BGM & AUDIO SYNTHESIZER
 // ========================================================
@@ -1398,3 +1401,5 @@ toggleResumeBtn?.addEventListener('click', () => {
     resumePdfView.style.display = 'block';
   }
 });
+
+} // End of browser environment guard
