@@ -9,6 +9,7 @@
 
 // Guard against server-side Node.js execution
 if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+let pipGame = null;
 
 // ========================================================
 // 1. ROYALTY-FREE 8-BIT CHIPTUNE BGM & AUDIO SYNTHESIZER
@@ -467,10 +468,12 @@ function switchView(targetViewId, pushHash = true) {
   }
 
   // Trigger game start or sync when entering specific views
-  if (targetViewId === 'game') {
-    pipGame.onEnter();
-  } else {
-    pipGame.onLeave();
+  if (pipGame) {
+    if (targetViewId === 'game') {
+      pipGame.onEnter();
+    } else {
+      pipGame.onLeave();
+    }
   }
   sfx.setBgmForView(targetViewId);
 
@@ -522,14 +525,6 @@ window.addEventListener('popstate', () => {
   const hash = location.hash.replace('#', '') || 'desktop';
   switchView(hash, false);
 });
-
-// Initial hash inspection on boot & background music auto-start
-const initialHash = location.hash.replace('#', '') || 'desktop';
-if (['about', 'works', 'game'].includes(initialHash)) {
-  switchView(initialHash, false);
-} else {
-  sfx.setBgmForView('desktop');
-}
 
 // User-gesture audio unlocker for modern browsers autoplay policies
 const unlockAudioOnGesture = () => {
@@ -680,16 +675,76 @@ async function fetchGitHubRepos(forceRefresh = false) {
     statusBadge.className = 'sync-badge syncing';
   }
 
+  // Fallback seed repositories based on user's GitHub sorted newest first
+  const fallbackRepos = [
+    {
+      name: 'portfolio',
+      html_url: 'https://github.com/DeepshikhaDey28/portfolio',
+      description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
+      language: 'HTML',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-10-10T19:52:07Z'
+    },
+    {
+      name: 'smart_traffic_simulation',
+      html_url: 'https://github.com/DeepshikhaDey28/smart_traffic_simulation',
+      description: 'Autonomous traffic grid simulator with 4-phase signal timing, emergency vehicle corridors & circuit racer.',
+      language: 'JavaScript',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-10-06T15:43:46Z'
+    },
+    {
+      name: 'weatherwhether',
+      html_url: 'https://github.com/DeepshikhaDey28/weatherwhether',
+      description: 'Real-time meteorological telemetry & atmospheric condition monitoring dashboard across Indian & German stations.',
+      language: 'JavaScript',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-09-29T11:56:15Z'
+    },
+    {
+      name: 'deep_thoughts_app_for_notes',
+      html_url: 'https://github.com/DeepshikhaDey28/deep_thoughts_app_for_notes',
+      description: 'Interactive responsive Markdown notes & creative journaling application with instant live rendering.',
+      language: 'HTML',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-09-28T12:35:04Z'
+    },
+    {
+      name: 'First_Python',
+      html_url: 'https://github.com/DeepshikhaDey28/First_Python',
+      description: 'Core computational and algorithmic hub in Python covering data structures, scope, and algorithmic efficiency.',
+      language: 'Python',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-08-25T14:41:50Z'
+    },
+    {
+      name: 'B2B-bussiness-website-',
+      html_url: 'https://github.com/DeepshikhaDey28/B2B-bussiness-website-',
+      description: 'Commercial front-end multi-product wholesale & retail storefront catalog template with shopping cart.',
+      language: 'HTML',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-06-01T11:49:57Z'
+    }
+  ];
+
   // Check LocalStorage cache first unless force refresh requested
   if (!forceRefresh) {
     const cached = localStorage.getItem(REPOS_CACHE_KEY);
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (parsed.timestamp && Date.now() - parsed.timestamp < 1000 * 60 * 15 && parsed.data?.length) {
+        if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
           renderRepos(parsed.data);
           updateSyncUI(parsed.data.length, 'Live Cache');
-          return;
+          if (parsed.timestamp && Date.now() - parsed.timestamp < 1000 * 60 * 15) {
+            return;
+          }
         }
       } catch (e) {}
     }
@@ -710,77 +765,32 @@ async function fetchGitHubRepos(forceRefresh = false) {
       }));
       renderRepos(repos);
       updateSyncUI(repos.length, 'Live Synced');
-      showToast(`Synced ${repos.length} GitHub repositories!`);
+      if (forceRefresh) {
+        showToast(`Synced ${repos.length} GitHub repositories!`);
+      }
     } else {
       throw new Error('No repositories found');
     }
   } catch (err) {
     console.warn('GitHub fetch error, checking fallback cache:', err);
+    let rendered = false;
     const cached = localStorage.getItem(REPOS_CACHE_KEY);
     if (cached) {
-      const parsed = JSON.parse(cached);
-      renderRepos(parsed.data);
-      updateSyncUI(parsed.data.length, 'Offline Cache');
-    } else {
-      // Fallback seed repositories based on user's GitHub sorted newest first
-      const fallbackRepos = [
-        {
-          name: 'portfolio',
-          html_url: 'https://github.com/DeepshikhaDey28/portfolio',
-          description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
-          language: 'HTML',
-          stargazers_count: 2,
-          forks_count: 0,
-          updated_at: '2026-10-10T18:51:13Z'
-        },
-        {
-          name: 'smart_traffic_simulation',
-          html_url: 'https://github.com/DeepshikhaDey28/smart_traffic_simulation',
-          description: 'Autonomous traffic grid simulator with 4-phase signal timing, emergency vehicle corridors & circuit racer.',
-          language: 'JavaScript',
-          stargazers_count: 1,
-          forks_count: 0,
-          updated_at: '2026-10-06T15:43:46Z'
-        },
-        {
-          name: 'weatherwhether',
-          html_url: 'https://github.com/DeepshikhaDey28/weatherwhether',
-          description: 'Real-time meteorological telemetry & atmospheric condition monitoring dashboard across Indian & German stations.',
-          language: 'JavaScript',
-          stargazers_count: 1,
-          forks_count: 0,
-          updated_at: '2026-09-29T11:56:15Z'
-        },
-        {
-          name: 'deep_thoughts_app_for_notes',
-          html_url: 'https://github.com/DeepshikhaDey28/deep_thoughts_app_for_notes',
-          description: 'Interactive responsive Markdown notes & creative journaling application with instant live rendering.',
-          language: 'HTML',
-          stargazers_count: 1,
-          forks_count: 0,
-          updated_at: '2026-09-28T12:35:04Z'
-        },
-        {
-          name: 'First_Python',
-          html_url: 'https://github.com/DeepshikhaDey28/First_Python',
-          description: 'Core computational and algorithmic hub in Python covering data structures, scope, and algorithmic efficiency.',
-          language: 'Python',
-          stargazers_count: 0,
-          forks_count: 0,
-          updated_at: '2026-08-25T14:41:50Z'
-        },
-        {
-          name: 'B2B-bussiness-website-',
-          html_url: 'https://github.com/DeepshikhaDey28/B2B-bussiness-website-',
-          description: 'Commercial front-end multi-product wholesale & retail storefront catalog template with shopping cart.',
-          language: 'HTML',
-          stargazers_count: 1,
-          forks_count: 0,
-          updated_at: '2026-06-01T11:49:57Z'
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
+          renderRepos(parsed.data);
+          updateSyncUI(parsed.data.length, 'Offline Cache');
+          rendered = true;
         }
-      ];
+      } catch (e) {}
+    }
+    if (!rendered) {
       renderRepos(fallbackRepos);
-      updateSyncUI(fallbackRepos.length, 'Verified Seed');
+      updateSyncUI(fallbackRepos.length, 'Live Synced');
+    }
+    if (forceRefresh) {
+      showToast('Repositories refreshed!');
     }
   } finally {
     if (refreshIcon) refreshIcon.classList.remove('spin-anim');
@@ -3947,7 +3957,7 @@ class CatchThatPipGame {
   }
 }
 
-const pipGame = new CatchThatPipGame();
+pipGame = new CatchThatPipGame();
 
 
 // ========================================================
@@ -4086,5 +4096,17 @@ document.querySelectorAll('#resume-skills-filters .skill-filter-btn').forEach(bt
   });
 });
 
+
+// ========================================================
+// 8. BOOT INITIALIZATION: REPOSITORIES SYNC & ROUTING
+// ========================================================
+loadGitHubRepos();
+
+const initialHash = location.hash.replace('#', '') || 'desktop';
+if (['about', 'works', 'game'].includes(initialHash)) {
+  switchView(initialHash, false);
+} else {
+  sfx.setBgmForView('desktop');
+}
 
 } // End of browser environment guard
