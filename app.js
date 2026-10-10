@@ -419,6 +419,17 @@ class RetroAudioEngine {
     if (gameAudioBtn) {
       gameAudioBtn.classList.toggle('active', isPlaying);
     }
+
+    const enbAudioBtn = document.getElementById('enb-audio-btn');
+    if (enbAudioBtn) {
+      enbAudioBtn.classList.toggle('active', isPlaying);
+      enbAudioBtn.classList.toggle('muted', !isPlaying);
+      enbAudioBtn.title = isPlaying ? 'Soundtrack is ON (Click to Mute)' : 'Soundtrack is MUTED (Click to Play)';
+      const label = enbAudioBtn.querySelector('.enb-audio-label');
+      if (label) {
+        label.textContent = isPlaying ? 'Sound' : 'Muted';
+      }
+    }
   }
 }
 
