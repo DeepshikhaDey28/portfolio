@@ -30,36 +30,71 @@
       </div>
       <h1 class="portfolio-title">PORTFOLIO</h1>
       <div class="os-header-right">
-        <button id="sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects">
-          <span id="sound-icon">🔊</span>
+        <button id="music-toggle-btn" class="retro-icon-btn music-btn" title="Toggle Royalty-Free 8-Bit Game Music">
+          <span id="music-icon">🎵 BGM</span>
         </button>
-        <button id="quick-about-btn" class="pill-btn highlight">
+        <button id="sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects (Undertale & Retro SFX)">
+          <span id="sound-icon">🔊 SFX</span>
+        </button>
+        <button id="quick-about-btn" class="pill-btn highlight" title="Open Full About Me Page">
+          <img src="assets/icon_profile_trainer.svg" alt="Badge" class="btn-micro-icon">
           <span>About Me ↗</span>
+        </button>
+        <button id="quick-works-btn" class="pill-btn highlight-olive" title="Open Works &amp; Repositories Page">
+          <img src="assets/icon_works_game.svg" alt="Bag" class="btn-micro-icon">
+          <span>Works 📁</span>
+        </button>
+        <button id="quick-game-btn" class="pill-btn highlight-red" title="Play Catch That Pip Mini-Game">
+          <img src="assets/icon_pip_capsule.svg" alt="Capsule" class="btn-micro-icon">
+          <span>Catch That Pip 🎮</span>
         </button>
       </div>
     </header>
 
+    <!-- Desktop Pip-Trainer Quest HUD (Game Component) -->
+    <div class="desktop-trainer-hud-bar" id="desktop-quest-hud">
+      <div class="dth-left">
+        <span class="dth-badge">🎮 PIP-MASTER</span>
+        <span class="dth-name">DEEPSHIKHA</span>
+        <span class="dth-level">LV. 28</span>
+      </div>
+      <div class="dth-center">
+        <span class="dth-quest-star">★</span>
+        <span class="dth-quest-text">CURRENT QUEST: Catch wild <strong>FLAMECHAR</strong> in <em>Catch That Pip</em> &amp; explore all GitHub Repositories!</span>
+      </div>
+      <div class="dth-right">
+        <span class="dth-exp-pill">EXP 894/1000 (CGPA 8.94)</span>
+        <span class="dth-dex-pill">PIP-DEX: 4 DISCOVERED</span>
+      </div>
+    </div>
+
     <!-- Main Desktop Workspace with Grid Background -->
     <main class="desktop-workspace">
 
-      <!-- Desktop Sidebar Left Icons -->
+      <!-- Desktop Sidebar Left Icons (Unique Game-Like Logos) -->
       <aside class="desktop-icons-col left-col">
         <div class="desktop-icon-item" id="icon-profile" tabindex="0" role="button" aria-label="Open Profile and About Me">
-          <div class="icon-box profile-icon-box">
-            <span class="icon-letter">h</span>
+          <div class="icon-box custom-game-icon-box">
+            <img src="assets/icon_profile_trainer.svg" alt="Trainer Profile Badge" class="game-icon-img">
           </div>
           <span class="icon-label">profile</span>
-          <span class="icon-hint">Click for full page</span>
+          <span class="icon-hint">About Me</span>
         </div>
 
-        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Projects">
-          <div class="icon-box folder-icon-box">
-            <svg class="folder-svg" viewBox="0 0 48 40" fill="none">
-              <path d="M4 8C4 5.79086 5.79086 4 8 4H18L22 8H40C42.2091 8 44 9.79086 44 12V32C44 34.2091 42.2091 36 40 36H8C5.79086 36 4 34.2091 4 32V8Z" fill="#F4D06F" stroke="#3D3A2A" stroke-width="2.5" stroke-linejoin="round"/>
-              <path d="M12 16H36V28H12V16Z" fill="#FFFDF8" stroke="#3D3A2A" stroke-width="2"/>
-            </svg>
+        <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Repositories">
+          <div class="icon-box custom-game-icon-box">
+            <img src="assets/icon_works_game.svg" alt="Works Pip-Dex Bag" class="game-icon-img">
           </div>
           <span class="icon-label">works</span>
+          <span class="icon-hint">GitHub &amp; Apps</span>
+        </div>
+
+        <div class="desktop-icon-item" id="icon-game" tabindex="0" role="button" aria-label="Play Catch That Pip Mini-Game">
+          <div class="icon-box custom-game-icon-box pulse-capsule">
+            <img src="assets/icon_pip_capsule.svg" alt="Catch That Pip Capsule" class="game-icon-img">
+          </div>
+          <span class="icon-label">catch_pip.exe</span>
+          <span class="icon-hint">Catch That Pip!</span>
         </div>
       </aside>
 
@@ -110,17 +145,17 @@
                   <span>Open Full Profile / About Me &rarr;</span>
                 </button>
                 <button class="retro-btn secondary" id="win-quick-works-btn">
-                  <span>View Projects &darr;</span>
+                  <span>Explore Projects Page &rarr;</span>
                 </button>
               </div>
             </div>
           </div>
         </article>
 
-        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\works (Tools & Tech Showcase) -->
+        <!-- RETRO WINDOW 2: C:\DEEPSHIKHA\toolbox (Tools & Tech Showcase) -->
         <article class="retro-window" id="window-works">
           <div class="window-titlebar">
-            <span class="window-title">C:\DEEPSHIKHA\works</span>
+            <span class="window-title">C:\DEEPSHIKHA\toolbox</span>
             <div class="window-controls">
               <button class="win-btn minimize" title="Minimize">−</button>
               <button class="win-btn close" title="Close">×</button>
@@ -321,6 +356,12 @@
         <span class="heart-pixel">♥</span> Deepshikha Dey &bull; Profile &amp; Resume
       </div>
       <div class="scrapbook-nav-actions">
+        <button id="about-to-works-btn" class="back-pill-btn">
+          <span>📁</span> Works
+        </button>
+        <button id="about-to-game-btn" class="back-pill-btn">
+          <span class="pixel-heart-sm">♥</span> Catch That Pips! 🎮
+        </button>
         <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="download-resume-btn">
           <span>⬇ Download Official PDF</span>
         </a>
@@ -596,6 +637,581 @@
     </div>
 
   </section>
+
+
+  <!-- ======================================================== -->
+  <!-- VIEW 3: FULL WORKS & PROJECTS SHOWCASE PAGE              -->
+  <!-- ======================================================== -->
+  <section id="works-view" class="view">
+    
+    <!-- Top Navigation Ribbon -->
+    <nav class="works-nav">
+      <button id="works-back-to-desktop-btn" class="back-pill-btn">
+        <span class="back-arrow">&larr;</span> Back to Desktop OS
+      </button>
+      <div class="works-nav-brand">
+        <span class="folder-pixel">📁</span> Deepshikha Dey &bull; Projects &amp; Code Archive
+      </div>
+      <div class="works-nav-actions">
+        <button id="works-to-about-btn" class="back-pill-btn">
+          <span class="heart-pixel">♥</span> About Me
+        </button>
+        <button id="works-to-game-btn" class="back-pill-btn">
+          <span class="pixel-heart-sm">♥</span> Catch That Pips! 🎮
+        </button>
+        <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="download-resume-btn">
+          <span>⬇ Resume</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- Works Scrapbook Canvas with Red & Cream Gingham Border (Matching Profile Page Aesthetic) -->
+    <div class="scrapbook-wrapper works-scrapbook-wrapper">
+      <div class="scrapbook-page works-scrapbook-page">
+
+        <!-- Top Header Strip: Pixel Tag & Role Pill (Matching Daksh / Maryam Aesthetic) -->
+        <header class="scrapbook-header">
+          <div class="sh-left">
+            <span class="pixel-tag">📁 Works &amp; Code Archive</span>
+          </div>
+          <div class="sh-right">
+            <span class="editorial-pill">Computer Science &bull; Data Science &bull; GitHub Live Auto-Sync</span>
+          </div>
+        </header>
+
+        <!-- Scrapbook Intro Banner with Washi Tape and Marker Title -->
+        <div class="works-scrapbook-intro">
+          <div class="washi-tape top-left"></div>
+          <div class="washi-tape top-right"></div>
+          <div class="works-intro-tagline-row">
+            <span class="stamp-badge">★ PIP-APPROVED CODE</span>
+            <span class="sync-count-tag" id="works-count-badge">Syncing Repos...</span>
+          </div>
+          <h1 class="card-title-marker works-title-marker">Projects, Labs &amp; Repositories</h1>
+          <div class="card-title-line wide"></div>
+          <p class="works-scrapbook-desc">
+            A curated collection of live interactive web apps, data science telemetry engines, and live repositories dynamically synced from my GitHub profile (<a href="https://github.com/DeepshikhaDey28" target="_blank" class="c-link">@DeepshikhaDey28</a>). Any new repository pushed to GitHub will automatically appear here!
+          </p>
+
+          <!-- Scrapbook Category Filter Buttons -->
+          <div class="works-filter-bar scrapbook-filter-bar">
+            <button class="filter-tab-btn active" data-filter="all">All Projects</button>
+            <button class="filter-tab-btn" data-filter="github">🐙 Live GitHub Repos</button>
+            <button class="filter-tab-btn" data-filter="live">🚀 Interactive Live Apps (3)</button>
+            <button class="filter-tab-btn" data-filter="frontend">🌐 Frontend &amp; UI (3)</button>
+            <button class="filter-tab-btn" data-filter="data">📊 Data Science &amp; Telemetry (4)</button>
+          </div>
+        </div>
+
+        <!-- Live GitHub Sync Bulletin Board (Scrapbook Stamped Card) -->
+        <section class="github-sync-panel scrapbook-bulletin-card" id="github-sync-panel">
+          <div class="washi-tape top-center"></div>
+          <div class="gh-panel-top">
+            <div class="gh-panel-title-group">
+              <span class="gh-avatar-circle">🐙</span>
+              <div>
+                <h3 class="card-title-marker" style="margin:0; font-size:1.35rem;">GitHub Repositories Live Feed</h3>
+                <span class="gh-subhead">Synced live from <a href="https://github.com/DeepshikhaDey28" target="_blank" class="gh-user-link">@DeepshikhaDey28</a> &bull; Any new repos pushed will automatically appear here</span>
+              </div>
+            </div>
+            <div class="gh-actions-group">
+              <span id="github-sync-status-badge" class="sync-badge live">● Sync Active</span>
+              <button id="refresh-github-btn" class="retro-btn secondary small" title="Re-fetch repositories from GitHub API">
+                <span id="gh-refresh-icon">⟳</span> <span>Refresh Repos</span>
+              </button>
+            </div>
+          </div>
+          <!-- Grid of GitHub repos populated dynamically via JS -->
+          <div id="github-repos-container" class="github-repos-grid scrapbook-repo-grid">
+            <div class="gh-loading-skeleton">Loading GitHub repositories...</div>
+          </div>
+        </section>
+
+        <!-- Projects Grid -->
+        <div class="projects-catalog-grid">
+
+          <!-- PROJECT 1: Traffic Simulator -->
+          <article class="project-showcase-card" data-category="live frontend">
+            <div class="psc-topbar">
+              <span class="psc-icon">🚦</span>
+              <div class="psc-tags-top">
+                <span class="tag-status live">● LIVE INTERACTIVE</span>
+                <span class="tag-type">Simulation &amp; Game</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">Smart Traffic Grid &amp; Driving Simulation</h2>
+              <p class="psc-desc">
+                An interactive canvas-powered left-lane traffic grid simulator with dynamic 4-phase signal timing, emergency vehicle corridor priority wave dispatch, and a high-speed circuit racing game featuring drift physics, radar minimap, and synthesized Web Audio effects.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">HTML5 Canvas</span>
+                <span class="tpill">JavaScript</span>
+                <span class="tpill">Web Audio API</span>
+                <span class="tpill">Tailwind CSS</span>
+                <span class="tpill">Autonomous Agents</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/traffic-sim/index.html" data-title="Smart Traffic Grid &amp; Circuit Simulator">
+                <span>🚀 Launch Simulation</span>
+              </button>
+              <a href="projects/traffic-sim/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab ↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 2: Weather Hub -->
+          <article class="project-showcase-card" data-category="live data">
+            <div class="psc-topbar">
+              <span class="psc-icon">🛰️</span>
+              <div class="psc-tags-top">
+                <span class="tag-status live">● LIVE TELEMETRY</span>
+                <span class="tag-type">Analytics Hub</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">GlobalPulse Weather Hub &mdash; Advanced Edition</h2>
+              <p class="psc-desc">
+                Real-time meteorological telemetry and AI advisory platform monitoring Indian (Delhi, Kolkata) and German (Berlin, Frankfurt, Munich, Leipzig) stations. Features Chart.js thermal comparison rankings, 24-hour timeline forecast modals, and automated refresh sync.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">Open-Meteo API</span>
+                <span class="tpill">Chart.js</span>
+                <span class="tpill">Tailwind CSS</span>
+                <span class="tpill">Async Telemetry</span>
+                <span class="tpill">Data Viz</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/weather-hub/index.html" data-title="GlobalPulse Weather Hub">
+                <span>🛰️ Launch Weather Hub</span>
+              </button>
+              <a href="projects/weather-hub/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab ↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 3: AuraCalc -->
+          <article class="project-showcase-card" data-category="live frontend">
+            <div class="psc-topbar">
+              <span class="psc-icon">🧮</span>
+              <div class="psc-tags-top">
+                <span class="tag-status live">● LIVE WEB APP</span>
+                <span class="tag-type">Glassmorphism Tool</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">AuraCalc &mdash; Multi-Mode Calculator Suite</h2>
+              <p class="psc-desc">
+                An elegant rose and beige glassmorphic calculator engineered by Deepshikha Dey. Features 4 operational modes: Standard calculator, Scientific (trigonometry, logarithms, radian/degree), Unit Converter (Length, Weight, Temp, Currency), and Financial splitters (Tip &amp; Loan/EMI estimator).
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">Vanilla JS</span>
+                <span class="tpill">Tailwind CSS</span>
+                <span class="tpill">Audio Synth</span>
+                <span class="tpill">Glassmorphism</span>
+                <span class="tpill">Financial Math</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/aura-calc/index.html" data-title="AuraCalc Calculator">
+                <span>🔢 Launch AuraCalc</span>
+              </button>
+              <a href="projects/aura-calc/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab ↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 4: B2B E-Commerce -->
+          <article class="project-showcase-card" data-category="frontend">
+            <div class="psc-topbar">
+              <span class="psc-icon">🛒</span>
+              <div class="psc-tags-top">
+                <span class="tag-status github">🐙 GITHUB REPO</span>
+                <span class="tag-type">E-Commerce Platform</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">B2B Business &amp; Retail E-Commerce Platform</h2>
+              <p class="psc-desc">
+                Full-scale multi-product commercial web application developed for retail and wholesale operations. Implements category catalogs (clothing, kids wear, accessories), interactive shopping cart state, authentication (login/signup), and checkout order workflows.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">HTML5</span>
+                <span class="tpill">CSS3</span>
+                <span class="tpill">JavaScript</span>
+                <span class="tpill">Cart Architecture</span>
+                <span class="tpill">E-Commerce UI</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="retro-btn primary">
+                <span>GitHub Repository ↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 5: SevraOS Telemetry -->
+          <article class="project-showcase-card" data-category="data frontend">
+            <div class="psc-topbar">
+              <span class="psc-icon">⚙️</span>
+              <div class="psc-tags-top">
+                <span class="tag-status internship">💼 TEAM LEAD INTERN</span>
+                <span class="tag-type">IoT &amp; Telemetry</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">SevraOS Device Interface &amp; Telemetry Engine</h2>
+              <p class="psc-desc">
+                Led a cross-functional engineering team at Sevra AI (MyCare) to architect and construct the device UI in React.js, Figma, and CSS. Engineered data pipelines to perform advanced analytics on system telemetry with Python and SQL to monitor diagnostics and optimize system performance.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">React.js</span>
+                <span class="tpill">Python</span>
+                <span class="tpill">SQL</span>
+                <span class="tpill">Figma</span>
+                <span class="tpill">Telemetry Analytics</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <span class="card-footer-badge">Sevra AI (MyCare) &bull; June – July 2026</span>
+            </div>
+          </article>
+
+          <!-- PROJECT 6: Python Hub -->
+          <article class="project-showcase-card" data-category="data">
+            <div class="psc-topbar">
+              <span class="psc-icon">🐍</span>
+              <div class="psc-tags-top">
+                <span class="tag-status github">🐙 GITHUB REPO</span>
+                <span class="tag-type">Core CS &amp; Algorithms</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">Python Data Operations &amp; Algorithmic Hub</h2>
+              <p class="psc-desc">
+                Core computational implementations covering algorithms, data structures, variable scope rules, input handling, and type-casting mechanics in Python. Serves as a modular foundation for data preprocessing and algorithmic problem-solving.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">Python 3</span>
+                <span class="tpill">Data Structures</span>
+                <span class="tpill">Algorithms</span>
+                <span class="tpill">Scope &amp; Memory</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="retro-btn primary">
+                <span>GitHub Repository ↗</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 7: Yhills BI -->
+          <article class="project-showcase-card" data-category="data">
+            <div class="psc-topbar">
+              <span class="psc-icon">📊</span>
+              <div class="psc-tags-top">
+                <span class="tag-status internship">💼 DATA SCIENCE INTERN</span>
+                <span class="tag-type">Business Intelligence</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">Interactive Business Intelligence &amp; KPI Dashboards</h2>
+              <p class="psc-desc">
+                Conducted rigorous data cleaning, validation, and exploratory data analysis (EDA) on raw business datasets at Yhills. Engineered interactive Tableau dashboards providing real-time KPI monitoring, executive decision summaries, and actionable visual insights.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">Tableau</span>
+                <span class="tpill">Data Cleaning</span>
+                <span class="tpill">EDA</span>
+                <span class="tpill">Dashboarding</span>
+                <span class="tpill">KPI Analytics</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <span class="card-footer-badge">Yhills &bull; May – July 2024</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Bottom Return Banner -->
+        <div class="works-bottom-banner">
+          <div>
+            <h3>Want to collaborate or view code?</h3>
+            <p>Visit GitHub: <a href="https://github.com/DeepshikhaDey28" target="_blank">@DeepshikhaDey28</a> or connect on LinkedIn.</p>
+          </div>
+          <button class="back-pill-btn big" id="works-bottom-back-btn">
+            <span>&larr; Return to Desktop OS</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ======================================================== -->
+  <!-- ======================================================== -->
+  <!-- VIEW 4: CATCH THAT PIP! (PIP-BATTLE & DODGING ARENA)      -->
+  <!-- ======================================================== -->
+  <section id="game-view" class="view">
+    
+    <!-- Top Navigation Ribbon -->
+    <nav class="game-nav">
+      <button id="game-back-to-desktop-btn" class="back-pill-btn">
+        <span class="back-arrow">&larr;</span> Back to Desktop OS
+      </button>
+      <div class="game-nav-brand">
+        <img src="assets/icon_pip_capsule.svg" alt="Capsule" class="nav-mini-pip">
+        <span>CATCH THAT PIP! &bull; Pip-Master Dev Arena</span>
+      </div>
+      <div class="game-nav-actions">
+        <button id="game-music-toggle-btn" class="retro-icon-btn music-btn" title="Toggle Royalty-Free 8-Bit Game Music">
+          <span id="game-music-icon">🎵 BGM</span>
+        </button>
+        <button id="game-sound-toggle-btn" class="retro-icon-btn" title="Toggle Sound Effects">
+          <span id="game-sound-icon">🔊 SFX</span>
+        </button>
+        <button id="game-to-works-btn" class="back-pill-btn">
+          <span>📁</span> Works Page
+        </button>
+        <button id="game-to-about-btn" class="back-pill-btn">
+          <span class="heart-pixel">♥</span> About Me
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Game Wrapper with CRT retro console screen -->
+    <div class="pip-game-wrapper">
+      
+      <!-- Top Arcade Game Logo Banner -->
+      <div class="pip-logo-banner-wrap">
+        <img src="assets/pips_logo.svg" alt="Catch That Pip! Game Logo" class="pip-arcade-logo-img">
+      </div>
+
+      <div class="pip-game-cabinet">
+        
+        <!-- Retro Cabinet Top Title Bar -->
+        <div class="cabinet-top-strip">
+          <div class="cabinet-brand">
+            <span class="pip-dot red"></span>
+            <span class="pip-dot yellow"></span>
+            <span class="pip-dot green"></span>
+            <span class="cabinet-title">PIP-BOY ADVANCE 2026 // DEV EDITION</span>
+          </div>
+
+          <!-- Wild Pip Switcher / Selector Pills -->
+          <div class="pip-species-switcher" id="pip-species-switcher">
+            <span class="switcher-label">WILD PIP:</span>
+            <button class="pip-switch-btn active" data-pip="flamechar">🔥 Flamechar</button>
+            <button class="pip-switch-btn" data-pip="bulbasprout">🌿 Bulbasprout</button>
+            <button class="pip-switch-btn" data-pip="buggypip">👾 Buggypip</button>
+          </div>
+
+          <div class="cabinet-mode-badge" id="pip-battle-status-badge">WILD PIP ENCOUNTER!</div>
+        </div>
+
+        <!-- Battle Screen Stage -->
+        <div class="pip-battle-stage" id="pip-battle-stage">
+
+          <!-- ENEMY ROW: Wild Pip (Top-Right) -->
+          <div class="pip-stage-row enemy-row">
+            
+            <!-- Enemy Status Box (Classic creature-taming HUD) -->
+            <div class="pip-status-card enemy-card">
+              <div class="psc-header">
+                <span class="psc-name" id="enemy-pip-name">FLAMECHAR</span>
+                <span class="psc-level" id="enemy-pip-level">:L28</span>
+              </div>
+              <div class="psc-type-row" id="enemy-type-row">
+                <span class="psc-badge type-fire" id="enemy-type-badge-1">FIRE</span>
+                <span class="psc-badge type-code" id="enemy-type-badge-2">CODE</span>
+                <span class="psc-status-tag" id="enemy-status-tag">WILD</span>
+              </div>
+              <div class="psc-hp-wrap">
+                <span class="psc-hp-label">HP</span>
+                <div class="psc-hp-track">
+                  <div class="psc-hp-fill" id="enemy-hp-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="psc-hp-numbers">
+                <span id="enemy-hp-text">85 / 85</span>
+              </div>
+            </div>
+
+            <!-- Enemy Pedestal & Sprite Box -->
+            <div class="pip-sprite-pedestal enemy-pedestal">
+              <div class="pedestal-shadow"></div>
+              <div class="pip-creature-sprite" id="enemy-sprite">
+                <div class="pip-sprite-inner" id="enemy-sprite-inner">
+                  <!-- Flamechar Mascot Sprite Image -->
+                  <img src="assets/flamechar_sprite.svg" alt="Flamechar Pip" class="pip-mascot-img" id="enemy-mascot-img">
+                </div>
+              </div>
+              <div class="enemy-speech-balloon" id="enemy-speech-balloon">
+                <span>"Flamechar sparks with enthusiasm! Its tail flame crackles with Python bytecode!"</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- PLAYER ROW: Trainer Deepshikha (Bottom-Left) -->
+          <div class="pip-stage-row player-row">
+            
+            <!-- Player Pedestal & Character Sprite (Using user's actual profile picture!) -->
+            <div class="pip-sprite-pedestal player-pedestal">
+              <div class="pedestal-shadow"></div>
+              
+              <div class="player-trainer-sprite-card" id="player-sprite">
+                <div class="trainer-avatar-frame">
+                  <img src="assets/profile.jpg" alt="Pip-Master Deepshikha" class="trainer-pfp-img" id="trainer-pfp-img">
+                  <div class="trainer-badge-pill">DEEPSHIKHA</div>
+                </div>
+                <div class="trainer-aura-glow"></div>
+              </div>
+            </div>
+
+            <!-- Player Status Box -->
+            <div class="pip-status-card player-card">
+              <div class="psc-header">
+                <span class="psc-name">DEEPSHIKHA</span>
+                <span class="psc-level">:L28</span>
+              </div>
+              <div class="psc-type-row">
+                <span class="psc-badge type-trainer">PIP-MASTER</span>
+                <span class="psc-badge type-cs">DATA &amp; CODE</span>
+              </div>
+              <div class="psc-hp-wrap">
+                <span class="psc-hp-label">HP</span>
+                <div class="psc-hp-track">
+                  <div class="psc-hp-fill player-hp" id="player-hp-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+              <div class="psc-hp-numbers">
+                <span id="player-hp-text">100 / 100</span>
+              </div>
+              <!-- EXP Bar -->
+              <div class="psc-exp-wrap">
+                <span class="psc-exp-label">EXP</span>
+                <div class="psc-exp-track">
+                  <div class="psc-exp-fill" style="width: 89.4%;" title="CGPA: 8.94"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- BATTLE / DODGING INTERACTIVE LOWER BOX -->
+        <div class="pip-interactive-console">
+
+          <!-- MODE 1: Dialogue & Submenu Grid (Player Turn) -->
+          <div class="pip-dialogue-section" id="pip-dialogue-section">
+            
+            <div class="dialogue-panel-header">
+              <span class="dialogue-prompt-icon">▶</span>
+              <div class="dialogue-text-stream" id="pip-dialogue-text">
+                What will PIP-MASTER DEEPSHIKHA do?
+              </div>
+            </div>
+
+            <!-- Submenu List (Opened when an action button is clicked) -->
+            <div class="pip-submenu-panel" id="pip-submenu-panel" style="display: none;">
+              <div class="submenu-title-bar">
+                <span id="submenu-title">CHOOSE A MOVE:</span>
+                <button class="submenu-back-btn" id="submenu-back-btn">&times; Cancel</button>
+              </div>
+              <div class="submenu-options-grid" id="submenu-options-grid">
+                <!-- Dynamically populated options for FIGHT, COMMUNE, ITEMS, CATCH -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- MODE 2: Undertale-Style Bullet Hell Dodging Arena (Enemy Turn) -->
+          <div class="pip-dodging-section" id="pip-dodging-section" style="display: none;">
+            <div class="dodge-header-bar">
+              <span class="dodge-warning">⚠️ ENEMY TURN! DODGE THE GLITCH ATTACK!</span>
+              <span class="dodge-timer-badge" id="dodge-timer-badge">TIME: 5.0s</span>
+            </div>
+            
+            <!-- Canvas Dodge Arena -->
+            <div class="dodge-canvas-frame">
+              <canvas id="pip-dodge-canvas" width="520" height="190"></canvas>
+            </div>
+            
+            <!-- On-Screen Touch D-Pad for Mobile Dodging -->
+            <div class="pip-touch-dpad" id="pip-touch-dpad">
+              <button class="dpad-btn up" data-dir="up">▲</button>
+              <div class="dpad-mid-row">
+                <button class="dpad-btn left" data-dir="left">◀</button>
+                <button class="dpad-btn down" data-dir="down">▼</button>
+                <button class="dpad-btn right" data-dir="right">▶</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Iconic Action Command Buttons -->
+          <div class="pip-action-command-bar" id="pip-action-bar">
+            <button class="pip-cmd-btn btn-battle" id="btn-pip-fight" data-action="fight">
+              <span class="cmd-icon">⚔</span>
+              <span class="cmd-title">BATTLE</span>
+              <span class="cmd-sub">Code Attacks</span>
+            </button>
+            <button class="pip-cmd-btn btn-commune" id="btn-pip-act" data-action="act">
+              <span class="cmd-icon">💬</span>
+              <span class="cmd-title">COMMUNE</span>
+              <span class="cmd-sub">Act &amp; Debug</span>
+            </button>
+            <button class="pip-cmd-btn btn-bag" id="btn-pip-item" data-action="item">
+              <span class="cmd-icon">🎒</span>
+              <span class="cmd-title">PIP-BAG</span>
+              <span class="cmd-sub">Potions &amp; Tools</span>
+            </button>
+            <button class="pip-cmd-btn btn-catch" id="btn-pip-mercy" data-action="mercy">
+              <span class="cmd-icon">🔴</span>
+              <span class="cmd-title">CATCH</span>
+              <span class="cmd-sub">Capsule &amp; Spare</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Cabinet Bottom Helper / Lore Bar -->
+        <div class="cabinet-footer-bar">
+          <span>🎮 Battle tips: Lower Buggy-Pip's HP or Refactor its code to make it easier to CATCH with your Pip-Capsule! Use Arrow Keys or WASD to dodge in the arena.</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL: INTERACTIVE PROJECT RUNNER (IFRAME WINDOW)        -->
+  <!-- ======================================================== -->
+  <div class="retro-modal-overlay" id="project-runner-modal" role="dialog" aria-modal="true" aria-labelledby="runner-modal-title">
+    <div class="retro-modal-box xl-runner">
+      <div class="window-titlebar">
+        <span class="window-title" id="runner-modal-title">C:\DEEPSHIKHA\app_runner.exe</span>
+        <div class="window-controls">
+          <a id="runner-external-link" href="#" target="_blank" class="win-btn maximize" title="Open in New Tab">↗</a>
+          <button class="win-btn close close-runner-btn" title="Close">×</button>
+        </div>
+      </div>
+      <div class="runner-modal-body">
+        <iframe id="runner-iframe" src="" title="Interactive Project Runner" class="runner-iframe"></iframe>
+      </div>
+    </div>
+  </div>
 
 
   <!-- ======================================================== -->

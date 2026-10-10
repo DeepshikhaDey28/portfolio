@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <filter id="flame-glow-fx" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <linearGradient id="fire-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="40%" stop-color="#f97316"/>
+      <stop offset="85%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Tail Flame (Behind body) -->
+  <g class="tail-flame-group" filter="url(#flame-glow-fx)">
+    <path d="M125 75 C145 60, 155 35, 140 20 C125 25, 120 45, 115 65 Z" fill="url(#fire-grad)"/>
+    <path d="M126 70 C140 55, 148 40, 138 30 C128 35, 124 50, 120 62 Z" fill="#facc15"/>
+    <path d="M128 65 C136 54, 142 45, 136 38 C130 42, 128 50, 124 58 Z" fill="#ffffff"/>
+  </g>
+
+  <!-- Tail Curve -->
+  <path d="M95 105 Q125 100 120 68" stroke="#ea580c" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M95 105 Q125 100 120 68" stroke="#fb923c" stroke-width="8" stroke-linecap="round" fill="none"/>
+
+  <!-- Feet / Legs -->
+  <ellipse cx="60" cy="132" rx="14" ry="9" fill="#c2410c"/>
+  <ellipse cx="60" cy="130" rx="13" ry="8" fill="#fb923c"/>
+  <ellipse cx="98" cy="132" rx="14" ry="9" fill="#c2410c"/>
+  <ellipse cx="98" cy="130" rx="13" ry="8" fill="#fb923c"/>
+  <!-- Claws -->
+  <circle cx="52" cy="132" r="2.5" fill="#ffffff"/>
+  <circle cx="59" cy="134" r="2.5" fill="#ffffff"/>
+  <circle cx="66" cy="132" r="2.5" fill="#ffffff"/>
+  <circle cx="90" cy="132" r="2.5" fill="#ffffff"/>
+  <circle cx="97" cy="134" r="2.5" fill="#ffffff"/>
+  <circle cx="104" cy="132" r="2.5" fill="#ffffff"/>
+
+  <!-- Torso / Chubby Body -->
+  <path d="M55 75 C45 90 48 122 78 122 C108 122 112 90 100 75 Z" fill="url(#body-grad)" stroke="#9a3412" stroke-width="2.5"/>
+
+  <!-- Cream Belly Patch (Charmander style) -->
+  <path d="M64 85 C58 98 62 118 78 118 C94 118 98 98 92 85 C84 80 72 80 64 85 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+
+  <!-- Left Arm -->
+  <path d="M54 85 Q40 92 48 100 Q56 98 58 90 Z" fill="#fb923c" stroke="#9a3412" stroke-width="2"/>
+  <!-- Right Arm -->
+  <path d="M102 85 Q116 92 108 100 Q100 98 98 90 Z" fill="#fb923c" stroke="#9a3412" stroke-width="2"/>
+
+  <!-- Head -->
+  <ellipse cx="78" cy="52" rx="34" ry="30" fill="url(#body-grad)" stroke="#9a3412" stroke-width="2.5"/>
+
+  <!-- Cute Big Anime / Pokemon Eyes -->
+  <ellipse cx="65" cy="48" rx="7.5" ry="11" fill="#0369a1"/>
+  <ellipse cx="91" cy="48" rx="7.5" ry="11" fill="#0369a1"/>
+  <ellipse cx="65" cy="49" rx="5.5" ry="8.5" fill="#0284c7"/>
+  <ellipse cx="91" cy="49" rx="5.5" ry="8.5" fill="#0284c7"/>
+  <!-- Highlights in Eyes -->
+  <circle cx="63" cy="44" r="3.5" fill="#ffffff"/>
+  <circle cx="89" cy="44" r="3.5" fill="#ffffff"/>
+  <circle cx="67" cy="53" r="1.5" fill="#ffffff"/>
+  <circle cx="93" cy="53" r="1.5" fill="#ffffff"/>
+
+  <!-- Tiny Cute Nostrils -->
+  <circle cx="75" cy="57" r="1" fill="#7c2d12"/>
+  <circle cx="81" cy="57" r="1" fill="#7c2d12"/>
+
+  <!-- Open Cheerful Smile with Tiny Fang -->
+  <path d="M70 62 Q78 72 86 62 Q78 64 70 62 Z" fill="#991b1b" stroke="#7c2d12" stroke-width="1.5"/>
+  <polygon points="72,62 75,65 77,62" fill="#ffffff"/>
+  <ellipse cx="78" cy="67" rx="4" ry="2.5" fill="#f43f5e"/>
+
+  <!-- Rosy Cheeks -->
+  <circle cx="54" cy="58" r="4.5" fill="#ef4444" opacity="0.6"/>
+  <circle cx="102" cy="58" r="4.5" fill="#ef4444" opacity="0.6"/>
+</svg>

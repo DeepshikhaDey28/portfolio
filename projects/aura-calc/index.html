@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraCalc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pageBeige: '#F5F2EB',
+                        calcRose: '#F4D6D6',
+                        calcRoseDark: '#E8B4B4',
+                        btnBeige: '#FAF7F2',
+                        btnBeigeHover: '#F2EDE4',
+                        btnBrown: '#8C6D53',
+                        btnBrownHover: '#755A43',
+                        btnDeepRed: '#DC2626',
+                        btnDeepRedHover: '#B91C1C'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F5F2EB;
+            color: #2D2522;
+        }
+        .dark body {
+            background-color: #1A1615;
+            color: #F5F2EB;
+        }
+        .mono-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Soft light red / rose calculator card */
+        .glass-calc-card {
+            background: linear-gradient(135deg, rgba(244, 214, 214, 0.92) 0%, rgba(235, 195, 195, 0.88) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 30px 60px -15px rgba(140, 80, 80, 0.25);
+        }
+        .dark .glass-calc-card {
+            background: linear-gradient(135deg, rgba(58, 38, 38, 0.95) 0%, rgba(45, 28, 28, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+        }
+        /* Glass panels for panels & history */
+        .glass-panel-beige {
+            background: rgba(250, 247, 242, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(225, 215, 200, 0.7);
+            box-shadow: 0 20px 40px -10px rgba(100, 80, 60, 0.1);
+        }
+        .dark .glass-panel-beige {
+            background: rgba(30, 26, 25, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(140, 109, 83, 0.3);
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative overflow-x-hidden transition-colors duration-500">
+
+    <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-400/10 dark:bg-red-900/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-1/3 -right-40 w-96 h-96 bg-amber-600/10 dark:bg-amber-900/20 rounded-full blur-3xl animate-pulse" style="animation-duration: 4s;"></div>
+    </div>
+
+    <header class="w-full max-w-5xl mx-auto px-4 py-4 flex items-center justify-end z-10 space-x-3">
+        <button id="soundToggleBtn" title="Toggle Sound" class="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2A2322] border border-[#E1D7C8] dark:border-white/10 flex items-center justify-center text-[#8C6D53] dark:text-[#D1BEA8] hover:scale-105 transition-all shadow-sm">
+            <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+        </button>
+        <button id="historyToggleBtn" title="Calculation History" class="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2A2322] border border-[#E1D7C8] dark:border-white/10 flex items-center justify-center text-[#8C6D53] dark:text-[#D1BEA8] hover:scale-105 transition-all shadow-sm relative">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span id="historyBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#DC2626] text-[10px] font-bold rounded-full flex items-center justify-center text-white hidden">0</span>
+        </button>
+        <button id="themeToggleBtn" title="Toggle Theme" class="w-10 h-10 rounded-xl bg-[#FAF7F2] dark:bg-[#2A2322] border border-[#E1D7C8] dark:border-white/10 flex items-center justify-center text-[#8C6D53] dark:text-[#D1BEA8] hover:scale-105 transition-all shadow-sm">
+            <i id="themeIcon" class="fa-solid fa-moon"></i>
+        </button>
+    </header>
+
+    <main class="w-full max-w-5xl mx-auto px-4 py-2 flex-grow flex items-center justify-center relative z-10">
+        <div class="w-full max-w-3xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div id="calculatorCard" class="lg:col-span-12 transition-all duration-300 glass-calc-card rounded-3xl p-6 relative border-t-4 border-[#DC2626]">
+                
+                <div class="flex items-center justify-between mb-5 bg-[#FAF7F2]/60 dark:bg-[#1E1918]/70 p-1.5 rounded-2xl border border-[#E1D7C8]/70 dark:border-white/5 overflow-x-auto shadow-inner">
+                    <button onclick="switchMode('standard')" id="tab-standard" class="mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#DC2626] text-white shadow-md shadow-red-600/30">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Standard</span>
+                    </button>
+                    <button onclick="switchMode('scientific')" id="tab-scientific" class="mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-atom"></i>
+                        <span>Scientific</span>
+                    </button>
+                    <button onclick="switchMode('converter')" id="tab-converter" class="mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        <span>Converter</span>
+                    </button>
+                    <button onclick="switchMode('financial')" id="tab-financial" class="mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>Financial</span>
+                    </button>
+                </div>
+
+                <div class="mb-5 bg-[#FAF7F2] dark:bg-[#12100F] rounded-2xl p-4 border border-[#E1D7C8] dark:border-white/10 relative overflow-hidden group shadow-inner">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-500/20 transition-all"></div>
+                    
+                    <div class="flex items-center justify-between text-xs text-[#8C6D53] dark:text-[#A68A72] mb-1">
+                        <span id="angleModeIndicator" class="hidden px-2 py-0.5 rounded bg-red-500/20 text-[#DC2626] dark:text-red-300 font-mono font-bold text-[10px]">DEG</span>
+                        <div id="subExpression" class="mono-font tracking-wide text-right w-full truncate"></div>
+                    </div>
+
+                    <div class="flex flex-col items-end">
+                        <div id="mainDisplay" class="mono-font text-3xl sm:text-4xl font-bold tracking-tight text-[#2D2522] dark:text-[#F5F2EB] w-full text-right overflow-x-auto whitespace-nowrap py-1">0</div>
+                        <div id="livePreview" class="mono-font text-sm text-[#DC2626] dark:text-red-400 font-medium h-6 w-full text-right truncate"></div>
+                    </div>
+                </div>
+
+                <div id="panel-standard" class="calc-panel space-y-3">
+                    <div class="grid grid-cols-4 gap-3">
+                        <button onclick="clearAll()" class="calc-btn py-3.5 rounded-xl font-bold text-white bg-[#DC2626] hover:bg-[#B91C1C] shadow-md shadow-red-600/25 transition-all">AC</button>
+                        <button onclick="backspace()" class="calc-btn py-3.5 rounded-xl font-bold text-[#FAF7F2] bg-[#8C6D53] hover:bg-[#755A43] shadow-md transition-all"><i class="fa-solid fa-delete-left"></i></button>
+                        <button onclick="appendValue('%')" class="calc-btn py-3.5 rounded-xl font-bold text-[#6E533D] dark:text-[#EAE2D6] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 transition-all">%</button>
+                        <button onclick="appendValue('/')" class="calc-btn py-3.5 rounded-xl font-bold text-[#FAF7F2] bg-[#8C6D53] hover:bg-[#755A43] shadow-md transition-all">÷</button>
+                        
+                        <button onclick="appendValue('7')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">7</button>
+                        <button onclick="appendValue('8')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">8</button>
+                        <button onclick="appendValue('9')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">9</button>
+                        <button onclick="appendValue('*')" class="calc-btn py-3.5 rounded-xl font-bold text-[#FAF7F2] bg-[#8C6D53] hover:bg-[#755A43] shadow-md transition-all">×</button>
+                        
+                        <button onclick="appendValue('4')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">4</button>
+                        <button onclick="appendValue('5')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">5</button>
+                        <button onclick="appendValue('6')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">6</button>
+                        <button onclick="appendValue('-')" class="calc-btn py-3.5 rounded-xl font-bold text-[#FAF7F2] bg-[#8C6D53] hover:bg-[#755A43] shadow-md transition-all">−</button>
+                        
+                        <button onclick="appendValue('1')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">1</button>
+                        <button onclick="appendValue('2')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">2</button>
+                        <button onclick="appendValue('3')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">3</button>
+                        <button onclick="appendValue('+')" class="calc-btn py-3.5 rounded-xl font-bold text-[#FAF7F2] bg-[#8C6D53] hover:bg-[#755A43] shadow-md transition-all">+</button>
+                        
+                        <button onclick="appendValue('0')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm col-span-2 transition-all">0</button>
+                        <button onclick="appendValue('.')" class="calc-btn py-3.5 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] dark:hover:bg-[#3A3230] border border-[#E1D7C8] dark:border-white/10 shadow-sm transition-all">.</button>
+                        <button onclick="calculateResult()" class="calc-btn py-3.5 rounded-xl font-bold text-white bg-[#DC2626] hover:bg-[#B91C1C] shadow-lg shadow-red-600/30 transition-all">=</button>
+                    </div>
+                </div>
+
+                <div id="panel-scientific" class="calc-panel space-y-3 hidden">
+                    <div class="grid grid-cols-5 gap-2.5">
+                        <button onclick="toggleAngleMode()" id="angleBtn" class="py-2.5 rounded-xl font-bold text-xs text-white bg-[#DC2626] hover:bg-[#B91C1C] transition-all shadow-sm">DEG</button>
+                        <button onclick="appendFunction('sin(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">sin</button>
+                        <button onclick="appendFunction('cos(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">cos</button>
+                        <button onclick="appendFunction('tan(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">tan</button>
+                        <button onclick="clearAll()" class="py-2.5 rounded-xl font-bold text-xs text-white bg-[#DC2626] hover:bg-[#B91C1C] transition-all">AC</button>
+                        
+                        <button onclick="appendValue('π')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">π</button>
+                        <button onclick="appendValue('e')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">e</button>
+                        <button onclick="appendFunction('log(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">log</button>
+                        <button onclick="appendFunction('ln(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">ln</button>
+                        <button onclick="backspace()" class="py-2.5 rounded-xl font-bold text-xs text-white bg-[#8C6D53] hover:bg-[#755A43] transition-all"><i class="fa-solid fa-delete-left"></i></button>
+
+                        <button onclick="appendValue('^2')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">x²</button>
+                        <button onclick="appendFunction('sqrt(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">√x</button>
+                        <button onclick="appendValue('^')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">xʸ</button>
+                        <button onclick="appendValue('(')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">(</button>
+                        <button onclick="appendValue(')')" class="py-2.5 rounded-xl font-semibold text-xs text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">)</button>
+
+                        <button onclick="appendValue('7')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">7</button>
+                        <button onclick="appendValue('8')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">8</button>
+                        <button onclick="appendValue('9')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">9</button>
+                        <button onclick="appendValue('/')" class="py-3 rounded-xl font-bold text-white bg-[#8C6D53] hover:bg-[#755A43] transition-all">÷</button>
+                        <button onclick="appendValue('*')" class="py-3 rounded-xl font-bold text-white bg-[#8C6D53] hover:bg-[#755A43] transition-all">×</button>
+
+                        <button onclick="appendValue('4')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">4</button>
+                        <button onclick="appendValue('5')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">5</button>
+                        <button onclick="appendValue('6')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">6</button>
+                        <button onclick="appendValue('-')" class="py-3 rounded-xl font-bold text-white bg-[#8C6D53] hover:bg-[#755A43] transition-all">−</button>
+                        <button onclick="appendValue('+')" class="py-3 rounded-xl font-bold text-white bg-[#8C6D53] hover:bg-[#755A43] transition-all">+</button>
+
+                        <button onclick="appendValue('1')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">1</button>
+                        <button onclick="appendValue('2')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">2</button>
+                        <button onclick="appendValue('3')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">3</button>
+                        <button onclick="appendValue('0')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all col-span-2">0</button>
+                        <button onclick="appendValue('.')" class="py-3 rounded-xl font-semibold text-[#2D2522] dark:text-[#F5F2EB] bg-[#FAF7F2] hover:bg-[#F2EDE4] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all">.</button>
+                        <button onclick="calculateResult()" class="py-3 rounded-xl font-bold text-white bg-[#DC2626] hover:bg-[#B91C1C] shadow-lg shadow-red-600/30 transition-all col-span-2">=</button>
+                    </div>
+                </div>
+
+                <div id="panel-converter" class="calc-panel space-y-4 hidden">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button onclick="setConverterCategory('length')" id="cat-length" class="conv-cat-btn py-2 px-3 rounded-xl text-xs font-bold bg-[#DC2626] text-white shadow-sm transition-all flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-ruler"></i><span>Length</span>
+                        </button>
+                        <button onclick="setConverterCategory('weight')" id="cat-weight" class="conv-cat-btn py-2 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] bg-[#FAF7F2] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-weight-hanging"></i><span>Weight</span>
+                        </button>
+                        <button onclick="setConverterCategory('temperature')" id="cat-temperature" class="conv-cat-btn py-2 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] bg-[#FAF7F2] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-temperature-three-quarters"></i><span>Temp</span>
+                        </button>
+                        <button onclick="setConverterCategory('currency')" id="cat-currency" class="conv-cat-btn py-2 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] bg-[#FAF7F2] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-coins"></i><span>Currency</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-4 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-2 shadow-inner">
+                            <label class="text-xs font-semibold text-[#8C6D53] dark:text-[#A68A72]">From</label>
+                            <div class="flex space-x-2">
+                                <input type="number" id="fromValue" oninput="convertUnits()" value="1" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                                <select id="fromUnit" onchange="convertUnits()" class="bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-xs font-semibold text-[#2D2522] dark:text-[#F5F2EB] focus:outline-none focus:border-[#DC2626]"></select>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-4 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-2 shadow-inner">
+                            <label class="text-xs font-semibold text-[#8C6D53] dark:text-[#A68A72]">To</label>
+                            <div class="flex space-x-2">
+                                <input type="text" id="toValue" readonly class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#DC2626] dark:text-red-400 mono-font font-bold focus:outline-none">
+                                <select id="toUnit" onchange="convertUnits()" class="bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-xs font-semibold text-[#2D2522] dark:text-[#F5F2EB] focus:outline-none focus:border-[#DC2626]"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="panel-financial" class="calc-panel space-y-4 hidden">
+                    <div class="flex space-x-2 border-b border-[#E1D7C8] dark:border-white/10 pb-3">
+                        <button onclick="setFinSubMode('tip')" id="fin-tab-tip" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-[#DC2626] text-white transition-all shadow-sm">Tip Splitter</button>
+                        <button onclick="setFinSubMode('loan')" id="fin-tab-loan" class="px-4 py-1.5 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all">Loan / EMI</button>
+                    </div>
+
+                    <div id="fin-sub-tip" class="space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Bill Amount ($)</label>
+                                <input type="number" id="tipBill" oninput="calculateTip()" value="100" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                            </div>
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Tip Percentage</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="range" id="tipPercent" min="0" max="35" value="15" oninput="document.getElementById('tipPercentVal').innerText=this.value+'%'; calculateTip()" class="w-full accent-[#DC2626]">
+                                    <span id="tipPercentVal" class="mono-font text-xs font-bold text-[#DC2626] w-10 text-right">15%</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Split (People)</label>
+                                <input type="number" id="tipPeople" min="1" value="2" oninput="calculateTip()" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                            </div>
+                        </div>
+
+                        <div class="bg-white/80 dark:bg-[#1E1918] p-4 rounded-2xl border border-red-500/20 flex items-center justify-between shadow-sm">
+                            <div>
+                                <p class="text-xs text-[#8C6D53] dark:text-[#A68A72]">Tip Amount: <span id="tipResultAmount" class="text-[#2D2522] dark:text-[#F5F2EB] font-bold">$15.00</span></p>
+                                <p class="text-xs text-[#8C6D53] dark:text-[#A68A72]">Total Bill: <span id="tipResultTotal" class="text-[#2D2522] dark:text-[#F5F2EB] font-bold">$115.00</span></p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-[#DC2626] font-semibold block">Per Person</span>
+                                <span id="tipResultPerPerson" class="mono-font text-2xl font-extrabold text-[#2D2522] dark:text-[#F5F2EB]">$57.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="fin-sub-loan" class="space-y-3 hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Loan Amount ($)</label>
+                                <input type="number" id="loanAmount" oninput="calculateLoan()" value="250000" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                            </div>
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Interest Rate (% p.a.)</label>
+                                <input type="number" id="loanRate" step="0.1" oninput="calculateLoan()" value="6.5" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                            </div>
+                            <div class="bg-[#FAF7F2] dark:bg-[#1E1918] p-3 rounded-2xl border border-[#E1D7C8] dark:border-white/10 space-y-1 shadow-inner">
+                                <label class="text-[11px] font-semibold text-[#8C6D53] dark:text-[#A68A72]">Term (Years)</label>
+                                <input type="number" id="loanTerm" oninput="calculateLoan()" value="30" class="w-full bg-white dark:bg-[#12100F] border border-[#E1D7C8] dark:border-white/10 rounded-xl px-3 py-2 text-[#2D2522] dark:text-[#F5F2EB] mono-font font-bold focus:outline-none focus:border-[#DC2626]">
+                            </div>
+                        </div>
+
+                        <div class="bg-white/80 dark:bg-[#1E1918] p-4 rounded-2xl border border-red-500/20 flex items-center justify-between shadow-sm">
+                            <div>
+                                <p class="text-xs text-[#8C6D53] dark:text-[#A68A72]">Total Interest: <span id="loanTotalInterest" class="text-[#2D2522] dark:text-[#F5F2EB] font-bold">$318,000</span></p>
+                                <p class="text-xs text-[#8C6D53] dark:text-[#A68A72]">Total Repayment: <span id="loanTotalPayment" class="text-[#2D2522] dark:text-[#F5F2EB] font-bold">$568,000</span></p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs text-[#DC2626] font-semibold block">Monthly EMI</span>
+                                <span id="loanMonthlyEMI" class="mono-font text-2xl font-extrabold text-[#2D2522] dark:text-[#F5F2EB]">$1,579</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="historyDrawer" class="hidden lg:block lg:col-span-12 transition-all duration-300">
+                <div class="glass-panel-beige rounded-3xl p-5 shadow-xl max-h-80 overflow-y-auto">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-[#E1D7C8] dark:border-white/10">
+                        <div class="flex items-center space-x-2 text-sm font-bold text-[#2D2522] dark:text-[#F5F2EB]">
+                            <i class="fa-solid fa-clock-rotate-left text-[#DC2626]"></i>
+                            <span>Calculation History</span>
+                        </div>
+                        <button onclick="clearHistory()" class="text-xs text-[#DC2626] hover:text-[#B91C1C] font-semibold transition-colors">Clear All</button>
+                    </div>
+                    <div id="historyList" class="space-y-2">
+                        <div class="text-center text-xs text-[#8C6D53] dark:text-[#A68A72] py-6">No calculations recorded yet.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="w-full max-w-6xl mx-auto px-4 py-6 text-center z-10 flex flex-col items-center justify-center space-y-1">
+        <div class="inline-flex items-center space-x-2 px-5 py-2 rounded-full glass-panel-beige text-xs font-medium text-[#6E533D] dark:text-[#C7B299] shadow-sm">
+            <span>Developed by</span>
+            <span class="font-bold bg-gradient-to-r from-[#DC2626] to-[#B91C1C] bg-clip-text text-transparent tracking-wide text-sm">Deepshikha Dey</span>
+        </div>
+    </footer>
+
+    <script>
+        let currentExpression = '';
+        let history = [];
+        let angleMode = 'DEG';
+        let soundEnabled = true;
+        let isDarkMode = false;
+        let activeMode = 'standard';
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playClickSound() {
+            if (!soundEnabled) return;
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.04);
+                
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch (e) {}
+        }
+
+        function switchMode(mode) {
+            playClickSound();
+            activeMode = mode;
+            document.querySelectorAll('.mode-tab').forEach(btn => {
+                btn.className = "mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all flex items-center justify-center space-x-2 bg-transparent";
+            });
+            const activeBtn = document.getElementById(`tab-${mode}`);
+            activeBtn.className = "mode-tab flex-1 min-w-[90px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#DC2626] text-white shadow-md shadow-red-600/30";
+
+            document.querySelectorAll('.calc-panel').forEach(panel => panel.classList.add('hidden'));
+            document.getElementById(`panel-${mode}`).classList.remove('hidden');
+
+            if (mode === 'converter') {
+                convertUnits();
+            } else if (mode === 'financial') {
+                calculateTip();
+                calculateLoan();
+            }
+        }
+
+        function appendValue(val) {
+            playClickSound();
+            currentExpression += val;
+            updateDisplay();
+        }
+
+        function appendFunction(func) {
+            playClickSound();
+            currentExpression += func;
+            updateDisplay();
+        }
+
+        function clearAll() {
+            playClickSound();
+            currentExpression = '';
+            updateDisplay(true);
+        }
+
+        function backspace() {
+            playClickSound();
+            currentExpression = currentExpression.slice(0, -1);
+            updateDisplay();
+        }
+
+        function toggleAngleMode() {
+            playClickSound();
+            angleMode = angleMode === 'DEG' ? 'RAD' : 'DEG';
+            document.getElementById('angleBtn').innerText = angleMode;
+            const ind = document.getElementById('angleModeIndicator');
+            ind.innerText = angleMode;
+            ind.classList.remove('hidden');
+            updateDisplay();
+        }
+
+        function updateDisplay(isCleared = false) {
+            const mainDisplay = document.getElementById('mainDisplay');
+            const subExpression = document.getElementById('subExpression');
+            const livePreview = document.getElementById('livePreview');
+
+            if (isCleared) {
+                mainDisplay.innerText = '0';
+                subExpression.innerText = '';
+                livePreview.innerText = '';
+                return;
+            }
+
+            mainDisplay.innerText = currentExpression || '0';
+
+            if (currentExpression.trim() !== '') {
+                try {
+                    let sanitized = prepareExpressionForEval(currentExpression);
+                    let result = Function('"use strict";return (' + sanitized + ')')();
+                    if (result !== undefined && !isNaN(result)) {
+                        livePreview.innerText = '= ' + formatNumber(result);
+                    } else {
+                        livePreview.innerText = '';
+                    }
+                } catch (e) {
+                    livePreview.innerText = '';
+                }
+            } else {
+                livePreview.innerText = '';
+            }
+        }
+
+        function prepareExpressionForEval(expr) {
+            let processed = expr
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/π/g, 'Math.PI')
+                .replace(/e/g, 'Math.E')
+                .replace(/\^2/g, '**2')
+                .replace(/\^/g, '**');
+
+            processed = processed
+                .replace(/sin\(/g, angleMode === 'DEG' ? `Math.sin((Math.PI/180)*` : `Math.sin(`)
+                .replace(/cos\(/g, angleMode === 'DEG' ? `Math.cos((Math.PI/180)*` : `Math.cos(`)
+                .replace(/tan\(/g, angleMode === 'DEG' ? `Math.tan((Math.PI/180)*` : `Math.tan(`)
+                .replace(/sqrt\(/g, `Math.sqrt(`)
+                .replace(/log\(/g, `Math.log10(`)
+                .replace(/ln\(/g, `Math.log(`);
+
+            return processed;
+        }
+
+        function calculateResult() {
+            playClickSound();
+            if (!currentExpression.trim()) return;
+
+            try {
+                let sanitized = prepareExpressionForEval(currentExpression);
+                let result = Function('"use strict";return (' + sanitized + ')')();
+                
+                if (result === undefined || isNaN(result) || !isFinite(result)) {
+                    throw new Error('Invalid Expression');
+                }
+
+                let formattedResult = formatNumber(result);
+                addToHistory(currentExpression, formattedResult);
+
+                document.getElementById('subExpression').innerText = currentExpression + ' =';
+                currentExpression = formattedResult.toString();
+                document.getElementById('mainDisplay').innerText = currentExpression;
+                document.getElementById('livePreview').innerText = '';
+
+            } catch (err) {
+                document.getElementById('mainDisplay').innerText = 'Error';
+                setTimeout(() => {
+                    updateDisplay();
+                }, 1200);
+            }
+        }
+
+        function formatNumber(num) {
+            if (Math.abs(num) > 1e12 || (Math.abs(num) < 1e-6 && num !== 0)) {
+                return num.toExponential(6);
+            }
+            return parseFloat(num.toFixed(8));
+        }
+
+        function addToHistory(expr, res) {
+            history.unshift({ expr, res, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+            if (history.length > 20) history.pop();
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const listEl = document.getElementById('historyList');
+            const badge = document.getElementById('historyBadge');
+            
+            if (history.length === 0) {
+                listEl.innerHTML = '<div class="text-center text-xs text-[#8C6D53] dark:text-[#A68A72] py-6">No calculations recorded yet.</div>';
+                badge.classList.add('hidden');
+                return;
+            }
+
+            badge.innerText = history.length;
+            badge.classList.remove('hidden');
+
+            let html = '';
+            history.forEach((item, idx) => {
+                html += `
+                    <div onclick="useHistoryItem(${idx})" class="p-2.5 rounded-xl bg-white/70 dark:bg-[#12100F] hover:bg-white dark:hover:bg-[#25201E] border border-[#E1D7C8] dark:border-white/5 cursor-pointer transition-all flex items-center justify-between group">
+                        <div class="truncate pr-2">
+                            <div class="text-xs text-[#8C6D53] dark:text-[#A68A72] mono-font">${item.expr}</div>
+                            <div class="text-sm font-bold text-[#DC2626] mono-font">= ${item.res}</div>
+                        </div>
+                        <span class="text-[10px] text-[#A68A72] group-hover:text-[#2D2522] dark:group-hover:text-[#F5F2EB]">${item.time}</span>
+                    </div>
+                `;
+            });
+            listEl.innerHTML = html;
+        }
+
+        function useHistoryItem(idx) {
+            playClickSound();
+            currentExpression = history[idx].res.toString();
+            updateDisplay();
+        }
+
+        function clearHistory() {
+            playClickSound();
+            history = [];
+            renderHistory();
+        }
+
+        const unitData = {
+            length: {
+                units: { m: 'Meters', km: 'Kilometers', cm: 'Centimeters', mm: 'Millimeters', mi: 'Miles', ft: 'Feet', in: 'Inches' },
+                rates: { m: 1, km: 1000, cm: 0.01, mm: 0.001, mi: 1609.34, ft: 0.3048, in: 0.0254 }
+            },
+            weight: {
+                units: { kg: 'Kilograms', g: 'Grams', mg: 'Milligrams', lb: 'Pounds', oz: 'Ounces' },
+                rates: { kg: 1, g: 0.001, mg: 0.000001, lb: 0.453592, oz: 0.0283495 }
+            },
+            temperature: {
+                units: { C: 'Celsius', F: 'Fahrenheit', K: 'Kelvin' }
+            },
+            currency: {
+                units: { USD: 'US Dollar ($)', EUR: 'Euro (€)', GBP: 'British Pound (£)', JPY: 'Japanese Yen (¥)', INR: 'Indian Rupee (₹)', CAD: 'Canadian Dollar (C$)' },
+                rates: { USD: 1, EUR: 0.92, GBP: 0.79, JPY: 155.0, INR: 83.3, CAD: 1.36 }
+            }
+        };
+
+        let currentConvCategory = 'length';
+
+        function setConverterCategory(cat) {
+            playClickSound();
+            currentConvCategory = cat;
+            document.querySelectorAll('.conv-cat-btn').forEach(btn => {
+                btn.className = "conv-cat-btn py-2 px-3 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] bg-[#FAF7F2] dark:bg-[#2E2725] border border-[#E1D7C8] dark:border-white/10 transition-all flex items-center justify-center space-x-1.5";
+            });
+            const activeCatBtn = document.getElementById(`cat-${cat}`);
+            activeCatBtn.className = "conv-cat-btn py-2 px-3 rounded-xl text-xs font-bold bg-[#DC2626] text-white shadow-sm transition-all flex items-center justify-center space-x-1.5";
+
+            populateUnitDropdowns();
+            convertUnits();
+        }
+
+        function populateUnitDropdowns() {
+            const data = unitData[currentConvCategory].units;
+            const fromSelect = document.getElementById('fromUnit');
+            const toSelect = document.getElementById('toUnit');
+            
+            let options = '';
+            for (let key in data) {
+                options += `<option value="${key}">${data[key]}</option>`;
+            }
+            fromSelect.innerHTML = options;
+            toSelect.innerHTML = options;
+            if (toSelect.options.length > 1) {
+                toSelect.selectedIndex = 1;
+            }
+        }
+
+        function convertUnits() {
+            const val = parseFloat(document.getElementById('fromValue').value) || 0;
+            const from = document.getElementById('fromUnit').value;
+            const to = document.getElementById('toUnit').value;
+            let result = 0;
+
+            if (currentConvCategory === 'temperature') {
+                let tempInC = val;
+                if (from === 'F') tempInC = (val - 32) * 5/9;
+                if (from === 'K') tempInC = val - 273.15;
+
+                if (to === 'C') result = tempInC;
+                else if (to === 'F') result = (tempInC * 9/5) + 32;
+                else if (to === 'K') result = tempInC + 273.15;
+            } else {
+                const rates = unitData[currentConvCategory].rates;
+                const baseVal = val * rates[from];
+                result = baseVal / rates[to];
+            }
+
+            document.getElementById('toValue').value = formatNumber(result);
+        }
+
+        function setFinSubMode(sub) {
+            playClickSound();
+            document.getElementById('fin-tab-tip').className = sub === 'tip' ? "px-4 py-1.5 rounded-xl text-xs font-bold bg-[#DC2626] text-white transition-all shadow-sm" : "px-4 py-1.5 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all";
+            document.getElementById('fin-tab-loan').className = sub === 'loan' ? "px-4 py-1.5 rounded-xl text-xs font-bold bg-[#DC2626] text-white transition-all shadow-sm" : "px-4 py-1.5 rounded-xl text-xs font-semibold text-[#6E533D] dark:text-[#C7B299] hover:text-[#2D2522] dark:hover:text-white transition-all";
+
+            if (sub === 'tip') {
+                document.getElementById('fin-sub-tip').classList.remove('hidden');
+                document.getElementById('fin-sub-loan').classList.add('hidden');
+                calculateTip();
+            } else {
+                document.getElementById('fin-sub-tip').classList.add('hidden');
+                document.getElementById('fin-sub-loan').classList.remove('hidden');
+                calculateLoan();
+            }
+        }
+
+        function calculateTip() {
+            const bill = parseFloat(document.getElementById('tipBill').value) || 0;
+            const percent = parseFloat(document.getElementById('tipPercent').value) || 0;
+            const people = parseInt(document.getElementById('tipPeople').value) || 1;
+
+            const tipAmount = bill * (percent / 100);
+            const totalBill = bill + tipAmount;
+            const perPerson = totalBill / (people > 0 ? people : 1);
+
+            document.getElementById('tipResultAmount').innerText = '$' + tipAmount.toFixed(2);
+            document.getElementById('tipResultTotal').innerText = '$' + totalBill.toFixed(2);
+            document.getElementById('tipResultPerPerson').innerText = '$' + perPerson.toFixed(2);
+        }
+
+        function calculateLoan() {
+            const principal = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const annualRate = parseFloat(document.getElementById('loanRate').value) || 0;
+            const years = parseFloat(document.getElementById('loanTerm').value) || 0;
+
+            const monthlyRate = (annualRate / 100) / 12;
+            const months = years * 12;
+
+            let emi = 0;
+            if (monthlyRate === 0) {
+                emi = principal / (months > 0 ? months : 1);
+            } else {
+                emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+            }
+
+            const totalPayment = emi * months;
+            const totalInterest = totalPayment - principal;
+
+            document.getElementById('loanMonthlyEMI').innerText = '$' + Math.round(emi).toLocaleString();
+            document.getElementById('loanTotalInterest').innerText = '$' + Math.round(totalInterest).toLocaleString();
+            document.getElementById('loanTotalPayment').innerText = '$' + Math.round(totalPayment).toLocaleString();
+        }
+
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+
+        themeToggleBtn.addEventListener('click', () => {
+            playClickSound();
+            isDarkMode = !isDarkMode;
+            const html = document.documentElement;
+
+            if (isDarkMode) {
+                html.classList.add('dark');
+                themeIcon.className = "fa-solid fa-sun text-amber-400";
+            } else {
+                html.classList.remove('dark');
+                themeIcon.className = "fa-solid fa-moon text-[#8C6D53]";
+            }
+        });
+
+        const soundToggleBtn = document.getElementById('soundToggleBtn');
+        const soundIcon = document.getElementById('soundIcon');
+
+        soundToggleBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            if (soundEnabled) {
+                soundIcon.className = "fa-solid fa-volume-high";
+                playClickSound();
+            } else {
+                soundIcon.className = "fa-solid fa-volume-xmark";
+            }
+        });
+
+        const historyToggleBtn = document.getElementById('historyToggleBtn');
+        const historyDrawer = document.getElementById('historyDrawer');
+
+        historyToggleBtn.addEventListener('click', () => {
+            playClickSound();
+            historyDrawer.classList.toggle('hidden');
+        });
+
+        window.onload = function() {
+            populateUnitDropdowns();
+        };
+    </script>
+</body>
+</html>

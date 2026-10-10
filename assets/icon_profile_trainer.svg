@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="badge-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#1e251a"/>
+    </filter>
+    <linearGradient id="badge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8"/>
+      <stop offset="40%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Golden Laurel / Trainer Crest Shield -->
+  <path d="M32 4 L54 14 L48 48 L32 60 L16 48 L10 14 Z" fill="url(#badge-grad)" stroke="#831843" stroke-width="3" filter="url(#badge-shadow)"/>
+
+  <!-- Inner Crest Frame -->
+  <path d="M32 9 L49 17 L44 45 L32 54 L20 45 L15 17 Z" fill="#ffffff" stroke="#fbcfe8" stroke-width="2"/>
+
+  <!-- Red Pixel Heart in Center (Undertale Soul meets Trainer Card) -->
+  <path d="M32 23 C32 17 22 17 22 26 C22 34 32 42 32 42 C32 42 42 34 42 26 C42 17 32 17 32 23 Z" fill="#ef4444" stroke="#991b1b" stroke-width="1.5"/>
+
+  <!-- Heart Specular Highlight -->
+  <circle cx="26" cy="22" r="2" fill="#ffffff"/>
+
+  <!-- LV 28 Star Ribbon on Bottom -->
+  <rect x="20" y="44" width="24" height="8" rx="2" fill="#1e293b"/>
+  <text x="32" y="50.5" font-family="'Space Mono', monospace, sans-serif" font-size="6.5" font-weight="900" fill="#facc15" text-anchor="middle">LV.28</text>
+
+  <!-- Sparkle Stars -->
+  <polygon points="50,6 51.5,9 54.5,10 51.5,11.5 50,14.5 48.5,11.5 45.5,10 48.5,9" fill="#fde047"/>
+</svg>

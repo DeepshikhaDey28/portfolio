@@ -1,13 +1,22 @@
 {
-  "name": "adventurous-pascal",
+  "name": "portfolio",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Deepshikha Dey - Personal Portfolio, Scrapbook Resume, and Catch That Pip Interactive Experience",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "echo \"No test specified\" && exit 0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  "keywords": [
+    "portfolio",
+    "developer",
+    "data-science",
+    "cybersecurity",
+    "frontend",
+    "retro-os",
+    "scrapbook",
+    "catch-that-pip"
+  ],
+  "author": "Deepshikha Dey",
+  "license": "MIT"
 }

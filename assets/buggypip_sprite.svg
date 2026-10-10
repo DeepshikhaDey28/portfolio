@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <defs>
+    <filter id="bug-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#a855f7"/>
+    </filter>
+    <linearGradient id="glitch-purple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Glowing Pixel Cyber Wings -->
+  <ellipse cx="44" cy="55" rx="26" ry="14" fill="#38bdf8" opacity="0.75" transform="rotate(-30 44 55)" filter="url(#bug-glow)"/>
+  <ellipse cx="116" cy="55" rx="26" ry="14" fill="#38bdf8" opacity="0.75" transform="rotate(30 116 55)" filter="url(#bug-glow)"/>
+
+  <!-- Bug Legs -->
+  <path d="M42 95 L22 110 M48 105 L32 125 M118 95 L138 110 M112 105 L128 125" stroke="#4c1d95" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Round Cute Chubby Bug Body -->
+  <circle cx="80" cy="90" r="38" fill="url(#glitch-purple)" stroke="#2e1065" stroke-width="3" filter="url(#bug-glow)"/>
+
+  <!-- Glitch Circuit Strips on Body -->
+  <rect x="62" y="75" width="36" height="5" rx="2" fill="#38bdf8"/>
+  <rect x="70" y="105" width="20" height="4" rx="2" fill="#facc15"/>
+
+  <!-- Big Pixel Eyes -->
+  <circle cx="66" cy="85" r="9" fill="#facc15"/>
+  <circle cx="94" cy="85" r="9" fill="#facc15"/>
+  <circle cx="67" cy="85" r="4.5" fill="#0f172a"/>
+  <circle cx="95" cy="85" r="4.5" fill="#0f172a"/>
+  <circle cx="69" cy="83" r="2.5" fill="#ffffff"/>
+  <circle cx="97" cy="83" r="2.5" fill="#ffffff"/>
+
+  <!-- Antennae with Glowing Nodes -->
+  <path d="M68 56 Q55 35 45 36" stroke="#c084fc" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <circle cx="44" cy="36" r="6" fill="#38bdf8" filter="url(#bug-glow)"/>
+  <path d="M92 56 Q105 35 115 36" stroke="#c084fc" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <circle cx="116" cy="36" r="6" fill="#38bdf8" filter="url(#bug-glow)"/>
+
+  <!-- Tiny Cute Fang / Smile -->
+  <path d="M74 100 Q80 106 86 100" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+</svg>

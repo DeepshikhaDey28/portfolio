@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Traffic Grid & Driving Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: { 50: '#FDFBF7', 100: '#F7F4EF', 200: '#EFECE6', 300: '#E2DDD3' },
+                        sand: { 100: '#D9D3C7', 200: '#C7BFB1', 800: '#4A463F', 900: '#2C2A26' },
+                        charcoal: { 800: '#3D3B38', 900: '#2B2B2B', 950: '#1F1E1D' },
+                        terracotta: { DEFAULT: '#C85A32', dark: '#AC4823', light: '#E27650' },
+                        sage: { DEFAULT: '#8A9A86', dark: '#6A7A66', light: '#A8B7A4' },
+                        slateBlue: { DEFAULT: '#6B8EA7', dark: '#4E6F87', light: '#8DAEC7' },
+                        blushPink: { DEFAULT: '#E8A598', dark: '#C8877B' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #F7F4EF; color: #2B2B2B; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #EFECE6; }
+        ::-webkit-scrollbar-thumb { background: #C7BFB1; border-radius: 2px; }
+    </style>
+</head>
+<body class="bg-cream-100 text-charcoal-900 h-full flex flex-col overflow-hidden select-none">
+
+    <header class="bg-cream-50 border-b border-cream-300 px-6 py-3.5 flex items-center justify-between shrink-0 z-30">
+        <div class="flex items-center space-x-4">
+            <div>
+                <h1 class="font-semibold text-xs tracking-widest uppercase text-charcoal-900">Traffic System</h1>
+                <p class="text-[11px] text-sand-800 font-normal">Left-lane traffic grid &amp; circuit simulator</p>
+            </div>
+        </div>
+
+        <div class="flex items-center bg-cream-200/60 p-1 rounded-lg border border-cream-300 space-x-1">
+            <button id="btn-mode-sim" onclick="switchMode('sim')" class="px-4 py-1.5 rounded-md text-xs font-medium transition-all bg-charcoal-900 text-cream-50">
+                Simulation
+            </button>
+            <button id="btn-mode-game" onclick="openMenuModal()" class="px-4 py-1.5 rounded-md text-xs font-medium transition-all text-sand-800 hover:text-charcoal-900 hover:bg-cream-300/50">
+                Circuit Racing
+            </button>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <div class="hidden md:flex items-center space-x-2 bg-cream-200/50 px-3 py-1.5 rounded-md border border-cream-300 text-xs">
+                <span class="text-sand-800 font-medium">TIME</span>
+                <span id="real-clock-display" class="mono text-charcoal-900 font-semibold">--:--:--</span>
+            </div>
+            <button onclick="toggleAudio()" id="audio-toggle-btn" class="bg-cream-50 hover:bg-cream-200 text-charcoal-900 px-3 py-1.5 rounded-md text-xs font-medium transition border border-cream-300">
+                <span id="audio-text">Audio: ON</span>
+            </button>
+            <div class="hidden lg:flex items-center space-x-2 bg-cream-200/50 px-3 py-1.5 rounded-md border border-cream-300 text-xs">
+                <span class="text-sand-800 font-medium">FPS</span>
+                <span id="lbl-fps" class="mono text-charcoal-900">60</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden relative">
+        <div class="flex-1 relative bg-cream-100 flex items-center justify-center overflow-hidden">
+            <canvas id="simCanvas" class="w-full h-full block cursor-crosshair"></canvas>            
+            
+            <!-- Racing Minimalist HUD Overlay -->
+            <div id="game-overlay-hud" class="absolute inset-0 pointer-events-none hidden flex flex-col justify-between p-6 z-20">
+                <div class="flex justify-between items-start">
+                    <div class="bg-cream-50/90 border border-cream-300 px-4 py-3 rounded-lg pointer-events-auto flex items-center space-x-4 shadow-sm">
+                        <div>
+                            <div id="hud-map-name" class="text-xs font-semibold uppercase tracking-wider text-charcoal-900">Track 1 (Speed Loop)</div>
+                            <div class="text-xs font-medium text-sand-800 mt-0.5" id="hud-score">0 PTS</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream-50/90 border border-cream-300 px-4 py-3 rounded-lg pointer-events-auto flex items-center space-x-6 shadow-sm">
+                        <div>
+                            <div class="text-[10px] uppercase font-medium text-sand-800">Lap</div>
+                            <div id="hud-lap" class="mono text-xs font-semibold text-charcoal-900">1 / 3</div>
+                        </div>
+                        <div class="h-6 w-[1px] bg-cream-300"></div>
+                        <div>
+                            <div class="text-[10px] uppercase font-medium text-sand-800">Position</div>
+                            <div id="hud-position" class="mono text-xs font-semibold text-charcoal-900">1 / 5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-end">
+                    <div class="bg-cream-50/90 border border-cream-300 p-4 rounded-lg pointer-events-auto flex items-center space-x-5 shadow-sm">
+                        <div class="text-center">
+                            <span id="hud-speedometer" class="text-2xl font-bold mono text-charcoal-900 block">0</span>
+                            <span class="text-[9px] uppercase font-medium text-sand-800 tracking-wider">KM/H</span>
+                        </div>
+                        <div class="space-y-0.5 border-l border-cream-300 pl-4">
+                            <div id="hud-vehicle-label" class="text-xs font-semibold text-charcoal-900 uppercase">Car (Slate Blue)</div>
+                            <div class="text-[11px] text-sand-800">WASD / Arrows to Drive</div>
+                            <div class="text-[10px] text-sand-800">Space: Drift | E: Siren/Horn</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-cream-50/90 border border-cream-300 p-2 rounded-lg pointer-events-auto shadow-sm">
+                        <div class="text-[10px] uppercase font-medium text-sand-800 mb-1 text-center">Radar</div>
+                        <canvas id="minimapCanvas" width="110" height="110" class="rounded border border-cream-300 block bg-cream-200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Bottom Minimalist Overlay -->
+            <div id="sim-overlay-hud" class="absolute bottom-6 left-6 pointer-events-none flex space-x-3 z-20">
+                <div class="bg-cream-50/90 border border-cream-300 px-4 py-3 rounded-lg flex items-center space-x-3 pointer-events-auto shadow-sm">
+                    <div class="w-2 h-2 rounded-full bg-sage"></div>
+                    <div>
+                        <div class="text-xs font-medium text-charcoal-900">Left-Lane Grid (5s Green / 15s Red)</div>
+                        <div class="text-[11px] text-sand-800">Click anywhere on road canvas to spawn vehicles</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Controller -->
+        <aside id="sidebar-sim" class="w-80 bg-cream-50 border-l border-cream-300 flex flex-col z-30 shrink-0 p-5 space-y-5 overflow-y-auto">
+            <div>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-charcoal-900">Traffic Controller</h2>
+                <p class="text-[11px] text-sand-800 mt-0.5">Adjust signal timing &amp; emergency dispatch.</p>
+            </div>
+
+            <div class="space-y-2 bg-cream-100 p-3.5 rounded-lg border border-cream-300">
+                <div class="flex justify-between text-xs font-medium">
+                    <span class="text-sand-800">Simulation Speed</span>
+                    <span id="val-sim-speed" class="text-charcoal-900 mono">1.0x</span>
+                </div>
+                <input type="range" id="range-sim-speed" min="0.2" max="3.0" step="0.2" value="1.0" class="w-full accent-charcoal-900 cursor-pointer" oninput="updateSimSpeed(this.value)">
+            </div>
+
+            <div class="space-y-2 bg-cream-100 p-3.5 rounded-lg border border-cream-300">
+                <div class="flex justify-between text-xs font-medium">
+                    <span class="text-sand-800">Spawn Density</span>
+                    <span id="val-density" class="text-charcoal-900 mono">Low (Sparse)</span>
+                </div>
+                <input type="range" id="range-density" min="1" max="4" step="1" value="1" class="w-full accent-charcoal-900 cursor-pointer" oninput="updateDensity(this.value)">
+            </div>
+
+            <div class="bg-cream-100 p-3.5 rounded-lg border border-cream-300 space-y-2.5">
+                <div>
+                    <h3 class="text-xs font-medium text-charcoal-900">Emergency Priority</h3>
+                    <p class="text-[11px] text-sand-800">Dispatches Terracotta Red Ambulance with corridor green wave priority.</p>
+                </div>
+                <button onclick="dispatchEmergencyVehicle()" class="w-full bg-terracotta hover:bg-terracotta-dark text-cream-50 font-medium py-2 px-3 rounded text-xs transition border border-terracotta-dark">
+                    Dispatch Ambulance
+                </button>
+            </div>
+
+            <div class="space-y-2 bg-cream-100 p-3.5 rounded-lg border border-cream-300 text-xs">
+                <p class="font-medium text-charcoal-900 mb-2">Palette Vehicle Legend:</p>
+                <div class="grid grid-cols-2 gap-2 text-[11px] text-sand-800">
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-terracotta inline-block"></span><span>Ambulance</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-slateBlue inline-block"></span><span>Car</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-blushPink inline-block"></span><span>Taxi</span></div>
+                    <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-sage inline-block"></span><span>Bike</span></div>
+                </div>
+            </div>
+
+            <div class="space-y-2 bg-cream-100 p-3.5 rounded-lg border border-cream-300">
+                <h3 class="text-xs font-medium text-sand-800 uppercase tracking-wider">Metrics</h3>
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-cream-50 p-2.5 rounded border border-cream-300">
+                        <div class="text-[10px] text-sand-800 uppercase">Active Units</div>
+                        <div id="stat-cars" class="text-xs font-semibold text-charcoal-900 mono mt-0.5">0</div>
+                    </div>
+                    <div class="bg-cream-50 p-2.5 rounded border border-cream-300">
+                        <div class="text-[10px] text-sand-800 uppercase">Separations</div>
+                        <div id="stat-collisions" class="text-xs font-semibold text-charcoal-900 mono mt-0.5">0</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="menu-modal" class="fixed inset-0 bg-charcoal-950/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-6">
+        <div class="bg-cream-50 border border-cream-300 rounded-xl max-w-2xl w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto shadow-lg">
+            <div class="flex items-center justify-between border-b border-cream-300 pb-4">
+                <div>
+                    <h2 class="text-xs font-semibold text-charcoal-900 uppercase tracking-wider">Select Circuit &amp; Vehicle</h2>
+                    <p class="text-[11px] text-sand-800 mt-0.5">Choose layout and vehicle configuration.</p>
+                </div>
+                <button onclick="closeMenuModal()" class="text-sand-800 hover:text-charcoal-900 text-xs font-medium px-2 py-1">
+                    Close
+                </button>
+            </div>
+
+            <div class="space-y-2.5">
+                <h3 class="text-[11px] font-semibold uppercase tracking-wider text-sand-800">1. Track Layout</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="map-cards-container"></div>
+            </div>
+
+            <div class="space-y-2.5">
+                <h3 class="text-[11px] font-semibold uppercase tracking-wider text-sand-800">2. Player Vehicle</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" id="vehicle-cards-container"></div>
+            </div>
+
+            <div class="pt-3 border-t border-cream-300 flex justify-end">
+                <button onclick="launchDrivingGame()" class="bg-charcoal-900 hover:bg-charcoal-800 text-cream-50 font-medium py-2 px-5 rounded text-xs transition uppercase tracking-wider">
+                    Start Race
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let audioEnabled = true;
+        let sirenOsc = null;
+        let sirenGain = null;
+        let engineOsc = null;
+        let engineGain = null;
+
+        function updateRealClock() {
+            const now = new Date();
+            const timeString = now.toTimeString().split(' ')[0];
+            const clockEl = document.getElementById('real-clock-display');
+            if (clockEl) clockEl.innerText = timeString;
+        }
+        setInterval(updateRealClock, 1000);
+        updateRealClock();
+
+        function initAudio() {
+            if (audioCtx) return;
+            try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('audio-text');
+            if (audioEnabled) {
+                btn.innerText = "Audio: ON";
+                initAudio();
+            } else {
+                btn.innerText = "Audio: OFF";
+                stopSirenSound();
+                stopEngineSound();
+            }
+        }
+
+        function playBeep(freq = 440, type = 'sine', duration = 0.1) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function playHorn() { playBeep(320, 'sawtooth', 0.22); }
+
+        function startSirenSound() {
+            if (!audioEnabled || !audioCtx || sirenOsc) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                sirenOsc = audioCtx.createOscillator();
+                sirenGain = audioCtx.createGain();
+                sirenOsc.type = 'triangle';
+                const now = audioCtx.currentTime;
+                sirenOsc.frequency.setValueAtTime(620, now);
+
+                const lfo = audioCtx.createOscillator();
+                lfo.frequency.value = 0.5;
+                const lfoGain = audioCtx.createGain();
+                lfoGain.gain.value = 280;
+                lfo.connect(lfoGain);
+                lfoGain.connect(sirenOsc.frequency);
+                lfo.start();
+
+                sirenGain.gain.setValueAtTime(0.08, now);
+                sirenOsc.connect(sirenGain);
+                sirenGain.connect(audioCtx.destination);
+                sirenOsc.start();
+            } catch(e){}
+        }
+
+        function stopSirenSound() {
+            if (sirenOsc) {
+                try { sirenOsc.stop(); } catch(e){}
+                sirenOsc.disconnect();
+                sirenOsc = null;
+            }
+        }
+
+        function updateEngineSound(speedRatio) {
+            if (!audioEnabled || !audioCtx) return;
+            try {
+                if (!engineOsc) {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    engineOsc = audioCtx.createOscillator();
+                    engineGain = audioCtx.createGain();
+                    engineOsc.type = 'sawtooth';
+                    engineGain.gain.setValueAtTime(0.012, audioCtx.currentTime);
+                    engineOsc.connect(engineGain);
+                    engineGain.connect(audioCtx.destination);
+                    engineOsc.start();
+                }
+                const freq = 50 + Math.abs(speedRatio) * 180;
+                engineOsc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            } catch(e){}
+        }
+
+        function stopEngineSound() {
+            if (engineOsc) {
+                try { engineOsc.stop(); } catch(e){}
+                engineOsc.disconnect();
+                engineOsc = null;
+            }
+        }
+
+        const tracksData = [
+            { id: 'track1', name: 'Track 1 (Speed Circuit)', desc: 'Symmetrical hairpins with high-speed straightaways.' },
+            { id: 'track2', name: 'Track 2 (Serpentine Loop)', desc: 'Complex curving technical turns.' },
+            { id: 'track3', name: 'Track 3 (Grand Prix)', desc: 'Multi-layered intersecting loops.' },
+            { id: 'track4', name: 'Track 4 (Underground Oval)', desc: 'Sweeping continuous oval layout.' }
+        ];
+
+        const vehiclesData = [
+            { id: 'car', name: 'Car (Slate Blue)', type: 'car', color: '#6B8EA7', maxSpeed: 4.8, accel: 0.16, desc: 'Balanced handling and acceleration.' },
+            { id: 'bike', name: 'Bike (Sage Green)', type: 'bike', color: '#8A9A86', maxSpeed: 6.2, accel: 0.26, desc: 'High top speed and agile maneuvering.' },
+            { id: 'ambulance', name: 'Ambulance (Terracotta)', type: 'ambulance', color: '#C85A32', maxSpeed: 5.0, accel: 0.18, desc: 'Emergency siren and high road priority.' }
+        ];
+
+        let selectedTrackId = 'track1';
+        let selectedVehicleId = 'car';
+
+        function renderMenuModal() {
+            const mapContainer = document.getElementById('map-cards-container');
+            mapContainer.innerHTML = tracksData.map(t => `
+                <div onclick="selectTrack('${t.id}')" class="cursor-pointer bg-cream-100 p-3.5 rounded-lg border ${selectedTrackId === t.id ? 'border-charcoal-900 bg-cream-200' : 'border-cream-300'} transition">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span class="text-[9px] uppercase font-mono text-sand-800">LAYOUT</span>
+                    </div>
+                    <h4 class="font-semibold text-xs text-charcoal-900 uppercase">${t.name}</h4>
+                    <p class="text-[11px] text-sand-800 mt-0.5">${t.desc}</p>
+                </div>
+            `).join('');
+
+            const vehContainer = document.getElementById('vehicle-cards-container');
+            vehContainer.innerHTML = vehiclesData.map(v => `
+                <div onclick="selectVehicle('${v.id}')" class="cursor-pointer bg-cream-100 p-3.5 rounded-lg border ${selectedVehicleId === v.id ? 'border-charcoal-900 bg-cream-200' : 'border-cream-300'} transition">
+                    <h4 class="font-semibold text-xs text-charcoal-900">${v.name}</h4>
+                    <p class="text-[11px] text-sand-800 mt-0.5">${v.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectTrack(id) { selectedTrackId = id; renderMenuModal(); }
+        function selectVehicle(id) { selectedVehicleId = id; renderMenuModal(); }
+        function openMenuModal() { document.getElementById('menu-modal').classList.remove('hidden'); renderMenuModal(); }
+        function closeMenuModal() { document.getElementById('menu-modal').classList.add('hidden'); }
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const minimapCanvas = document.getElementById('minimapCanvas');
+        const miniCtx = minimapCanvas.getContext('2d');
+
+        let currentMode = 'sim';
+        let simSpeed = 1.0;
+        let trafficDensity = 1;
+        let lastFrameTime = performance.now();
+        let fps = 60;
+        let frameCount = 0;
+        let lastFpsUpdate = performance.now();
+
+        let vehicles = [];
+        let roads = [];
+        let intersections = [];
+        let collisionsCount = 0;
+        let spawnTimer = 0;
+
+        let player = null;
+        let gameScore = 0;
+        let currentLap = 1;
+        let totalLaps = 3;
+        let trackPathPoints = [];
+
+        let keys = {};
+        window.addEventListener('keydown', e => { keys[e.code] = true; if(e.code === 'KeyE') togglePlayerSirenOrHorn(); });
+        window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+        function togglePlayerSirenOrHorn() {
+            if (currentMode !== 'game' || !player) return;
+            if (player.type === 'ambulance') {
+                player.sirenActive = !player.sirenActive;
+                if (player.sirenActive) startSirenSound();
+                else stopSirenSound();
+            } else {
+                playHorn();
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function switchMode(mode) {
+            currentMode = mode;
+            stopSirenSound();
+            stopEngineSound();
+
+            const btnSim = document.getElementById('btn-mode-sim');
+            const btnGame = document.getElementById('btn-mode-game');
+            const sidebarSim = document.getElementById('sidebar-sim');
+            const gameHud = document.getElementById('game-overlay-hud');
+            const simHud = document.getElementById('sim-overlay-hud');
+
+            if (mode === 'sim') {
+                btnSim.className = "px-4 py-1.5 rounded-md text-xs font-medium transition-all bg-charcoal-900 text-cream-50";
+                btnGame.className = "px-4 py-1.5 rounded-md text-xs font-medium transition-all text-sand-800 hover:text-charcoal-900 hover:bg-cream-300/50";
+                sidebarSim.classList.remove('hidden');
+                gameHud.classList.add('hidden');
+                simHud.classList.remove('hidden');
+                initSimulationGrid();
+            } else {
+                openMenuModal();
+            }
+        }
+
+        function launchDrivingGame() {
+            closeMenuModal();
+            currentMode = 'game';
+            stopSirenSound();
+            stopEngineSound();
+
+            const btnSim = document.getElementById('btn-mode-sim');
+            const btnGame = document.getElementById('btn-mode-game');
+            const sidebarSim = document.getElementById('sidebar-sim');
+            const gameHud = document.getElementById('game-overlay-hud');
+            const simHud = document.getElementById('sim-overlay-hud');
+
+            btnGame.className = "px-4 py-1.5 rounded-md text-xs font-medium transition-all bg-charcoal-900 text-cream-50";
+            btnSim.className = "px-4 py-1.5 rounded-md text-xs font-medium transition-all text-sand-800 hover:text-charcoal-900 hover:bg-cream-300/50";
+            sidebarSim.classList.add('hidden');
+            gameHud.classList.remove('hidden');
+            simHud.classList.add('hidden');
+
+            gameScore = 0;
+            currentLap = 1;
+
+            buildTrackPath(selectedTrackId);
+
+            const vehConfig = vehiclesData.find(v => v.id === selectedVehicleId);
+            const startPt = trackPathPoints[0];
+            player = new Vehicle(startPt.x, startPt.y, vehConfig.type, true);
+            player.color = vehConfig.color;
+            player.maxSpeed = vehConfig.maxSpeed;
+            player.accel = vehConfig.accel;
+            player.sirenActive = vehConfig.type === 'ambulance';
+            if (player.sirenActive) startSirenSound();
+            
+            vehicles = [player];
+
+            for (let i = 1; i < 5; i++) {
+                let ptIdx = (i * 25) % trackPathPoints.length;
+                let aiPt = trackPathPoints[ptIdx];
+                let aiTypes = ['car', 'taxi', 'bike', 'ambulance'];
+                let aiType = aiTypes[i % aiTypes.length];
+                let ai = new Vehicle(aiPt.x, aiPt.y, aiType, false);
+                ai.pathIndex = ptIdx;
+                vehicles.push(ai);
+            }
+
+            const trackCfg = tracksData.find(t => t.id === selectedTrackId);
+            document.getElementById('hud-map-name').innerText = trackCfg.name;
+            document.getElementById('hud-vehicle-label').innerText = vehConfig.name;
+            updateGameHud();
+        }
+
+        function initSimulationGrid() {
+            vehicles = [];
+            roads = [];
+            intersections = [];
+
+            const w = canvas.width;
+            const h = canvas.height;
+            const cols = Math.max(2, Math.floor(w / 480));
+            const rows = Math.max(2, Math.floor(h / 360));
+            
+            const cellW = w / (cols + 1);
+            const cellH = h / (rows + 1);
+
+            let xCoords = [];
+            let yCoords = [];
+
+            for (let i = 1; i <= cols; i++) xCoords.push(i * cellW);
+            for (let j = 1; j <= rows; j++) yCoords.push(j * cellH);
+
+            xCoords.forEach(x => {
+                yCoords.forEach(y => {
+                    intersections.push({
+                        x: x,
+                        y: y,
+                        size: 90,
+                        timer: Math.random() * 20,
+                        state: 'ns_green'
+                    });
+                });
+            });
+
+            yCoords.forEach(y => {
+                roads.push({ type: 'horizontal', y: y, startX: 0, endX: w });
+            });
+            xCoords.forEach(x => {
+                roads.push({ type: 'vertical', x: x, startY: 0, endY: h });
+            });
+
+            for (let i = 0; i < 6; i++) {
+                spawnRandomLandingVehicle();
+            }
+        }
+
+        function buildTrackPath(trackId) {
+            trackPathPoints = [];
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const rx = Math.min(canvas.width, canvas.height) * 0.38;
+            const ry = rx * 0.65;
+
+            let steps = 180;
+            for (let i = 0; i < steps; i++) {
+                let t = (i / steps) * Math.PI * 2;
+                let x = cx, y = cy;
+
+                if (trackId === 'track1') {
+                    x = cx + Math.cos(t) * rx * (1 + 0.3 * Math.sin(t * 2));
+                    y = cy + Math.sin(t) * ry * (1 - 0.2 * Math.cos(t));
+                } else if (trackId === 'track2') {
+                    x = cx + Math.sin(t * 2) * rx * 0.9;
+                    y = cy + Math.sin(t) * ry * 0.85;
+                } else if (trackId === 'track3') {
+                    x = cx + Math.cos(t) * rx + Math.sin(t * 3) * (rx * 0.2);
+                    y = cy + Math.sin(t) * ry + Math.cos(t * 2) * (ry * 0.25);
+                } else {
+                    x = cx + Math.cos(t) * rx * 1.1;
+                    y = cy + Math.sin(t) * ry * 0.75;
+                }
+                trackPathPoints.push({ x, y });
+            }
+        }
+
+        class Vehicle {
+            constructor(x, y, type = 'car', isPlayer = false) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.isPlayer = isPlayer;
+                this.vx = 0;
+                this.vy = 0;
+                this.angle = 0;
+                this.maxSpeed = type === 'bike' ? 5.8 : type === 'ambulance' ? 4.8 : 4.5;
+                this.accel = type === 'bike' ? 0.22 : 0.14;
+                this.speed = 0;
+                this.width = type === 'bike' ? 12 : 20;
+                this.length = type === 'bike' ? 28 : 40;
+                this.color = this.getColorForType(type);
+                this.pathDirection = Math.random() > 0.5 ? 'horizontal' : 'vertical';
+                this.directionSign = Math.random() > 0.5 ? 1 : -1;
+                this.sirenActive = type === 'ambulance';
+                this.sirenTimer = 0;
+                this.stoppedAtLight = false;
+                this.mass = type === 'ambulance' ? 1.8 : type === 'bike' ? 0.5 : 1.0;
+                this.pathIndex = 0;
+            }
+
+            getColorForType(t) {
+                if (t === 'ambulance') return '#C85A32'; // Terracotta Red
+                if (t === 'car') return '#6B8EA7';       // Dusty Slate Blue
+                if (t === 'taxi') return '#E8A598';      // Soft Blush Pink
+                if (t === 'bike') return '#8A9A86';      // Sage Green
+                return '#6B8EA7';
+            }
+
+            update(dt) {
+                if (currentMode === 'game') {
+                    if (this.isPlayer) {
+                        this.updatePlayerRacing(dt);
+                    } else {
+                        this.updateAIRacing(dt);
+                    }
+                } else {
+                    this.updateLandingTraffic(dt);
+                }
+
+                if (this.sirenActive) {
+                    this.sirenTimer += dt * 10;
+                }
+            }
+
+            updatePlayerRacing(dt) {
+                let throttle = 0;
+                let steer = 0;
+
+                if (keys['KeyW'] || keys['ArrowUp']) throttle = 1;
+                if (keys['KeyS'] || keys['ArrowDown']) throttle = -0.6;
+                if (keys['KeyA'] || keys['ArrowLeft']) steer = -1;
+                if (keys['KeyD'] || keys['ArrowRight']) steer = 1;
+
+                if (throttle > 0) {
+                    this.speed += this.accel * throttle;
+                    if (this.speed > this.maxSpeed * 1.5) this.speed = this.maxSpeed * 1.5;
+                } else if (throttle < 0) {
+                    this.speed += this.accel * throttle;
+                    if (this.speed < -this.maxSpeed * 0.4) this.speed = -this.maxSpeed * 0.4;
+                } else {
+                    this.speed *= 0.98;
+                }
+
+                if (Math.abs(this.speed) > 0.2) {
+                    this.angle += steer * 0.05 * (this.speed / this.maxSpeed);
+                }
+
+                this.vx = Math.cos(this.angle) * this.speed;
+                this.vy = Math.sin(this.angle) * this.speed;
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                let closestPt = this.getClosestTrackPoint();
+                let distToCenter = Math.hypot(this.x - closestPt.x, this.y - closestPt.y);
+                let roadWidthLimit = 52;
+
+                if (distToCenter > roadWidthLimit) {
+                    let nx = (closestPt.x - this.x) / distToCenter;
+                    let ny = (closestPt.y - this.y) / distToCenter;
+                    this.x = closestPt.x - nx * roadWidthLimit;
+                    this.y = closestPt.y - ny * roadWidthLimit;
+                }
+
+                updateEngineSound(this.speed / this.maxSpeed);
+            }
+
+            updateAIRacing(dt) {
+                let targetPt = trackPathPoints[(this.pathIndex + 3) % trackPathPoints.length];
+                let dx = targetPt.x - this.x;
+                let dy = targetPt.y - this.y;
+                let targetAngle = Math.atan2(dy, dx);
+
+                let angleDiff = targetAngle - this.angle;
+                while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+                while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+                this.angle += Math.max(-0.06, Math.min(0.06, angleDiff));
+
+                let targetSpeed = this.maxSpeed * 0.95;
+                if (this.speed < targetSpeed) this.speed += this.accel;
+
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+
+                if (Math.hypot(this.x - targetPt.x, this.y - targetPt.y) < 45) {
+                    this.pathIndex = (this.pathIndex + 1) % trackPathPoints.length;
+                    if (this.pathIndex === 0 && this === vehicles[1]) {
+                        currentLap = Math.min(totalLaps, currentLap + 1);
+                    }
+                }
+            }
+
+            getClosestTrackPoint() {
+                let minDist = 99999;
+                let closest = trackPathPoints[0];
+                trackPathPoints.forEach(pt => {
+                    let d = Math.hypot(this.x - pt.x, this.y - pt.y);
+                    if (d < minDist) {
+                        minDist = d;
+                        closest = pt;
+                    }
+                });
+                return closest;
+            }
+
+            updateLandingTraffic(dt) {
+                let targetSpeed = this.maxSpeed * simSpeed;
+                this.stoppedAtLight = false;
+                let frontDist = 9999;
+
+                intersections.forEach(inter => {
+                    let dx = inter.x - this.x;
+                    let dy = inter.y - this.y;
+                    let dist = Math.hypot(dx, dy);
+
+                    if (dist < 180 && dist > 10) {
+                        if (this.pathDirection === 'horizontal') {
+                            let correctLane = (this.directionSign > 0 && dy > 0 && dy < 35) || (this.directionSign < 0 && dy < 0 && dy > -35);
+                            if (correctLane) {
+                                if ((this.directionSign > 0 && dx > 0 && dx < frontDist) || (this.directionSign < 0 && dx < 0 && -dx < frontDist)) {
+                                    frontDist = Math.abs(dx);
+                                    if (!inter.state.startsWith('ew') || inter.state.includes('red') || inter.state.includes('amber')) {
+                                        this.stoppedAtLight = true;
+                                    }
+                                }
+                            }
+                        } else {
+                            let correctLane = (this.directionSign > 0 && dx < 0 && dx > -35) || (this.directionSign < 0 && dx > 0 && dx < 35);
+                            if (correctLane) {
+                                if ((this.directionSign > 0 && dy > 0 && dy < frontDist) || (this.directionSign < 0 && dy < 0 && -dy < frontDist)) {
+                                    frontDist = Math.abs(dy);
+                                    if (!inter.state.startsWith('ns') || inter.state.includes('red') || inter.state.includes('amber')) {
+                                        this.stoppedAtLight = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                if (this.type !== 'ambulance') {
+                    vehicles.forEach(other => {
+                        if (other.type === 'ambulance' && other.sirenActive) {
+                            if (Math.hypot(other.x - this.x, other.y - this.y) < 180) {
+                                targetSpeed *= 0.2;
+                            }
+                        }
+                    });
+                }
+
+                if (this.stoppedAtLight && frontDist < 75) {
+                    targetSpeed = 0;
+                }
+
+                if (this.speed < targetSpeed) {
+                    this.speed += this.accel;
+                    if (this.speed > targetSpeed) this.speed = targetSpeed;
+                } else if (this.speed > targetSpeed) {
+                    this.speed -= this.accel * 1.5;
+                    if (this.speed < targetSpeed) this.speed = targetSpeed;
+                }
+
+                const laneOffset = 15;
+
+                if (this.pathDirection === 'horizontal') {
+                    this.vx = this.speed * this.directionSign;
+                    this.vy = 0;
+                    this.angle = this.directionSign > 0 ? 0 : Math.PI;
+                    let targetY = this.roadRefY + (this.directionSign > 0 ? laneOffset : -laneOffset);
+                    this.y += (targetY - this.y) * 0.1;
+                    this.x += this.vx;
+
+                    if (this.x > canvas.width + 120) this.x = -120;
+                    if (this.x < -120) this.x = canvas.width + 120;
+
+                    intersections.forEach(inter => {
+                        if (Math.abs(this.x - inter.x) < 5 && Math.random() < 0.12 && Math.abs(this.y - inter.y) < 25) {
+                            if (Math.random() > 0.5) {
+                                this.pathDirection = 'vertical';
+                                this.directionSign = Math.random() > 0.5 ? 1 : -1;
+                                this.roadRefX = inter.x;
+                            }
+                        }
+                    });
+                } else {
+                    this.vx = 0;
+                    this.vy = this.speed * this.directionSign;
+                    this.angle = this.directionSign > 0 ? Math.PI / 2 : -Math.PI / 2;
+                    let targetX = this.roadRefX + (this.directionSign > 0 ? -laneOffset : laneOffset);
+                    this.x += (targetX - this.x) * 0.1;
+                    this.y += this.vy;
+
+                    if (this.y > canvas.height + 120) this.y = -120;
+                    if (this.y < -120) this.y = canvas.height + 120;
+
+                    intersections.forEach(inter => {
+                        if (Math.abs(this.y - inter.y) < 5 && Math.random() < 0.12 && Math.abs(this.x - inter.x) < 25) {
+                            if (Math.random() > 0.5) {
+                                this.pathDirection = 'horizontal';
+                                this.directionSign = Math.random() > 0.5 ? 1 : -1;
+                                this.roadRefY = inter.y;
+                            }
+                        }
+                    });
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+
+                // Subtle shadow
+                ctx.fillStyle = 'rgba(43, 43, 43, 0.12)';
+                ctx.fillRect(-this.length/2 + 2, -this.width/2 + 2, this.length, this.width);
+
+                if (this.type === 'bike') {
+                    ctx.fillStyle = '#3D3B38';
+                    ctx.fillRect(-10, -4, 20, 8);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-8, -3, 16, 6);
+                } else if (this.type === 'ambulance') {
+                    ctx.fillStyle = '#FDFBF7';
+                    ctx.fillRect(-this.length/2, -this.width/2, this.length, this.width);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-6, -7, 12, 14);
+
+                    if (this.sirenActive || Math.floor(this.sirenTimer) % 2 === 0) {
+                        ctx.fillStyle = Math.sin(this.sirenTimer * 6) > 0 ? '#6B8EA7' : '#C85A32';
+                        ctx.beginPath(); ctx.arc(0, 0, 2.5, 0, Math.PI*2); ctx.fill();
+                    }
+                } else {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.roundRect(-this.length/2, -this.width/2, this.length, this.width, 3);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#2B2B2B';
+                    ctx.fillRect(-4, -this.width/2 + 2, 10, this.width - 4);
+                }
+
+                ctx.restore();
+            }
+        }
+
+        function resolveCollisions() {
+            for (let i = 0; i < vehicles.length; i++) {
+                for (let j = i + 1; j < vehicles.length; j++) {
+                    let v1 = vehicles[i];
+                    let v2 = vehicles[j];
+
+                    let dx = v2.x - v1.x;
+                    let dy = v2.y - v1.y;
+                    let dist = Math.hypot(dx, dy);
+                    let minDist = (v1.length + v2.length) * 0.42;
+
+                    if (dist < minDist && dist > 0) {
+                        collisionsCount++;
+                        let overlap = minDist - dist;
+                        let nx = dx / dist;
+                        let ny = dy / dist;
+
+                        let totalMass = v1.mass + v2.mass;
+                        if (!v1.isPlayer) {
+                            v1.x -= nx * overlap * (v2.mass / totalMass);
+                            v1.y -= ny * overlap * (v2.mass / totalMass);
+                        }
+                        if (!v2.isPlayer) {
+                            v2.x += nx * overlap * (v1.mass / totalMass);
+                            v2.y += ny * overlap * (v1.mass / totalMass);
+                        }
+                    }
+                }
+            }
+        }
+
+        function spawnRandomLandingVehicle() {
+            if (vehicles.length > 25) return;
+            const road = roads[Math.floor(Math.random() * roads.length)];
+            const types = ['car', 'car', 'taxi', 'bike'];
+            const type = types[Math.floor(Math.random() * types.length)];
+
+            let v = new Vehicle(0, 0, type);
+            if (road.type === 'horizontal') {
+                v.pathDirection = 'horizontal';
+                v.directionSign = Math.random() > 0.5 ? 1 : -1;
+                v.roadRefY = road.y;
+                v.x = v.directionSign > 0 ? 40 : canvas.width - 40;
+                v.y = road.y + (v.directionSign > 0 ? 15 : -15);
+            } else {
+                v.pathDirection = 'vertical';
+                v.directionSign = Math.random() > 0.5 ? 1 : -1;
+                v.roadRefX = road.x;
+                v.x = road.x - 15;
+                v.y = v.directionSign > 0 ? 40 : canvas.height - 40;
+            }
+            vehicles.push(v);
+        }
+
+        function dispatchEmergencyVehicle() {
+            playBeep(650, 'sawtooth', 0.25);
+            if (currentMode === 'sim') {
+                const road = roads[Math.floor(Math.random() * roads.length)];
+                let amb = new Vehicle(0, 0, 'ambulance');
+                amb.sirenActive = true;
+                if (road.type === 'horizontal') {
+                    amb.pathDirection = 'horizontal';
+                    amb.directionSign = 1;
+                    amb.roadRefY = road.y;
+                    amb.x = 60;
+                    amb.y = road.y + 15;
+                } else {
+                    amb.pathDirection = 'vertical';
+                    amb.directionSign = 1;
+                    amb.roadRefX = road.x;
+                    amb.x = road.x - 15;
+                    amb.y = 60;
+                }
+                vehicles.unshift(amb);
+            }
+        }
+
+        function updateTrafficLights(dt) {
+            intersections.forEach(inter => {
+                inter.timer += dt * simSpeed;
+
+                let emergencyNear = false;
+                vehicles.forEach(v => {
+                    if (v.type === 'ambulance' && Math.hypot(v.x - inter.x, v.y - inter.y) < 220) {
+                        emergencyNear = true;
+                        if (v.pathDirection === 'vertical') {
+                            inter.state = 'ns_green';
+                            inter.timer = 0;
+                        } else {
+                            inter.state = 'ew_green';
+                            inter.timer = 0;
+                        }
+                    }
+                });
+
+                if (!emergencyNear) {
+                    let cycle = inter.timer % 20;
+                    if (cycle < 5) inter.state = 'ns_green';
+                    else if (cycle < 6) inter.state = 'ns_amber';
+                    else if (cycle < 11) inter.state = 'ew_green';
+                    else inter.state = 'ew_amber';
+                }
+            });
+        }
+
+        function updateGameHud() {
+            document.getElementById('hud-score').innerText = `${Math.round(gameScore)} PTS`;
+            document.getElementById('hud-lap').innerText = `${currentLap} / ${totalLaps}`;
+            document.getElementById('hud-position').innerText = `1 / 5`;
+        }
+
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            if (currentMode === 'game' && player) {
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(-player.angle - Math.PI / 2);
+                ctx.translate(-player.x, -player.y);
+            }
+
+            if (currentMode === 'sim') {
+                ctx.fillStyle = '#F7F4EF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                roads.forEach(road => {
+                    ctx.strokeStyle = '#3D3B38'; // Charcoal road surface
+                    ctx.lineWidth = 60;
+                    ctx.beginPath();
+                    if (road.type === 'horizontal') {
+                        ctx.moveTo(road.startX, road.y);
+                        ctx.lineTo(road.endX, road.y);
+                    } else {
+                        ctx.moveTo(road.x, road.startY);
+                        ctx.lineTo(road.x, road.endY);
+                    }
+                    ctx.stroke();
+
+                    ctx.strokeStyle = '#EFECE6';
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([8, 8]);
+                    ctx.beginPath();
+                    if (road.type === 'horizontal') {
+                        ctx.moveTo(road.startX, road.y);
+                        ctx.lineTo(road.endX, road.y);
+                    } else {
+                        ctx.moveTo(road.x, road.startY);
+                        ctx.lineTo(road.x, road.endY);
+                    }
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                });
+
+                intersections.forEach(inter => {
+                    ctx.fillStyle = '#3D3B38';
+                    ctx.fillRect(inter.x - inter.size/2, inter.y - inter.size/2, inter.size, inter.size);
+
+                    let nsGreen = inter.state.startsWith('ns');
+                    let ewGreen = inter.state.startsWith('ew');
+                    let cycle = inter.timer % 20;
+                    let countdown = Math.max(0, Math.ceil(nsGreen ? (cycle < 5 ? 5 - cycle : 6 - cycle) : (cycle < 11 ? 11 - cycle : 20 - cycle)));
+
+                    drawTrafficLightSignal(inter.x - 32, inter.y - 42, nsGreen, countdown);
+                    drawTrafficLightSignal(inter.x + 32, inter.y + 42, nsGreen, countdown);
+                    drawTrafficLightSignal(inter.x + 42, inter.y - 32, ewGreen, countdown);
+                    drawTrafficLightSignal(inter.x - 42, inter.y + 32, ewGreen, countdown);
+                });
+            } else {
+                ctx.fillStyle = '#F7F4EF';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = '#3D3B38';
+                ctx.lineWidth = 88;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+                trackPathPoints.forEach((pt, idx) => {
+                    if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                    else ctx.lineTo(pt.x, pt.y);
+                });
+                ctx.closePath();
+                ctx.stroke();
+
+                ctx.strokeStyle = '#E2DDD3';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            vehicles.forEach(v => v.draw());
+            ctx.restore();
+
+            drawMinimap();
+        }
+
+        function drawTrafficLightSignal(x, y, isGreen, countdown) {
+            ctx.fillStyle = '#2B2B2B';
+            ctx.beginPath();
+            ctx.roundRect(x - 7, y - 12, 14, 24, 3);
+            ctx.fill();
+
+            ctx.fillStyle = isGreen ? '#8A9A86' : '#C85A32'; // Sage Green / Terracotta Red
+            ctx.beginPath();
+            ctx.arc(x, isGreen ? y + 4 : y - 4, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#4A463F';
+            ctx.font = '500 8px JetBrains Mono, monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(countdown + 's', x, y - 6);
+        }
+
+        function drawMinimap() {
+            miniCtx.fillStyle = '#EFECE6';
+            miniCtx.fillRect(0, 0, minimapCanvas.width, minimapCanvas.height);
+
+            const scaleX = minimapCanvas.width / canvas.width;
+            const scaleY = minimapCanvas.height / canvas.height;
+
+            if (currentMode === 'sim') {
+                roads.forEach(r => {
+                    miniCtx.strokeStyle = '#C7BFB1';
+                    miniCtx.lineWidth = 2;
+                    miniCtx.beginPath();
+                    if (r.type === 'horizontal') {
+                        miniCtx.moveTo(0, r.y * scaleY);
+                        miniCtx.lineTo(minimapCanvas.width, r.y * scaleY);
+                    } else {
+                        miniCtx.moveTo(r.x * scaleX, 0);
+                        miniCtx.lineTo(r.x * scaleX, minimapCanvas.height);
+                    }
+                    miniCtx.stroke();
+                });
+            } else {
+                miniCtx.strokeStyle = '#3D3B38';
+                miniCtx.lineWidth = 2;
+                miniCtx.beginPath();
+                trackPathPoints.forEach((pt, idx) => {
+                    if (idx === 0) miniCtx.moveTo(pt.x * scaleX, pt.y * scaleY);
+                    else miniCtx.lineTo(pt.x * scaleX, pt.y * scaleY);
+                });
+                miniCtx.closePath();
+                miniCtx.stroke();
+            }
+
+            vehicles.forEach(v => {
+                miniCtx.fillStyle = v.isPlayer ? '#6B8EA7' : v.type === 'ambulance' ? '#C85A32' : '#8A9A86';
+                miniCtx.beginPath();
+                miniCtx.arc(v.x * scaleX, v.y * scaleY, v.isPlayer ? 3 : 2, 0, Math.PI*2);
+                miniCtx.fill();
+            });
+        }
+
+        function mainLoop(now) {
+            let dt = (now - lastFrameTime) / 1000;
+            if (dt > 0.1) dt = 0.1;
+            lastFrameTime = now;
+
+            frameCount++;
+            if (now - lastFpsUpdate > 1000) {
+                fps = Math.round((frameCount * 1000) / (now - lastFpsUpdate));
+                document.getElementById('lbl-fps').innerText = fps;
+                frameCount = 0;
+                lastFpsUpdate = now;
+            }
+
+            if (currentMode === 'sim') {
+                spawnTimer += dt * simSpeed;
+                let interval = Math.max(2.0, 6.0 - (trafficDensity * 1.2));
+                if (spawnTimer > interval) {
+                    spawnRandomLandingVehicle();
+                    spawnTimer = 0;
+                }
+                updateTrafficLights(dt);
+            } else if (currentMode === 'game' && player) {
+                gameScore += Math.abs(player.speed) * 0.2;
+                let kmh = Math.round(Math.abs(player.speed) * 22);
+                document.getElementById('hud-speedometer').innerText = kmh;
+                updateGameHud();
+            }
+
+            vehicles.forEach(v => v.update(dt));
+            resolveCollisions();
+
+            if (currentMode === 'sim') {
+                document.getElementById('stat-cars').innerText = vehicles.length;
+                document.getElementById('stat-collisions').innerText = collisionsCount;
+            }
+
+            drawScene();
+            requestAnimationFrame(mainLoop);
+        }
+
+        function updateSimSpeed(val) {
+            simSpeed = parseFloat(val);
+            document.getElementById('val-sim-speed').innerText = `${simSpeed.toFixed(1)}x`;
+        }
+
+        function updateDensity(val) {
+            trafficDensity = parseInt(val);
+            const labels = ['Very Sparse', 'Low (Sparse)', 'Moderate', 'Dense'];
+            document.getElementById('val-density').innerText = labels[trafficDensity - 1];
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (currentMode !== 'sim') return;
+            const rect = canvas.getBoundingClientRect();
+            let v = new Vehicle(e.clientX - rect.left, e.clientY - rect.top, Math.random() > 0.8 ? 'ambulance' : 'car');
+            vehicles.push(v);
+        });
+
+        window.onload = function() {
+            initSimulationGrid();
+            requestAnimationFrame(mainLoop);
+        };
+    </script>
+</body>
+</html>

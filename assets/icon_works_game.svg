@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="works-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="0" flood-color="#1e251a"/>
+    </filter>
+    <linearGradient id="bag-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="dex-screen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Trainer Adventure Satchel / Dev Dex Archive -->
+  <!-- Back Handle -->
+  <path d="M22 18 C22 10 42 10 42 18" stroke="#78350f" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Main Bag Body with 3D Bevel -->
+  <rect x="8" y="16" width="48" height="42" rx="10" fill="url(#bag-gold)" stroke="#78350f" stroke-width="3" filter="url(#works-shadow)"/>
+
+  <!-- Flap Cover with Stitching -->
+  <path d="M8 18 C8 18 16 34 32 34 C48 34 56 18 56 18 Z" fill="#b45309" stroke="#78350f" stroke-width="2.5"/>
+  <path d="M12 20 C14 28 22 30 32 30 C42 30 50 28 52 20" stroke="#fde047" stroke-width="1.5" stroke-dasharray="3,2" fill="none"/>
+
+  <!-- Center Metallic Fastener / Pip-Dex Cartridge Slot -->
+  <rect x="26" y="27" width="12" height="13" rx="3" fill="#1e293b" stroke="#fef08a" stroke-width="1.5"/>
+  <circle cx="32" cy="33.5" r="3" fill="#22c55e"/>
+
+  <!-- Glowing Pip-Dex Mini Screen on Bottom -->
+  <rect x="14" y="38" width="36" height="15" rx="4" fill="url(#dex-screen)" stroke="#0369a1" stroke-width="1.5"/>
+  <!-- Code Telemetry Scanlines -->
+  <line x1="18" y1="42" x2="32" y2="42" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="18" y1="46" x2="44" y2="46" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+  <line x1="18" y1="50" x2="26" y2="50" stroke="#facc15" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Sparkle Stars -->
+  <polygon points="53,8 55,12 59,13 55,15 53,19 51,15 47,13 51,12" fill="#facc15"/>
+</svg>
