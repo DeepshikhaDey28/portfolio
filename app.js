@@ -590,11 +590,11 @@ function renderRepos(repos) {
       <div class="repo-footer">
         <div class="repo-meta-left">
           <span><span class="repo-lang-dot" style="background-color: ${langColor};"></span>${lang}</span>
-          <span class="repo-stars">★ ${repo.stargazers_count || 0}</span>
-          <span class="repo-forks">⑂ ${repo.forks_count || 0}</span>
+          <span class="repo-stars">Stars: ${repo.stargazers_count || 0}</span>
+          <span class="repo-forks">Forks: ${repo.forks_count || 0}</span>
         </div>
         <a href="${repo.html_url}" target="_blank" class="repo-action-btn">
-          <span>View Code ↗</span>
+          <span>View Code</span>
         </a>
       </div>
     `;
@@ -713,8 +713,8 @@ class CatchThatPipGame {
       maxHp: 100,
       exp: 89.4,
       // Open World Grid Position (Tile 32x32)
-      x: 8 * 32,
-      y: 7 * 32,
+      x: 11 * 32,
+      y: 8 * 32,
       w: 24,
       h: 28,
       speed: 2.6,
@@ -1011,10 +1011,27 @@ class CatchThatPipGame {
     this.dodgeInterval = null;
     this.bullets = [];
 
-    // Map Dimensions (40 x 30 tiles @ 32px each = 1280 x 960 world)
-    this.mapCols = 40;
-    this.mapRows = 30;
+    // Map Dimensions (80 x 60 tiles @ 32px each = 2560 x 1920 world)
+    this.mapCols = 80;
+    this.mapRows = 60;
     this.tileSize = 32;
+
+    // 5 Gym Leader Badges State
+    this.badges = {
+      ember: false,
+      flora: false,
+      tide: false,
+      pulse: false,
+      cipher: false
+    };
+
+    // Active Battle Context (gym leader challenge vs wild)
+    this.currentBattleContext = null;
+
+    // Radar Minimap
+    this.mmCanvas = null;
+    this.mmCtx = null;
+    this.mmStaticBg = null;
 
     // Build Open World Map Tiles & Entity Objects
     this.initWorldMap();
@@ -1033,7 +1050,7 @@ class CatchThatPipGame {
     // 6: Deep Water (Solid)
     // 7: Wooden Bridge (Walkable)
     // 8: Cyber Circuit Matrix (Walkable)
-    // 9: Outer Pine Trees / Border (Solid)
+    // 9: Outer Pine Trees / Border / Monoliths (Solid)
     this.tiles = [];
     for (let r = 0; r < this.mapRows; r++) {
       this.tiles[r] = [];
@@ -1042,168 +1059,288 @@ class CatchThatPipGame {
         if (r === 0 || r === this.mapRows - 1 || c === 0 || c === this.mapCols - 1) {
           this.tiles[r][c] = 9;
         }
-        // PALLET DEV LAB (Top-Left: c: 1..15, r: 1..13)
-        else if (c >= 1 && c <= 15 && r >= 1 && r <= 13) {
-          if (r === 1 || c === 1 || c === 15 || (r === 13 && c !== 8 && c !== 9)) {
-            this.tiles[r][c] = 1; // Lab Wall
-          } else if (r === 3 && (c >= 3 && c <= 6)) {
-            this.tiles[r][c] = 2; // Lab Computer Desk & Servers
-          } else if (r === 3 && (c >= 10 && c <= 13)) {
-            this.tiles[r][c] = 2; // Lab Bookshelf & PC
+        // PALLET DEV LAB BUILDING (c: 3..21, r: 2..15)
+        else if (c >= 3 && c <= 21 && r >= 2 && r <= 15) {
+          if (r === 2 || c === 3 || c === 21 || (r === 15 && c !== 11 && c !== 12)) {
+            this.tiles[r][c] = 1; // Lab Wall (Door at c:11,12)
+          } else if (r === 4 && ((c >= 5 && c <= 8) || (c >= 15 && c <= 19))) {
+            this.tiles[r][c] = 2; // Lab Computer Desks & Terminals
+          } else if (r === 8 && (c >= 17 && c <= 19)) {
+            this.tiles[r][c] = 2; // Bookshelves & Servers
           } else {
             this.tiles[r][c] = 0; // Lab Parquet Floor
           }
         }
-        // DATA LAKE (Bottom-Left: c: 1..16, r: 16..28)
-        else if (c >= 2 && c <= 16 && r >= 17 && r <= 27) {
-          // Wooden bridge spanning lake at c: 8..9
-          if ((c === 8 || c === 9) && r >= 17 && r <= 26) {
-            this.tiles[r][c] = 7; // Bridge
-          } else if (c === 2 || c === 16 || r === 17 || r === 27) {
+        // SANCTUARY COURTYARD & PATHS (c: 1..26, r: 1..22)
+        else if (c <= 26 && r <= 22) {
+          if ((c >= 10 && c <= 13) || r === 16 || r === 21 || (c === 26 && r >= 16)) {
+            this.tiles[r][c] = 3; // Cobble Path
+          } else {
+            this.tiles[r][c] = 4; // Courtyard Grass
+          }
+        }
+        // CROSSROADS HUB (c: 27..38, r: 20..27)
+        else if (c >= 27 && c <= 38 && r >= 20 && r <= 27) {
+          if (r === 23 || r === 24 || c === 32 || c === 33) {
+            this.tiles[r][c] = 3; // Main Crossroad Highway
+          } else {
+            this.tiles[r][c] = 4; // Hub Grass
+          }
+        }
+        // ROUTE 2: WHISPERING DATA LAKE (Bottom-Left: c: 1..37, r: 26..58)
+        else if (c <= 37 && r >= 26) {
+          // Shore path around lake perimeter
+          if (c <= 3 || c >= 35 || r <= 27 || r >= 57) {
             this.tiles[r][c] = 3; // Shore path
-          } else {
-            this.tiles[r][c] = 6; // Deep animated water
+          }
+          // Main North-South Wooden Bridge: c: 17..19, r: 28..41
+          else if ((c >= 17 && c <= 19) && r >= 28 && r <= 41) {
+            this.tiles[r][c] = 7; // Wooden Bridge
+          }
+          // Azure Marina Gym Island: c: 15..21, r: 42..47
+          else if (c >= 15 && c <= 21 && r >= 42 && r <= 47) {
+            this.tiles[r][c] = (r === 42 || r === 47 || c === 15 || c === 21) ? 7 : 3; // Gym Pier Deck
+          }
+          // South Bridge to Shore: c: 17..19, r: 48..56
+          else if ((c >= 17 && c <= 19) && r >= 48 && r <= 56) {
+            this.tiles[r][c] = 7; // Wooden Bridge
+          }
+          // East lake walkway to Matrix: c: 20..35, r: 35..36
+          else if (r >= 35 && r <= 36 && c >= 20 && c <= 35) {
+            this.tiles[r][c] = 7; // Bridge
+          }
+          else {
+            this.tiles[r][c] = 6; // Deep Animated Water
           }
         }
-        // CYBER CIRCUIT MATRIX (Bottom-Right: c: 18..38, r: 16..28)
-        else if (c >= 18 && c <= 38 && r >= 16 && r <= 28) {
-          if (r === 16 || c === 18) {
+        // ROUTE 3: OBSIDIAN GLITCHLANDS & CYBER MATRIX (Bottom-Right: c: 38..78, r: 26..58)
+        else if (c >= 38 && r >= 26) {
+          // Cyber paths and monoliths
+          if (c === 38 || r === 26 || c === 56 || r === 44) {
             this.tiles[r][c] = 3; // Path divider
-          } else if ((r === 20 || r === 25) && (c === 23 || c === 31)) {
-            this.tiles[r][c] = 9; // Cyber server monolith
-          } else {
-            this.tiles[r][c] = 8; // Cyber circuit tile
+          }
+          // Cyber server pillars / monoliths
+          else if ((r === 32 || r === 48 || r === 54) && (c === 46 || c === 66 || c === 74)) {
+            this.tiles[r][c] = 9; // Server Monolith
+          }
+          // Gym 5 Obsidian Void Sanctum (c: 66..74, r: 48..56)
+          else if (c >= 66 && c <= 74 && r >= 48 && r <= 56) {
+            this.tiles[r][c] = (c === 66 || c === 74 || r === 48 || r === 56) ? 9 : 8; // Sanctum Ring
+          }
+          else {
+            this.tiles[r][c] = 8; // Cyber Circuit Matrix
           }
         }
-        // ROUTE 1: PYTHON MEADOW (Top-Right: c: 16..38, r: 1..15)
+        // ROUTE 1: VERDANT MEADOW & ARBORETUM (Top-Right: c: 27..78, r: 1..25)
         else {
-          // Cobble paths
-          if (c === 16 || c === 17 || (r === 14 && c <= 28) || (c === 27 && r <= 14)) {
-            this.tiles[r][c] = 3; // Path
+          // Cobble Path Network
+          if (r === 16 || r === 17 || c === 42 || c === 43 || (r === 8 && c >= 36 && c <= 72) || (c === 70 && r >= 8 && r <= 16)) {
+            this.tiles[r][c] = 3; // Cobble Path
           }
-          // Tall Wild Grass patches
-          else if ((c >= 20 && c <= 25 && r >= 4 && r <= 10) || (c >= 29 && c <= 36 && r >= 5 && r <= 12)) {
-            this.tiles[r][c] = 5; // Tall Grass
-          } else {
+          // Tall Wild Grass Patches (triggers encounters!)
+          else if (
+            (c >= 30 && c <= 40 && r >= 4 && r <= 13) ||
+            (c >= 46 && c <= 62 && r >= 4 && r <= 12) ||
+            (c >= 52 && c <= 68 && r >= 14 && r <= 22) ||
+            (c >= 71 && c <= 76 && r >= 6 && r <= 22)
+          ) {
+            this.tiles[r][c] = 5; // Tall Wild Grass
+          }
+          // Pine tree groves
+          else if ((r === 4 || r === 20) && (c === 48 || c === 64)) {
+            this.tiles[r][c] = 9; // Decorative Pine
+          }
+          else {
             this.tiles[r][c] = 4; // Meadow Grass
           }
         }
       }
     }
 
+    // 5 Official Regional Gym Leaders
+    this.gymLeaders = [
+      {
+        id: 'gym_brock',
+        name: 'PYRO BROCK',
+        gymName: 'Ember Core Gym',
+        badge: 'EMBER',
+        badgeKey: 'ember',
+        x: 44 * 32,
+        y: 8 * 32,
+        color: '#dc2626',
+        hatColor: '#ef4444',
+        signatureSpecies: 'flamechar',
+        defeated: false,
+        challengeSpeech: "I am Gym Leader Brock! My fiery Flamechar burns with the raw heat of compiled machine code! Show me your passion, Trainer!",
+        victorySpeech: "Remarkable execution! You cooled my burning flame. I officially bestow upon you the Ember Badge!"
+      },
+      {
+        id: 'gym_erika',
+        name: 'FLORA ERIKA',
+        gymName: 'Meadow Arboretum Gym',
+        badge: 'FLORA',
+        badgeKey: 'flora',
+        x: 72 * 32,
+        y: 12 * 32,
+        color: '#16a34a',
+        hatColor: '#86efac',
+        signatureSpecies: 'bulbasprout',
+        defeated: false,
+        challengeSpeech: "Welcome to the Meadow Arboretum. Algorithms and organic nature flourish in harmony here. Face my Bulbasprout!",
+        victorySpeech: "A truly elegant performance. Your strategy has blossomed. Take this official Flora Badge!"
+      },
+      {
+        id: 'gym_misty',
+        name: 'MISTY TIDE',
+        gymName: 'Azure Marina Gym',
+        badge: 'TIDE',
+        badgeKey: 'tide',
+        x: 18 * 32,
+        y: 44 * 32,
+        color: '#0284c7',
+        hatColor: '#38bdf8',
+        signatureSpecies: 'aquabyte',
+        defeated: false,
+        challengeSpeech: "You navigated the deep waters to reach my Marina Gym! My Aquabyte has unshakeable defenses and crushing Hydro Pumps!",
+        victorySpeech: "Splendid sailing! You outmaneuvered my tidal waves. Wear this Tide Badge with honor!"
+      },
+      {
+        id: 'gym_volt',
+        name: 'LT. VOLT',
+        gymName: 'Cyber Pulse Gym',
+        badge: 'PULSE',
+        badgeKey: 'pulse',
+        x: 56 * 32,
+        y: 36 * 32,
+        color: '#eab308',
+        hatColor: '#fde047',
+        signatureSpecies: 'voltasync',
+        defeated: false,
+        challengeSpeech: "Ten-hut! The Pulse Gym runs on 100 Gigabits of raw electric discharge! Sparkpip and Voltasync will overload your circuits!",
+        victorySpeech: "Surge protection triggered! You grounded my highest voltages. You've earned the Pulse Badge!"
+      },
+      {
+        id: 'gym_giovanni',
+        name: 'GIOVANNI CIPHER',
+        gymName: 'Obsidian Void Gym',
+        badge: 'CIPHER',
+        badgeKey: 'cipher',
+        x: 70 * 32,
+        y: 52 * 32,
+        color: '#7c3aed',
+        hatColor: '#c084fc',
+        signatureSpecies: 'neuropip',
+        defeated: false,
+        challengeSpeech: "Fascinating... you traversed the entire realm to reach the Obsidian Void. I command Neuropip—supreme intellect of the Prime Core. Prove your mastery!",
+        victorySpeech: "Astonishing... your bond with your team shattered my telepathic barrier. I concede. Receive the ultimate Cipher Badge!"
+      }
+    ];
+
     // NPCs across all regions
     this.npcs = [
       {
         id: 'oak',
         name: 'ARCHIVIST OAK',
-        x: 8 * 32,
-        y: 4 * 32,
+        x: 12 * 32,
+        y: 5 * 32,
         color: '#dc2626',
         hatColor: '#ffffff',
         dialogueIndex: 0,
         dialogues: [
-          "Greetings, young Trainer! The Prime Core has fractured into ten elemental frequencies, scattering the wild Pips across the realm. Your quest is to roam the three biomes, tame all 10 in your Pip-Dex, and restore harmony to the Aether Grid!",
-          "Field Tip: Soften a wild Pip's HP into the red or calm its spirit before throwing a Pip-Capsule. A weakened Pip is far easier to capture!",
-          "Ancient scrolls tell of Neuropip (#150)—a mythical psychic intellect forged from the Prime Core's neural crystal, sleeping in Route 3's Cyber Matrix. Only a true champion can face its psychic barrier!"
+          "Greetings, young Trainer! The Prime Core has fractured across five elemental biomes, scattering the wild Pips and rousing the five Gym Leaders.",
+          "Your quest is to explore the vast expanded realm, defeat all 5 Gym Leaders to claim their Badges, and tame all 10 Sacred Pips in your Pip-Dex!",
+          "Use the Radar Minimap on your top-left corner to locate the 5 Gym Leaders and navigate the vast terrain!"
         ]
       },
       {
         id: 'nurse_chai',
         name: 'NURSE CHAI (OASIS HUB)',
-        x: 5 * 32,
-        y: 3 * 32,
+        x: 6 * 32,
+        y: 5 * 32,
         color: '#f43f5e',
         hatColor: '#fecdd3',
         dialogueIndex: 0,
         dialogues: [
-          "Welcome to the Oasis Waystation! Let me brew a restorative pot of celestial blossom tea... ✨ Ding-ding! All your HP has been fully restored to 100%! Safe travels!",
-          "Wild Pips fight because the Core's fracture made them restless. When you battle them with respect and feed them Rare Candy, they become your most loyal companions.",
-          "If your team ever falls low on vitality after an intense encounter, return here anytime! My healing cauldron never runs dry."
+          "Welcome to the Oasis Waystation! Let me brew a restorative pot of celestial blossom tea... All your HP has been fully restored to 100%! Safe travels!",
+          "If your team ever falls low on vitality after an intense encounter or Gym battle, return here anytime!"
         ],
         action: () => this.healTrainer()
       },
       {
         id: 'pip_researcher',
         name: 'RESEARCHER MAYA',
-        x: 14 * 32,
-        y: 8 * 32,
+        x: 18 * 32,
+        y: 9 * 32,
         color: '#8b5cf6',
         hatColor: '#c4b5fd',
         dialogueIndex: 0,
         dialogues: [
-          "I study wild Pip biology! Each species has elemental strengths: Fire burns Grass, Grass absorbs Water, Water douses Fire, and Electric shocks everything in between!",
-          "Wild Pips roam freely in the grass! Approach any creature to initiate battle. Remember to use keys [1-4] to select your attacks, or press [R] to flee if things get dangerous.",
-          "Have you heard a sweet melody floating across the meadows? That's Jigglypip! Its soothing lullaby can put even the fiercest dragon into deep slumber."
+          "I study elemental affinity! Fire burns Grass, Grass absorbs Water, Water douses Fire, and Electric shocks everything!",
+          "The five Gym Leaders represent the pinnacle of each discipline. Defeat them all to become the Grand Arbiter!"
         ]
       },
       {
         id: 'ranger_kael',
         name: 'MEADOW RANGER KAEL',
-        x: 27 * 32,
-        y: 7 * 32,
+        x: 42 * 32,
+        y: 16 * 32,
         color: '#2563eb',
         hatColor: '#1d4ed8',
         dialogueIndex: 0,
         dialogues: [
-          "Shh! Tread lightly through the amber tall grass of Route 1. Bulbasprouts nest in root hollows, while Flamechars sunbathe on heated boulders.",
-          "Old folklore says a Flamechar's tail flame never dims, even in torrential storms. Its fire reflects its trainer's fighting spirit!",
-          "Keep an eye out for Sparkpip darting through the meadow! It crackles with 60 FPS electric discharge and dashes faster than the wind."
+          "Welcome to Route 1's vast Verdant Meadow! Just north is Pyro Brock's Ember Core Gym, and to the far east is Flora Erika's Arboretum Gym.",
+          "Sparkpip and Flamechar roam freely in these sunny tall grass fields."
         ]
       },
       {
         id: 'diver_mira',
         name: 'LAKE GUARDIAN MIRA',
-        x: 18 * 32,
-        y: 12 * 32,
+        x: 22 * 32,
+        y: 28 * 32,
         color: '#0284c7',
         hatColor: '#38bdf8',
         dialogueIndex: 0,
         dialogues: [
-          "Look into the turquoise depths of Route 2's Whispering Lake... Ancient legends say Aquabyte has guarded these waters for three centuries. Its crystalline shell deflects any blow!",
-          "See that giant sleeping across the bridge? That's Snorlaxpip! It has been snoozing since the last solar eclipse. Don't wake it unless you're prepared for a massive Body Slam!",
-          "The lake's water is fed by subterranean crystal springs. Old myths claim bathing a wild Pip in its waters purifies them of cyber glitch corruption."
+          "You stand at the northern shores of Route 2's Whispering Data Lake. Cross the long bridge south to reach Gym Leader Misty Tide at the Marina Pier!",
+          "Watch out for slumbering Snorlaxpip across the water!"
         ]
       },
       {
         id: 'fisherman_tide',
         name: 'OLD ANGLER FINN',
-        x: 9 * 32,
-        y: 16 * 32,
+        x: 16 * 32,
+        y: 54 * 32,
         color: '#059669',
         hatColor: '#34d399',
         dialogueIndex: 0,
         dialogues: [
-          "Ahoy, young traveler! In my fifty years fishing these shores, I've seen the lake glow with phosphorescent tides whenever Aquabyte unleashes Hydro Pump!",
-          "Take caution around the wooden bridge on foggy nights. The shadow creature Spectrepip lurks between dimensions, chuckling softly before casting Shadow Ball!",
-          "Here's an old salt's secret: always keep Sacred Elixirs in your bag. Once you cross into the Glitchlands, there are no healing stations for miles!"
+          "Ahoy! Misty Tide is one of the sharpest Gym Leaders in the region. Her Aquabyte's Hydro Pump is legendary!"
         ]
       },
       {
         id: 'speedrun_alex',
         name: 'ACE TRAINER ALEX',
-        x: 22 * 32,
-        y: 15 * 32,
+        x: 62 * 32,
+        y: 18 * 32,
         color: '#ea580c',
         hatColor: '#f97316',
         dialogueIndex: 0,
         dialogues: [
-          "My speed tracker is pinging like crazy! Sparkpip is roaming somewhere nearby. It dodges attacks before you can even blink!",
-          "During battle, pay close attention when the enemy attacks! You must guide your soul inside the combat box and dodge incoming energy bullets to survive!",
-          "I'm on a journey to catch all 10 mythical Pips and become the Grand Arbiter! But you have fire in your eyes too... let's see which of us completes the Pip-Dex first!"
+          "I'm training to take on Lt. Volt in Route 3's Cyber Matrix! His electric currents are blistering fast!",
+          "Remember: during enemy turns, guide your soul in the battle box to dodge glitch energy bullets!"
         ]
       },
       {
         id: 'cipher_sage',
         name: 'ARCHON CIPHER',
-        x: 23 * 32,
-        y: 20 * 32,
+        x: 52 * 32,
+        y: 42 * 32,
         color: '#7c3aed',
         hatColor: '#a78bfa',
         dialogueIndex: 0,
         dialogues: [
-          "HALT! You stand at the threshold of the Obsidian Glitchlands—the epicenter of the Great Rupture! Here, raw energy loops upon itself, birthing strange anomalies.",
-          "Beware Buggypip! A paradox entity tormented by psychic headaches. When its confusion erupts, it creates Memory Leaks that block the event loop of reality!",
-          "Deep inside the obsidian monolith hovers NEUROPIP (#150). It possesses the genetic intellect of the ancient gods. Capture it, and you shall restore the fractured world!"
+          "HALT! You stand in the Obsidian Glitchlands. Deep in the southeastern sanctum waits Giovanni Cipher and the genetic deity Neuropip (#150).",
+          "Only a Trainer who has conquered the other Gyms can hope to withstand the Void Gym!"
         ]
       }
     ];
@@ -1212,15 +1349,15 @@ class CatchThatPipGame {
     this.interactives = [
       {
         type: 'heal',
-        x: 4 * 32,
-        y: 3 * 32,
+        x: 5 * 32,
+        y: 4 * 32,
         label: 'Oasis Waystation',
         action: () => this.healTrainer()
       },
       {
         type: 'pc',
-        x: 12 * 32,
-        y: 3 * 32,
+        x: 16 * 32,
+        y: 4 * 32,
         label: 'Prime Archive Terminal',
         action: () => {
           this.setMode('lore');
@@ -1228,32 +1365,50 @@ class CatchThatPipGame {
       },
       {
         type: 'sign',
-        x: 8 * 32,
+        x: 11 * 32,
+        y: 16 * 32,
+        text: "ARCHIVIST SANCTUARY: Research post of the Prime Core. North: Lab & Healing. South: Exit to Crossroads."
+      },
+      {
+        type: 'sign',
+        x: 32 * 32,
+        y: 22 * 32,
+        text: "CENTRAL CROSSROADS: North-East: Route 1 (Verdant Meadow & Ember/Flora Gyms). South-West: Route 2 (Data Lake & Tide Gym). South-East: Route 3 (Glitchlands & Pulse/Void Gyms)."
+      },
+      {
+        type: 'sign',
+        x: 42 * 32,
+        y: 10 * 32,
+        text: "GYM 1: EMBER CORE GYM. Leader: PYRO BROCK. Type: Fire/Rock."
+      },
+      {
+        type: 'sign',
+        x: 70 * 32,
         y: 14 * 32,
-        text: "📍 ARCHIVIST SANCTUARY: Research post of the Prime Core. North: Oasis Waystation. South: Exit to Route 1."
+        text: "GYM 2: MEADOW ARBORETUM GYM. Leader: FLORA ERIKA. Type: Grass/Nature."
       },
       {
         type: 'sign',
-        x: 20 * 32,
-        y: 4 * 32,
-        text: "📍 ROUTE 1: VERDANT MEADOW. High concentration of wild Flamechar, Bulbasprout & Sparkpip in the tall grass!"
+        x: 17 * 32,
+        y: 42 * 32,
+        text: "GYM 3: AZURE MARINA GYM. Leader: MISTY TIDE. Type: Water/Ice."
       },
       {
         type: 'sign',
-        x: 8 * 32,
-        y: 16 * 32,
-        text: "📍 ROUTE 2: WHISPERING DATA LAKE. Home of ancient Aquabyte and slumbering Snorlaxpip. Cross bridge with care."
+        x: 54 * 32,
+        y: 36 * 32,
+        text: "GYM 4: CYBER PULSE GYM. Leader: LT. VOLT. Type: Electric/Protocol."
       },
       {
         type: 'sign',
-        x: 19 * 32,
-        y: 16 * 32,
-        text: "📍 ROUTE 3: OBSIDIAN GLITCHLANDS. Warning: Reality distortion field. Ghostly Spectrepip & Genetic Neuropip spotted."
+        x: 68 * 32,
+        y: 50 * 32,
+        text: "GYM 5: OBSIDIAN VOID GYM. Leader: GIOVANNI CIPHER. Type: Psychic/Glitch."
       },
       {
         type: 'item',
-        x: 35 * 32,
-        y: 4 * 32,
+        x: 64 * 32,
+        y: 6 * 32,
         name: '3x Pip-Capsules',
         collected: false,
         grant: () => {
@@ -1263,8 +1418,8 @@ class CatchThatPipGame {
       },
       {
         type: 'item',
-        x: 4 * 32,
-        y: 26 * 32,
+        x: 8 * 32,
+        y: 56 * 32,
         name: 'Sacred Elixir',
         collected: false,
         grant: () => {
@@ -1274,8 +1429,8 @@ class CatchThatPipGame {
       },
       {
         type: 'item',
-        x: 36 * 32,
-        y: 22 * 32,
+        x: 75 * 32,
+        y: 32 * 32,
         name: 'Rare Candy',
         collected: false,
         grant: () => {
@@ -1285,22 +1440,55 @@ class CatchThatPipGame {
       }
     ];
 
-    // Roaming Wild Pips in Open World
+    // Roaming Wild Pips in Open World (Expanded 80x60 Map)
     this.roamingPips = [
-      { species: 'flamechar', x: 23 * 32, y: 7 * 32, origX: 23 * 32, origY: 7 * 32, wander: 1.5, active: true },
-      { species: 'bulbasprout', x: 32 * 32, y: 9 * 32, origX: 32 * 32, origY: 9 * 32, wander: 1.5, active: true },
-      { species: 'aquabyte', x: 5 * 32, y: 20 * 32, origX: 5 * 32, origY: 20 * 32, wander: 1.2, active: true },
-      { species: 'buggypip', x: 26 * 32, y: 22 * 32, origX: 26 * 32, origY: 22 * 32, wander: 1.5, active: true },
-      { species: 'voltasync', x: 33 * 32, y: 19 * 32, origX: 33 * 32, origY: 19 * 32, wander: 1.5, active: true },
-      { species: 'neuropip', x: 35 * 32, y: 26 * 32, origX: 35 * 32, origY: 26 * 32, wander: 1.5, active: true }
+      { species: 'flamechar', x: 38 * 32, y: 10 * 32, origX: 38 * 32, origY: 10 * 32, wander: 1.5, active: true },
+      { species: 'bulbasprout', x: 58 * 32, y: 8 * 32, origX: 58 * 32, origY: 8 * 32, wander: 1.5, active: true },
+      { species: 'jigglypip', x: 66 * 32, y: 18 * 32, origX: 66 * 32, origY: 18 * 32, wander: 1.2, active: true },
+      { species: 'aquabyte', x: 10 * 32, y: 36 * 32, origX: 10 * 32, origY: 36 * 32, wander: 1.2, active: true },
+      { species: 'snorlaxpip', x: 26 * 32, y: 44 * 32, origX: 26 * 32, origY: 44 * 32, wander: 0.5, active: true },
+      { species: 'sparkpip', x: 48 * 32, y: 22 * 32, origX: 48 * 32, origY: 22 * 32, wander: 1.8, active: true },
+      { species: 'voltasync', x: 48 * 32, y: 34 * 32, origX: 48 * 32, origY: 34 * 32, wander: 1.5, active: true },
+      { species: 'buggypip', x: 62 * 32, y: 38 * 32, origX: 62 * 32, origY: 38 * 32, wander: 1.5, active: true },
+      { species: 'spectrepip', x: 44 * 32, y: 50 * 32, origX: 44 * 32, origY: 50 * 32, wander: 1.4, active: true },
+      { species: 'neuropip', x: 70 * 32, y: 54 * 32, origX: 70 * 32, origY: 54 * 32, wander: 1.0, active: true }
     ];
+  }
+
+  buildMinimapCache() {
+    this.minimapBg = document.createElement('canvas');
+    this.minimapBg.width = 120;
+    this.minimapBg.height = 90;
+    const mctx = this.minimapBg.getContext('2d');
+    const scaleX = 120 / this.mapCols;
+    const scaleY = 90 / this.mapRows;
+
+    for (let r = 0; r < this.mapRows; r++) {
+      for (let c = 0; c < this.mapCols; c++) {
+        const t = this.tiles[r][c];
+        let color = '#4d7c0f';
+        if (t === 0 || t === 1 || t === 2) color = '#475569';
+        else if (t === 3 || t === 7) color = '#d97706';
+        else if (t === 4) color = '#65a30d';
+        else if (t === 5) color = '#3f6212';
+        else if (t === 6) color = '#0284c7';
+        else if (t === 8) color = '#0f172a';
+        else if (t === 9) color = '#14532d';
+        mctx.fillStyle = color;
+        mctx.fillRect(c * scaleX, r * scaleY, scaleX + 0.1, scaleY + 0.1);
+      }
+    }
   }
 
   initDOM() {
     this.owCanvas = document.getElementById('pip-overworld-canvas');
+    this.minimapCanvas = document.getElementById('pip-minimap-canvas');
+    if (this.minimapCanvas) this.minimapCtx = this.minimapCanvas.getContext('2d');
+    this.buildMinimapCache();
+
     if (this.owCanvas) {
       this.owCtx = this.owCanvas.getContext('2d');
-      // Direct click on canvas to talk to NPCs or interact
+      // Direct click on canvas to talk to NPCs, Gym Leaders, or interact
       this.owCanvas.addEventListener('click', (e) => {
         if (this.mode !== 'overworld') return;
         if (this.dialogueActive) {
@@ -1312,6 +1500,20 @@ class CatchThatPipGame {
         const scaleY = this.owCanvas.height / rect.height;
         const clickX = (e.clientX - rect.left) * scaleX + this.camera.x;
         const clickY = (e.clientY - rect.top) * scaleY + this.camera.y;
+
+        // Check if clicked directly near any Gym Leader
+        for (const gym of this.gymLeaders) {
+          const d = Math.hypot(clickX - (gym.x + 16), clickY - (gym.y + 16));
+          if (d < 42) {
+            sfx.playClick();
+            if (gym.defeated) {
+              this.showDialogue(gym.name, gym.victorySpeech || `You already conquered the ${gym.gymName}! Safe travels!`);
+            } else {
+              this.showDialogue(gym.name, gym.challengeSpeech, () => this.startGymBattle(gym));
+            }
+            return;
+          }
+        }
 
         // Check if clicked directly near any NPC
         for (const npc of this.npcs) {
@@ -1524,10 +1726,10 @@ class CatchThatPipGame {
     if (loreView) loreView.style.display = targetMode === 'lore' ? 'block' : 'none';
 
     if (modeBtnText) {
-      if (targetMode === 'overworld') modeBtnText.textContent = '🗺️ Open World';
-      else if (targetMode === 'battle') modeBtnText.textContent = '⚔️ Battle Arena';
-      else if (targetMode === 'dex') modeBtnText.textContent = '📖 Pip-Dex';
-      else if (targetMode === 'lore') modeBtnText.textContent = '📜 Realm Lore';
+      if (targetMode === 'overworld') modeBtnText.textContent = 'Open World';
+      else if (targetMode === 'battle') modeBtnText.textContent = 'Battle Arena';
+      else if (targetMode === 'dex') modeBtnText.textContent = 'Pip-Dex';
+      else if (targetMode === 'lore') modeBtnText.textContent = 'Realm Lore';
     }
 
     if (targetMode === 'overworld') {
@@ -1766,11 +1968,13 @@ class CatchThatPipGame {
     const pill = document.getElementById('ow-zone-pill');
     if (!pill) return;
     let zone = 'Route 1: Verdant Meadow';
-    if (c <= 15 && r <= 13) zone = 'Archivist Sanctuary';
-    else if (c <= 16 && r >= 16) zone = 'Route 2: Whispering Lake';
-    else if (c >= 18 && r >= 16) zone = 'Route 3: Obsidian Glitchlands';
+    if (c <= 26 && r <= 22) zone = 'Archivist Sanctuary';
+    else if (c >= 27 && c <= 46 && r >= 20 && r <= 28) zone = 'Central Crossroads';
+    else if (c <= 37 && r >= 26) zone = 'Route 2: Whispering Lake';
+    else if (c >= 38 && r >= 26) zone = 'Route 3: Obsidian Glitchlands';
+    else if (c >= 27 && r <= 25) zone = 'Route 1: Verdant Meadow';
 
-    pill.innerHTML = `<span>📍 ${zone}</span>`;
+    pill.innerHTML = `<span>${zone}</span>`;
   }
 
   drawOverworld() {
@@ -1884,12 +2088,13 @@ class CatchThatPipGame {
       if (ox < -32 || ox > this.camera.width || oy < -32 || oy > this.camera.height) return;
 
       if (obj.type === 'heal') {
-        // Coffee Machine / Nurse Bar
+        // Nurse Bar
         ctx.fillStyle = '#b91c1c';
         ctx.fillRect(ox + 4, oy + 4, 24, 24);
-        ctx.fillStyle = '#fef08a';
-        ctx.font = 'bold 12px monospace';
-        ctx.fillText('☕', ox + 8, oy + 21);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('HP', ox + 16, oy + 20);
       } else if (obj.type === 'sign') {
         // Wooden Signpost
         ctx.fillStyle = '#78350f';
@@ -1980,6 +2185,84 @@ class CatchThatPipGame {
       }
     });
 
+    // 3.5 Draw 5 Official Regional Gym Leaders
+    this.gymLeaders.forEach(gym => {
+      const gx = gym.x - cx;
+      const gy = gym.y - cy;
+      if (gx < -48 || gx > this.camera.width + 16 || gy < -48 || gy > this.camera.height + 16) return;
+
+      const pDist = Math.hypot((this.player.x + 16) - (gym.x + 16), (this.player.y + 16) - (gym.y + 16));
+
+      // Arena Podium Platform underneath Leader
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
+      ctx.beginPath();
+      ctx.ellipse(gx + 16, gy + 30, 16, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = gym.color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.beginPath();
+      ctx.ellipse(gx + 16, gy + 28, 10, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Body (Cape / Uniform)
+      ctx.fillStyle = gym.color;
+      ctx.fillRect(gx + 7, gy + 10, 18, 18);
+
+      // Accent gold stripe
+      ctx.fillStyle = '#fde047';
+      ctx.fillRect(gx + 14, gy + 10, 4, 18);
+
+      // Head
+      ctx.fillStyle = '#fed7aa';
+      ctx.beginPath();
+      ctx.arc(gx + 16, gy + 7, 7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Hat / Hair
+      ctx.fillStyle = gym.hatColor || '#0f172a';
+      ctx.beginPath();
+      ctx.arc(gx + 16, gy + 5, 7.5, Math.PI, Math.PI * 2);
+      ctx.fill();
+
+      // Proximity Action Prompt
+      if (pDist < 56) {
+        const bounce = Math.sin(Date.now() / 160) * 3;
+        const bubbleY = gy - 20 + bounce;
+
+        ctx.fillStyle = gym.defeated ? '#f0fdf4' : '#fffbeb';
+        ctx.strokeStyle = gym.defeated ? '#16a34a' : '#d97706';
+        ctx.lineWidth = 1.5;
+
+        const promptText = gym.defeated ? `[E] ${gym.name} (CLEARED)` : `[E] GYM BATTLE: ${gym.badge}`;
+        ctx.font = 'bold 8px monospace';
+        const textWidth = ctx.measureText(promptText).width;
+        const bubbleW = Math.max(76, textWidth + 12);
+
+        ctx.beginPath();
+        ctx.roundRect(gx + 16 - bubbleW / 2, bubbleY, bubbleW, 15, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        // Speech tail
+        ctx.beginPath();
+        ctx.moveTo(gx + 13, bubbleY + 15);
+        ctx.lineTo(gx + 16, bubbleY + 19);
+        ctx.lineTo(gx + 19, bubbleY + 15);
+        ctx.fillStyle = gym.defeated ? '#f0fdf4' : '#fffbeb';
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = gym.defeated ? '#15803d' : '#9a3412';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(promptText, gx + 16, bubbleY + 8);
+      }
+    });
+
     // 4. Draw Roaming Wild Pips (Mini Sprites in Overworld!)
     this.roamingPips.forEach(rp => {
       if (!rp.active) return;
@@ -2065,6 +2348,9 @@ class CatchThatPipGame {
 
     // 7. Draw Floating HGSS Autumn Leaves / Wind Particles
     this.drawWindLeaves(ctx);
+
+    // 8. Draw Radar Minimap on Top-Left Canvas
+    this.drawMinimap();
   }
 
   drawTrainerDeepshikha(ctx, px, py, dir, animFrame, isMoving) {
@@ -2276,11 +2562,10 @@ class CatchThatPipGame {
       ctx.fillRect(px + 13, py + 12 + bob, 2, 3);
     }
 
-    // Little Heart / Sparkle of Partner Bond
+    // Little Sparkle of Partner Bond
     if (Math.sin(time * 2) > 0.8) {
       ctx.fillStyle = '#f43f5e';
-      ctx.font = 'bold 8px monospace';
-      ctx.fillText('♥', px + 18, py + 6 + bob);
+      ctx.fillRect(px + 18, py + 5 + bob, 3, 3);
     }
 
     ctx.restore();
@@ -2298,6 +2583,75 @@ class CatchThatPipGame {
       ctx.fill();
       ctx.restore();
     });
+  }
+
+  drawMinimap() {
+    if (!this.minimapCanvas) {
+      this.minimapCanvas = document.getElementById('pip-minimap-canvas');
+      if (this.minimapCanvas) this.minimapCtx = this.minimapCanvas.getContext('2d');
+    }
+    const ctx = this.minimapCtx;
+    if (!ctx) return;
+
+    if (!this.minimapBg) {
+      this.buildMinimapCache();
+    }
+
+    // 1. Draw cached map background
+    ctx.drawImage(this.minimapBg, 0, 0);
+
+    const scaleX = 120 / (this.mapCols * this.tileSize);
+    const scaleY = 90 / (this.mapRows * this.tileSize);
+
+    // 2. Draw Camera Viewport Box (where player is looking)
+    const camX = this.camera.x * scaleX;
+    const camY = this.camera.y * scaleY;
+    const camW = this.camera.width * scaleX;
+    const camH = this.camera.height * scaleY;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(camX, camY, camW, camH);
+
+    // 3. Draw 5 Gym Leaders (blips)
+    const time = Date.now() / 250;
+    const pulse = Math.sin(time) * 1.2;
+    this.gymLeaders.forEach(gym => {
+      const gx = (gym.x + 16) * scaleX;
+      const gy = (gym.y + 16) * scaleY;
+
+      ctx.save();
+      if (gym.defeated) {
+        ctx.fillStyle = '#22c55e';
+        ctx.beginPath();
+        ctx.arc(gx, gy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = gym.color;
+        ctx.beginPath();
+        ctx.arc(gx, gy, Math.max(2, 3.2 + pulse), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+
+    // 4. Draw Player Blip (Bright Gold Dot)
+    const px = (this.player.x + 16) * scaleX;
+    const py = (this.player.y + 16) * scaleY;
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.arc(px, py, 2.8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  startGymBattle(leader) {
+    this.currentGymLeader = leader;
+    this.startBattle(leader.signatureSpecies, { isGym: true, leader });
   }
 
   handleActionPress() {
@@ -2318,6 +2672,21 @@ class CatchThatPipGame {
     else if (p.dir === 1) checkY -= reach;
     else if (p.dir === 2) checkX -= reach;
     else if (p.dir === 3) checkX += reach;
+
+    // Check Gym Leader challenge interaction
+    for (const gym of this.gymLeaders) {
+      const dirDist = Math.hypot(checkX - (gym.x + 16), checkY - (gym.y + 16));
+      const proxDist = Math.hypot(pxCenter - (gym.x + 16), pyCenter - (gym.y + 16));
+      if (dirDist < 46 || proxDist < 46) {
+        sfx.playClick();
+        if (gym.defeated) {
+          this.showDialogue(gym.name, gym.victorySpeech || `You already conquered the ${gym.gymName}! Safe travels!`);
+        } else {
+          this.showDialogue(gym.name, gym.challengeSpeech, () => this.startGymBattle(gym));
+        }
+        return;
+      }
+    }
 
     // Check NPC interaction: both directional check AND proximity check (< 46px)
     for (const npc of this.npcs) {
@@ -2345,7 +2714,7 @@ class CatchThatPipGame {
         const k = this.activePokemonKey || 'flamechar';
         const poke = this.speciesData[k];
         const dialogues = [
-          `${poke.name} looked up happily at DEEPSHIKHA! It seems full of energy! ♥`,
+          `${poke.name} looked up happily at DEEPSHIKHA! It seems full of energy!`,
           `${poke.name} is walking briskly alongside DEEPSHIKHA, matching her footsteps!`,
           `${poke.name} rubbed gently against DEEPSHIKHA! Its bond with its Trainer grows stronger!`,
           `${poke.name} looked around the route curiously, ready for whatever adventure comes next!`
@@ -2387,8 +2756,9 @@ class CatchThatPipGame {
     this.showDialogue('NURSE CHAI (OASIS HUB)', msg);
   }
 
-  showDialogue(speaker, message) {
+  showDialogue(speaker, message, onClose = null) {
     this.dialogueActive = true;
+    this.onDialogueClose = onClose;
     const box = document.getElementById('ow-dialogue-box');
     const spkEl = document.getElementById('ow-dialogue-speaker');
     const msgEl = document.getElementById('ow-dialogue-message');
@@ -2405,19 +2775,43 @@ class CatchThatPipGame {
     this.dialogueActive = false;
     const box = document.getElementById('ow-dialogue-box');
     if (box) box.style.display = 'none';
+    if (this.onDialogueClose) {
+      const cb = this.onDialogueClose;
+      this.onDialogueClose = null;
+      cb();
+    }
   }
 
   updateHUD() {
     const hpEl = document.getElementById('ow-hp-count');
     const dexEl = document.getElementById('ow-dex-count');
     const dexNav = document.getElementById('dex-nav-count');
+    const gymEl = document.getElementById('ow-gyms-count');
 
     let count = 0;
     Object.keys(this.dex).forEach(k => { if (this.dex[k]) count++; });
 
+    let defeatedGyms = 0;
+    if (this.gymLeaders) {
+      defeatedGyms = this.gymLeaders.filter(g => g.defeated).length;
+    }
+
     if (hpEl) hpEl.textContent = `${this.player.hp}/${this.player.maxHp}`;
     if (dexEl) dexEl.textContent = `${count}/${Object.keys(this.dex).length}`;
     if (dexNav) dexNav.textContent = count;
+    if (gymEl) gymEl.textContent = `${defeatedGyms}/5`;
+
+    // Update Badges on Trainer Card
+    ['ember', 'flora', 'tide', 'pulse', 'cipher'].forEach(bKey => {
+      const bEl = document.getElementById(`badge-${bKey}`);
+      if (bEl) {
+        if (this.badges && this.badges[bKey]) {
+          bEl.classList.add('active');
+        } else {
+          bEl.classList.remove('active');
+        }
+      }
+    });
   }
 
   // ========================================================
@@ -2440,12 +2834,13 @@ class CatchThatPipGame {
     }, 450);
   }
 
-  startBattle(speciesKey) {
+  startBattle(speciesKey, options = {}) {
     if (!speciesKey) {
       const keys = Object.keys(this.speciesData);
       speciesKey = keys[Math.floor(Math.random() * keys.length)];
     }
     this.currentSpeciesKey = speciesKey;
+    this.currentBattleContext = options;
     const data = this.speciesData[speciesKey] || this.speciesData.flamechar;
     this.pip = { ...data };
     this.isRefactored = false;
@@ -2461,17 +2856,27 @@ class CatchThatPipGame {
     const balloon = document.getElementById('enemy-speech-balloon');
     const mascotImg = document.getElementById('enemy-mascot-img');
 
-    if (nameEl) nameEl.textContent = this.pip.name;
+    if (nameEl) {
+      nameEl.textContent = options.isGym ? `${options.leader.name}'S ${this.pip.name}` : this.pip.name;
+    }
     if (b1) {
       b1.textContent = this.pip.type1;
       b1.className = `psc-badge ${this.pip.badgeClass}`;
     }
     if (b2) b2.textContent = this.pip.type2;
     if (statusTag) {
-      statusTag.textContent = this.dex[speciesKey] ? 'CAUGHT' : 'WILD';
-      statusTag.style.backgroundColor = this.dex[speciesKey] ? '#a3e635' : '#fef08a';
+      if (options.isGym) {
+        statusTag.textContent = `GYM LEADER: ${options.leader.badge}`;
+        statusTag.style.backgroundColor = '#fbbf24';
+      } else {
+        statusTag.textContent = this.dex[speciesKey] ? 'CAUGHT' : 'WILD';
+        statusTag.style.backgroundColor = this.dex[speciesKey] ? '#a3e635' : '#fef08a';
+      }
     }
-    if (balloon) balloon.innerHTML = `<span>"${this.pip.greeting}"</span>`;
+    if (balloon) {
+      const greeting = options.isGym ? `Face my ${this.pip.name}! Prove your worth!` : `"${this.pip.greeting}"`;
+      balloon.innerHTML = `<span>${greeting}</span>`;
+    }
     if (mascotImg && this.pip.spriteSrc) {
       mascotImg.src = this.pip.spriteSrc;
       mascotImg.alt = this.pip.name;
@@ -2496,7 +2901,10 @@ class CatchThatPipGame {
     }
 
     this.updateHpUI();
-    this.typeDialogue(`Wild ${this.pip.name} appeared! Go, ${activeData.name}! What will DEEPSHIKHA do?`);
+    const introMsg = options.isGym
+      ? `Gym Leader ${options.leader.name} sent out ${this.pip.name}! Go, ${activeData.name}! What will DEEPSHIKHA do?`
+      : `Wild ${this.pip.name} appeared! Go, ${activeData.name}! What will DEEPSHIKHA do?`;
+    this.typeDialogue(introMsg);
   }
 
   typeDialogue(text, callback) {
@@ -2617,7 +3025,7 @@ class CatchThatPipGame {
       currentMoves.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
-        btn.innerHTML = `<span class="sub-item-name">⚔ ${m.name}</span><span class="sub-item-meta">[${m.type}] ${m.desc} (${m.dmg} DMG)</span>`;
+        btn.innerHTML = `<span class="sub-item-name">${m.name}</span><span class="sub-item-meta">[${m.type}] ${m.desc} (${m.dmg} DMG)</span>`;
         btn.addEventListener('click', () => this.executeAttack(m));
         grid.appendChild(btn);
       });
@@ -2634,7 +3042,7 @@ class CatchThatPipGame {
           <div class="sub-pkmn-row">
             <img src="${poke.spriteSrc}" alt="${poke.name}" class="sub-pkmn-thumb">
             <div class="sub-pkmn-info">
-              <span class="sub-item-name">${poke.name} :L${poke.level} ${isActive ? '★ [ACTIVE]' : ''}</span>
+              <span class="sub-item-name">${poke.name} :L${poke.level} ${isActive ? '[ACTIVE]' : ''}</span>
               <span class="sub-item-meta">[${poke.type1}/${poke.type2}] Moves: ${poke.moves.map(m => m.name).join(', ')}</span>
             </div>
             <span class="sub-pkmn-action">${isActive ? 'IN ARENA' : 'SWITCH IN'}</span>
@@ -2647,13 +3055,13 @@ class CatchThatPipGame {
       // Special trainer actions
       const inspectBtn = document.createElement('button');
       inspectBtn.className = 'submenu-item-btn';
-      inspectBtn.innerHTML = `<span class="sub-item-name">🔍 Inspect Wild ${this.pip.name}</span>`;
+      inspectBtn.innerHTML = `<span class="sub-item-name">Inspect Wild ${this.pip.name}</span>`;
       inspectBtn.addEventListener('click', () => this.typeDialogue(this.pip.inspect, () => this.closeSubmenu()));
       grid.appendChild(inspectBtn);
 
       const chaiBtn = document.createElement('button');
       chaiBtn.className = 'submenu-item-btn';
-      chaiBtn.innerHTML = `<span class="sub-item-name">☕ Share Chai Break (+25 HP to Team)</span>`;
+      chaiBtn.innerHTML = `<span class="sub-item-name">Share Chai Break (+25 HP to Team)</span>`;
       chaiBtn.addEventListener('click', () => {
         sfx.playHeal();
         this.player.hp = Math.min(this.player.maxHp, this.player.hp + 25);
@@ -2671,7 +3079,7 @@ class CatchThatPipGame {
       items.forEach(it => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
-        btn.innerHTML = `<span class="sub-item-name">🧪 ${it.name}</span>`;
+        btn.innerHTML = `<span class="sub-item-name">${it.name}</span>`;
         btn.addEventListener('click', () => {
           if (it.count <= 0) {
             showToast('Item depleted!');
@@ -2694,12 +3102,12 @@ class CatchThatPipGame {
       title.textContent = 'CATCH OR ESCAPE:';
       const opts = [
         {
-          name: `🔴 Throw Pip-Capsule (x${this.inventory.capsules})`,
+          name: `Throw Pip-Capsule (x${this.inventory.capsules})`,
           desc: 'Attempt to catch the wild Pip!',
           action: () => this.attemptCatch()
         },
         {
-          name: '🏃 RUN / Flee ([R])',
+          name: 'RUN / Flee ([R])',
           desc: 'Escape battle safely back to overworld (Press [R])',
           action: () => this.escapeBattle()
         }
@@ -2784,10 +3192,26 @@ class CatchThatPipGame {
 
     if (this.pip.hp <= 0) {
       sfx.playVictory();
-      this.typeDialogue(`★ Incredible! Wild ${this.pip.name} was defeated! Earned 120 EXP!${effectMsg}`, () => {
-        showToast(`Defeated ${this.pip.name}!`);
-        setTimeout(() => this.setMode('overworld'), 2000);
-      });
+      if (this.currentBattleContext?.isGym) {
+        const leader = this.currentBattleContext.leader;
+        leader.defeated = true;
+        if (this.badges) this.badges[leader.badgeKey] = true;
+        this.updateHUD();
+
+        const victoryText = `VICTORY! Gym Leader ${leader.name} was defeated! You earned the official ${leader.badge} BADGE!`;
+        this.typeDialogue(victoryText, () => {
+          showToast(`Won the ${leader.badge} Badge!`);
+          setTimeout(() => {
+            this.setMode('overworld');
+            this.showDialogue(leader.name, leader.victorySpeech);
+          }, 2000);
+        });
+      } else {
+        this.typeDialogue(`Incredible! Wild ${this.pip.name} was defeated! Earned 120 EXP!${effectMsg}`, () => {
+          showToast(`Defeated ${this.pip.name}!`);
+          setTimeout(() => this.setMode('overworld'), 2000);
+        });
+      }
     } else {
       this.typeDialogue(`${activeData.name} used ${move.name}! Dealt ${dealt} damage!${effectMsg}`, () => {
         this.triggerEnemyTurn();
@@ -2797,6 +3221,13 @@ class CatchThatPipGame {
 
   attemptCatch() {
     this.closeSubmenu();
+    if (this.currentBattleContext?.isGym) {
+      showToast("Cannot catch a Gym Leader's Pokémon!");
+      this.typeDialogue(`Gym Leader ${this.currentBattleContext.leader.name} blocked the Pip-Capsule! "You cannot catch a Gym Leader's Pokémon!"`, () => {
+        this.triggerEnemyTurn();
+      });
+      return;
+    }
     if (this.inventory.capsules <= 0) {
       showToast('Out of Pip-Capsules! Find more in Route 1!');
       return;
@@ -2806,22 +3237,22 @@ class CatchThatPipGame {
     sfx.playSelect();
     const dialogue = document.getElementById('pip-dialogue-text');
     if (dialogue) {
-      dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Trainer threw a Pip-Capsule...!`;
+      dialogue.innerHTML = `Trainer threw a Pip-Capsule...!`;
     }
 
     setTimeout(() => {
       sfx.playCapsuleWobble();
-      if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (1)`;
+      if (dialogue) dialogue.innerHTML = `Wobble... (1)`;
     }, 800);
 
     setTimeout(() => {
       sfx.playCapsuleWobble();
-      if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (2)`;
+      if (dialogue) dialogue.innerHTML = `Wobble... (2)`;
     }, 1600);
 
     setTimeout(() => {
       sfx.playCapsuleWobble();
-      if (dialogue) dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Wobble... (3)`;
+      if (dialogue) dialogue.innerHTML = `Wobble... (3)`;
     }, 2400);
 
     setTimeout(() => {
@@ -2843,7 +3274,7 @@ class CatchThatPipGame {
           tag.style.backgroundColor = '#a3e635';
         }
 
-        this.typeDialogue(`🎉 GOTCHA! Wild ${this.pip.name} was caught and registered to your Pip-Dex! ⭐`, () => {
+        this.typeDialogue(`GOTCHA! Wild ${this.pip.name} was caught and registered to your Pip-Dex!`, () => {
           showToast(`Caught ${this.pip.name}! Added to Pip-Dex & Team!`);
           setTimeout(() => this.setMode('overworld'), 2200);
         });
@@ -3016,7 +3447,7 @@ class CatchThatPipGame {
           <span class="psc-badge ${sp.badgeClass}">${sp.type1}</span>
           <span class="psc-badge type-code">${sp.type2}</span>
         </div>
-        <span class="dex-card-status ${isCaught ? 'caught' : 'wild'}">${isCaught ? (isActive ? '★ ACTIVE PARTNER' : '✓ CAUGHT (Click to Partner)') : 'UNKNOWN'}</span>
+        <span class="dex-card-status ${isCaught ? 'caught' : 'wild'}">${isCaught ? (isActive ? 'ACTIVE PARTNER' : 'CAUGHT (Click to Partner)') : 'UNKNOWN'}</span>
       `;
 
       if (isCaught) {

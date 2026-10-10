@@ -29,11 +29,8 @@
 
       <!-- 1. Top Deep Wine Maroon Nav Capsule Bar -->
       <header class="editorial-nav-bar">
-        <button class="enb-icon-btn home-btn" id="enb-home-btn" title="Home View" aria-label="Home">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
+        <button class="enb-text-nav-btn home-btn" id="enb-home-btn" title="Home View" aria-label="Home">
+          Home
         </button>
 
         <nav class="enb-links-row">
@@ -55,12 +52,8 @@
           </button>
         </nav>
 
-        <button class="enb-icon-btn music-btn active" id="enb-audio-btn" title="Toggle Soundtrack" aria-label="Toggle Soundtrack">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor"/>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-          </svg>
+        <button class="enb-text-nav-btn music-btn active" id="enb-audio-btn" title="Toggle Soundtrack" aria-label="Toggle Soundtrack">
+          Sound
         </button>
       </header>
 
@@ -73,21 +66,9 @@
 
         <!-- Underneath Image Content Row -->
         <div class="ehc-content-row">
-          <!-- Relocated Pills (Clean icon-less widgets) -->
           <div class="ehc-pills-col">
-            <!-- Music Pill Widget -->
-            <button type="button" class="ehc-music-pill inline-hero-pill" id="ehc-music-toggle" title="Toggle Soundtrack">
-              <div class="emp-wave-icon">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-                </svg>
-              </div>
-              <span class="emp-text">Ambient Lofi Music</span>
-            </button>
-
             <!-- Identity Pill Widget -->
             <div class="ehc-badge-pill inline-hero-pill" id="ehc-badge-pill">
-              <span class="ebp-status-dot">✦</span>
               <div class="ebp-text-col">
                 <span class="ebp-name">Deepshikha Dey</span>
                 <span class="ebp-role">Data Scientist &amp; SWE</span>
@@ -98,18 +79,18 @@
           <div class="ehc-bio-col">
             <h2 class="ehc-name-heading">Deepshikha Dey</h2>
             <p class="ehc-bio-text">
-              Computer Science undergraduate specializing in Data Science and Cyber Security at Symbiosis Skills and Professional University. Pairing academic excellence (8.94 CGPA / recent 9.45 SGPA) with hands-on leadership across three industry internships, she engineers end-to-end solutions—from reactive front-end interfaces to high-throughput data telemetry pipelines.
+              Computer Science undergraduate specializing in Data Science and Cyber Security at Symbiosis Skills and Professional University. Pairing academic excellence with hands-on leadership across three industry internships, she engineers end-to-end solutions—from reactive front-end interfaces to high-throughput data telemetry pipelines.
             </p>
           </div>
         </div>
       </article>
 
-      <!-- 3. Second Row (Two Columns: Academic Credentials & Social Profile Card) -->
+      <!-- 3. Second Row (Two Non-Repetitive Core Pillars) -->
       <div class="editorial-grid-two">
-        <!-- Left: Academic Rigor & Technical Foundation (Replaces former photo card with rich info) -->
+        <!-- Left: Academic Rigor & Technical Foundation -->
         <article class="editorial-credentials-card">
           <div class="ecc-top-bar">
-            <span class="ecc-badge">★ ACADEMIC FOUNDATION</span>
+            <span class="ecc-badge">ACADEMIC FOUNDATION</span>
             <span class="ecc-timeline">2023 – 2027</span>
           </div>
           <div class="ecc-main-body">
@@ -149,114 +130,25 @@
                 Telemetry Pipelines &bull; Full-Stack React Architecture &bull; SQL &amp; Tableau Dashboards &bull; Cyber Security Protocols &bull; Real-Time Web Simulations
               </p>
             </div>
+
+            <div class="epc-actions-row">
+              <button class="epc-action-pill" id="epc-btn-projects">Explore Projects</button>
+              <button class="epc-action-pill" id="epc-btn-resume">Official Resume</button>
+              <button class="epc-action-pill epc-wine-pill" id="epc-btn-game">Play Mini-Game</button>
+            </div>
           </div>
         </article>
 
-        <!-- Right: Social Profile Stats Card with Wine Border -->
-        <article class="editorial-profile-card">
-          <div class="epc-header">
-            <h3 class="epc-name">Deepshikha Dey</h3>
-            <span class="epc-network">1K+ network &bull; Pune, India</span>
-          </div>
-
-          <div class="epc-handle-row">
-            <div class="epc-location-pill">
-              <span class="epc-location-tag">Pune, Maharashtra &bull; India</span>
-            </div>
-            <div class="epc-social-icons">
-              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="epc-icon-link linkedin-link" title="LinkedIn Profile">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.76v8.37H6.46v-8.37M7.84 6.2a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
-              </a>
-              <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="epc-icon-link github-link" title="GitHub Profile">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <p class="epc-bio-snippet">Data Science &bull; Front-End Developer &bull; Cyber Security</p>
-
-          <div class="epc-stats-row">
-            <div class="epc-stat">
-              <strong>12+</strong>
-              <span>projects</span>
-            </div>
-            <div class="epc-stat">
-              <strong>8.94</strong>
-              <span>cgpa</span>
-            </div>
-            <div class="epc-stat">
-              <strong>9.45</strong>
-              <span>sgpa</span>
-            </div>
-          </div>
-
-          <div class="epc-actions-row">
-            <button class="epc-action-pill" id="epc-btn-projects">Explore Projects</button>
-            <button class="epc-action-pill" id="epc-btn-resume">Official Resume</button>
-            <button class="epc-action-pill epc-wine-pill" id="epc-btn-game">Play Mini-Game</button>
-          </div>
-        </article>
-      </div>
-
-      <!-- 4. Third Row (Two Columns: Stats + Mini Gallery & Experience/Languages Card) -->
-      <div class="editorial-grid-three">
-        <!-- Left: Stats Monogram + Mini Projects Window -->
-        <div class="eg3-left-col">
-          <div class="eg3-profile-stamp">
-            <div class="eg3-monogram-badge">
-              <span class="emb-star">✦</span>
-              <span class="emb-title">DEEPSHIKHA DEY</span>
-            </div>
-            <span class="eg3-handle">@deepshikha28 &bull; Data Science &amp; SWE</span>
-            <div class="eg3-counter-row">
-              <div class="eg3-counter"><strong>3</strong><span>Internships</span></div>
-              <div class="eg3-counter"><strong>12+</strong><span>Projects</span></div>
-              <div class="eg3-counter"><strong>5</strong><span>Languages</span></div>
-              <div class="eg3-counter"><strong>8.94</strong><span>CGPA</span></div>
-            </div>
-          </div>
-
-          <!-- Mini Gallery Window with Wine Header -->
-          <article class="editorial-mini-gallery">
-            <div class="emg-top-bar">
-              <span class="emg-title">FEATURED PROJECTS</span>
-              <span class="emg-badge">4 REPOSITORIES</span>
-            </div>
-            <div class="emg-grid">
-              <div class="emg-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" role="button" tabindex="0">
-                <span class="emg-card-tag">AUTONOMOUS FLOW</span>
-                <h4 class="emg-card-title">Smart Traffic Grid</h4>
-                <p class="emg-card-desc">Real-time telemetry simulation engine</p>
-              </div>
-              <div class="emg-card run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" role="button" tabindex="0">
-                <span class="emg-card-tag">LIVE TELEMETRY</span>
-                <h4 class="emg-card-title">GlobalPulse Weather</h4>
-                <p class="emg-card-desc">Atmospheric multi-city sensor network</p>
-              </div>
-              <div class="emg-card run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator Suite" role="button" tabindex="0">
-                <span class="emg-card-tag">MATH SUITE</span>
-                <h4 class="emg-card-title">AuraCalc Suite</h4>
-                <p class="emg-card-desc">Precision algorithmic calculation utility</p>
-              </div>
-              <div class="emg-card" id="emg-card-all" role="button" tabindex="0">
-                <span class="emg-card-tag">OPEN SOURCE</span>
-                <h4 class="emg-card-title">All Repositories</h4>
-                <p class="emg-card-desc">Browse complete GitHub portfolio &rarr;</p>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <!-- Right: Industry Experience & Global Languages Showcase (Image-Free Card) -->
+        <!-- Right: Industry Experience & Global Languages Showcase -->
         <article class="editorial-internships-card">
           <div class="eic-header-strip">
             <span class="eic-badge">INDUSTRY TRACK RECORD</span>
-            <span class="eic-city-tag">Pune, Maharashtra</span>
+            <div class="epc-social-icons">
+              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="epc-text-pill linkedin-link" title="LinkedIn Profile">LinkedIn</a>
+              <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="epc-text-pill github-link" title="GitHub Profile">GitHub</a>
+            </div>
           </div>
           <div class="eic-body-inner">
-            <h3 class="eic-name-title">Deepshikha Dey</h3>
-            <p class="eic-subtitle">Front-End Engineer &bull; Data Analyst &bull; Cyber Security</p>
-
             <div class="eic-internships-summary">
               <div class="eic-intern-item">
                 <div class="eii-top">
@@ -305,6 +197,36 @@
         </article>
       </div>
 
+      <!-- 4. Third Row: Featured Projects Window -->
+      <article class="editorial-mini-gallery editorial-full-gallery">
+        <div class="emg-top-bar">
+          <span class="emg-title">FEATURED PROJECTS</span>
+          <span class="emg-badge">4 REPOSITORIES</span>
+        </div>
+        <div class="emg-grid">
+          <div class="emg-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" role="button" tabindex="0">
+            <span class="emg-card-tag">AUTONOMOUS FLOW</span>
+            <h4 class="emg-card-title">Smart Traffic Grid</h4>
+            <p class="emg-card-desc">Real-time telemetry simulation engine</p>
+          </div>
+          <div class="emg-card run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" role="button" tabindex="0">
+            <span class="emg-card-tag">LIVE TELEMETRY</span>
+            <h4 class="emg-card-title">GlobalPulse Weather</h4>
+            <p class="emg-card-desc">Atmospheric multi-city sensor network</p>
+          </div>
+          <div class="emg-card run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator Suite" role="button" tabindex="0">
+            <span class="emg-card-tag">MATH SUITE</span>
+            <h4 class="emg-card-title">AuraCalc Suite</h4>
+            <p class="emg-card-desc">Precision algorithmic calculation utility</p>
+          </div>
+          <div class="emg-card" id="emg-card-all" role="button" tabindex="0">
+            <span class="emg-card-tag">OPEN SOURCE</span>
+            <h4 class="emg-card-title">All Repositories</h4>
+            <p class="emg-card-desc">Browse complete GitHub portfolio</p>
+          </div>
+        </div>
+      </article>
+
     </div>
 
   </section>
@@ -322,7 +244,7 @@
         <!-- Top Header Strip: Single Cute Go to Desktop Button -->
         <header class="scrapbook-header single-nav-header">
           <button id="back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
-            <span class="cute-desktop-arrow">←</span> Go to desktop
+            Go to desktop
           </button>
         </header>
 
@@ -427,7 +349,6 @@
             <div class="scrapbook-hero-title">
               <span class="hero-hi">Hii,</span>
               <h1 class="hero-name">I'm Deepshikha</h1>
-              <div class="sparkle-star">✦</div>
             </div>
 
             <!-- "About me" Card (Matching Reference 1 Card) -->
@@ -487,7 +408,7 @@
                     <span class="mini-tag">CSS3</span>
                     <span class="mini-tag">JavaScript</span>
                     <span class="mini-tag">Cart Architecture</span>
-                    <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="mini-tag link-tag">GitHub: B2B-website ↗</a>
+                    <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="mini-tag link-tag">GitHub: B2B-website</a>
                   </div>
                 </div>
 
@@ -595,7 +516,7 @@
         <!-- Top Header Strip: Single Cute Go to Desktop Button -->
         <header class="scrapbook-header single-nav-header">
           <button id="works-back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
-            <span class="cute-desktop-arrow">←</span> Go to desktop
+            Go to desktop
           </button>
         </header>
 
@@ -604,7 +525,7 @@
           <div class="washi-tape top-left"></div>
           <div class="washi-tape top-right"></div>
           <div class="works-intro-tagline-row">
-            <span class="stamp-badge">★ PIP-APPROVED CODE</span>
+            <span class="stamp-badge">PIP-APPROVED CODE</span>
             <span class="sync-count-tag" id="works-count-badge">Syncing Repos...</span>
           </div>
           <h1 class="card-title-marker works-title-marker">Projects, Labs &amp; Repositories</h1>
@@ -616,10 +537,10 @@
           <!-- Scrapbook Category Filter Buttons -->
           <div class="works-filter-bar scrapbook-filter-bar">
             <button class="filter-tab-btn active" data-filter="all">All Projects</button>
-            <button class="filter-tab-btn" data-filter="github">🐙 Live GitHub Repos</button>
-            <button class="filter-tab-btn" data-filter="live">🚀 Interactive Live Apps (3)</button>
-            <button class="filter-tab-btn" data-filter="frontend">🌐 Frontend &amp; UI (3)</button>
-            <button class="filter-tab-btn" data-filter="data">📊 Data Science &amp; Telemetry (4)</button>
+            <button class="filter-tab-btn" data-filter="github">Live GitHub Repos</button>
+            <button class="filter-tab-btn" data-filter="live">Interactive Live Apps (3)</button>
+            <button class="filter-tab-btn" data-filter="frontend">Frontend &amp; UI (3)</button>
+            <button class="filter-tab-btn" data-filter="data">Data Science &amp; Telemetry (4)</button>
           </div>
         </div>
 
@@ -628,16 +549,15 @@
           <div class="washi-tape top-center"></div>
           <div class="gh-panel-top">
             <div class="gh-panel-title-group">
-              <span class="gh-avatar-circle">🐙</span>
               <div>
                 <h3 class="card-title-marker" style="margin:0; font-size:1.35rem;">GitHub Repositories Live Feed</h3>
                 <span class="gh-subhead">Synced live from <a href="https://github.com/DeepshikhaDey28" target="_blank" class="gh-user-link">@DeepshikhaDey28</a> &bull; Any new repos pushed will automatically appear here</span>
               </div>
             </div>
             <div class="gh-actions-group">
-              <span id="github-sync-status-badge" class="sync-badge live">● Sync Active</span>
+              <span id="github-sync-status-badge" class="sync-badge live">Sync Active</span>
               <button id="refresh-github-btn" class="retro-btn secondary small" title="Re-fetch repositories from GitHub API">
-                <span id="gh-refresh-icon">⟳</span> <span>Refresh Repos</span>
+                <span>Refresh Repos</span>
               </button>
             </div>
           </div>
@@ -653,9 +573,8 @@
           <!-- PROJECT 1: Traffic Simulator -->
           <article class="project-showcase-card" data-category="live frontend">
             <div class="psc-topbar">
-              <span class="psc-icon">🚦</span>
               <div class="psc-tags-top">
-                <span class="tag-status live">● LIVE INTERACTIVE</span>
+                <span class="tag-status live">LIVE INTERACTIVE</span>
                 <span class="tag-type">Simulation &amp; Game</span>
               </div>
             </div>
@@ -674,10 +593,10 @@
             </div>
             <div class="psc-actions">
               <button class="retro-btn primary run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid &amp; Circuit Simulator">
-                <span>🚀 Launch Simulation</span>
+                <span>Launch Simulation</span>
               </button>
               <a href="projects/traffic-grid-simulation/index.html" target="_blank" class="retro-btn secondary">
-                <span>Open Full Tab ↗</span>
+                <span>Open Full Tab</span>
               </a>
             </div>
           </article>
@@ -685,9 +604,8 @@
           <!-- PROJECT 2: Weather Hub -->
           <article class="project-showcase-card" data-category="live data">
             <div class="psc-topbar">
-              <span class="psc-icon">🛰️</span>
               <div class="psc-tags-top">
-                <span class="tag-status live">● LIVE TELEMETRY</span>
+                <span class="tag-status live">LIVE TELEMETRY</span>
                 <span class="tag-type">Analytics Hub</span>
               </div>
             </div>
@@ -706,10 +624,10 @@
             </div>
             <div class="psc-actions">
               <button class="retro-btn primary run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub">
-                <span>🛰️ Launch Weather Hub</span>
+                <span>Launch Weather Hub</span>
               </button>
               <a href="projects/weather-telemetry-hub/index.html" target="_blank" class="retro-btn secondary">
-                <span>Open Full Tab ↗</span>
+                <span>Open Full Tab</span>
               </a>
             </div>
           </article>
@@ -717,9 +635,8 @@
           <!-- PROJECT 3: AuraCalc -->
           <article class="project-showcase-card" data-category="live frontend">
             <div class="psc-topbar">
-              <span class="psc-icon">🧮</span>
               <div class="psc-tags-top">
-                <span class="tag-status live">● LIVE WEB APP</span>
+                <span class="tag-status live">LIVE WEB APP</span>
                 <span class="tag-type">Glassmorphism Tool</span>
               </div>
             </div>
@@ -738,10 +655,10 @@
             </div>
             <div class="psc-actions">
               <button class="retro-btn primary run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator">
-                <span>🔢 Launch AuraCalc</span>
+                <span>Launch AuraCalc</span>
               </button>
               <a href="projects/auracalc-suite/index.html" target="_blank" class="retro-btn secondary">
-                <span>Open Full Tab ↗</span>
+                <span>Open Full Tab</span>
               </a>
             </div>
           </article>
@@ -749,9 +666,8 @@
           <!-- PROJECT 4: B2B E-Commerce -->
           <article class="project-showcase-card" data-category="frontend">
             <div class="psc-topbar">
-              <span class="psc-icon">🛒</span>
               <div class="psc-tags-top">
-                <span class="tag-status github">🐙 GITHUB REPO</span>
+                <span class="tag-status github">GITHUB REPO</span>
                 <span class="tag-type">E-Commerce Platform</span>
               </div>
             </div>
@@ -770,7 +686,7 @@
             </div>
             <div class="psc-actions">
               <a href="https://github.com/DeepshikhaDey28/B2B-bussiness-website-" target="_blank" class="retro-btn primary">
-                <span>GitHub Repository ↗</span>
+                <span>GitHub Repository</span>
               </a>
             </div>
           </article>
@@ -778,9 +694,8 @@
           <!-- PROJECT 5: SevraOS Telemetry -->
           <article class="project-showcase-card" data-category="data frontend">
             <div class="psc-topbar">
-              <span class="psc-icon">⚙️</span>
               <div class="psc-tags-top">
-                <span class="tag-status internship">💼 TEAM LEAD INTERN</span>
+                <span class="tag-status internship">TEAM LEAD INTERN</span>
                 <span class="tag-type">IoT &amp; Telemetry</span>
               </div>
             </div>
@@ -805,9 +720,8 @@
           <!-- PROJECT 6: Python Hub -->
           <article class="project-showcase-card" data-category="data">
             <div class="psc-topbar">
-              <span class="psc-icon">🐍</span>
               <div class="psc-tags-top">
-                <span class="tag-status github">🐙 GITHUB REPO</span>
+                <span class="tag-status github">GITHUB REPO</span>
                 <span class="tag-type">Core CS &amp; Algorithms</span>
               </div>
             </div>
@@ -825,7 +739,7 @@
             </div>
             <div class="psc-actions">
               <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="retro-btn primary">
-                <span>GitHub Repository ↗</span>
+                <span>GitHub Repository</span>
               </a>
             </div>
           </article>
@@ -833,9 +747,8 @@
           <!-- PROJECT 7: Yhills BI -->
           <article class="project-showcase-card" data-category="data">
             <div class="psc-topbar">
-              <span class="psc-icon">📊</span>
               <div class="psc-tags-top">
-                <span class="tag-status internship">💼 DATA SCIENCE INTERN</span>
+                <span class="tag-status internship">DATA SCIENCE INTERN</span>
                 <span class="tag-type">Business Intelligence</span>
               </div>
             </div>
@@ -896,15 +809,15 @@
         <!-- Retro Cabinet Top Title Bar (Cute Go to Desktop Button & Lore/Dex Toggles) -->
         <div class="cabinet-top-strip single-nav-cabinet-strip">
           <button id="game-back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
-            <span class="cute-desktop-arrow">←</span> Go to desktop
+            Go to desktop
           </button>
           <span class="cabinet-title">PIP-BOY ADVANCE // OPEN WORLD DEV REGION</span>
           <div class="cabinet-ctrl-group">
             <button id="game-lore-toggle-btn" class="cabinet-ctrl-pill lore-ctrl-pill" title="Read Realm Lore &amp; Chronicles">
-              <span>📜 Game Lore</span>
+              <span>Game Lore</span>
             </button>
             <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Press [Q] for Pip-Dex">
-              <span>📖 Pip-Dex</span>
+              <span>Pip-Dex</span>
             </button>
           </div>
         </div>
@@ -916,12 +829,19 @@
           <div class="pip-screen-view active" id="view-overworld">
             <canvas id="pip-overworld-canvas" width="640" height="360"></canvas>
             
+            <!-- Minimap Top-Left Corner -->
+            <div class="ow-minimap-card" id="ow-minimap-card">
+              <div class="ow-minimap-label">RADAR MAP</div>
+              <canvas id="pip-minimap-canvas" width="120" height="90"></canvas>
+            </div>
+
             <!-- Overworld Top HUD Overlay -->
             <div class="ow-hud-overlay">
               <div class="ow-zone-pill" id="ow-zone-pill">
-                <span>📍 Pallet Dev Lab</span>
+                <span>Pallet Dev Lab</span>
               </div>
               <div class="ow-stats-pill">
+                <span>GYMS: <strong id="ow-gyms-count">0/5</strong></span>
                 <span>PIPS: <strong id="ow-dex-count">0/10</strong></span>
                 <span>HP: <strong id="ow-hp-count">100/100</strong></span>
               </div>
@@ -931,7 +851,7 @@
             <div class="ow-dialogue-box" id="ow-dialogue-box" style="display: none;">
               <div class="ow-speaker" id="ow-dialogue-speaker">Dev Mentor</div>
               <div class="ow-message" id="ow-dialogue-message">Welcome to the Open Dev Region!</div>
-              <div class="ow-prompt">▼ Press [E] or Space to continue</div>
+              <div class="ow-prompt">Press [E] or Space to continue</div>
             </div>
 
             <!-- Wild Encounter Screen Flash Overlay -->
@@ -1063,7 +983,7 @@
               <!-- Undertale Dodging Arena Phase -->
               <div class="pip-dodging-section" id="pip-dodging-section" style="display: none;">
                 <div class="dodge-header-bar">
-                  <span class="dodge-warning">⚠️ ENEMY TURN! DODGE THE GLITCH ATTACK!</span>
+                  <span class="dodge-warning">ENEMY TURN! DODGE THE GLITCH ATTACK!</span>
                   <span class="dodge-timer-badge" id="dodge-timer-badge">TIME: 5.0s</span>
                 </div>
                 <div class="dodge-canvas-frame">
@@ -1074,22 +994,18 @@
               <!-- 4 Classic Pokemon Battle Command Buttons -->
               <div class="pip-action-command-bar" id="pip-action-bar">
                 <button class="pip-cmd-btn btn-battle" id="btn-pip-fight" data-action="fight">
-                  <span class="cmd-icon">⚔</span>
                   <span class="cmd-title">FIGHT</span>
                   <span class="cmd-sub">4 Attacks</span>
                 </button>
                 <button class="pip-cmd-btn btn-commune" id="btn-pip-act" data-action="act">
-                  <span class="cmd-icon">⚡</span>
                   <span class="cmd-title">POKÉMON</span>
                   <span class="cmd-sub">Switch Team</span>
                 </button>
                 <button class="pip-cmd-btn btn-bag" id="btn-pip-item" data-action="item">
-                  <span class="cmd-icon">🎒</span>
                   <span class="cmd-title">BAG</span>
                   <span class="cmd-sub">Potions &amp; Items</span>
                 </button>
                 <button class="pip-cmd-btn btn-catch" id="btn-pip-mercy" data-action="mercy">
-                  <span class="cmd-icon">🔴</span>
                   <span class="cmd-title">CATCH</span>
                   <span class="cmd-sub">Capsule &amp; Run</span>
                 </button>
@@ -1107,7 +1023,7 @@
                 <button class="dex-close-btn" id="dex-close-btn">&times; Close Dex</button>
               </div>
               <div class="dex-grid" id="dex-grid">
-                <!-- Dynamically populated 6 Pips cards -->
+                <!-- Dynamically populated Pips cards -->
               </div>
               <div class="dex-trainer-card">
                 <div class="dtc-left">
@@ -1118,10 +1034,11 @@
                   </div>
                 </div>
                 <div class="dtc-badges-row">
-                  <div class="badge-item active" title="Ember Badge">🔥 EMBER</div>
-                  <div class="badge-item active" title="Flora Badge">🌿 FLORA</div>
-                  <div class="badge-item active" title="Tide Badge">🌊 TIDE</div>
-                  <div class="badge-item active" title="Pulse Badge">⚡ PULSE</div>
+                  <div class="badge-item active" id="badge-ember" title="Ember Badge">EMBER</div>
+                  <div class="badge-item" id="badge-flora" title="Flora Badge">FLORA</div>
+                  <div class="badge-item" id="badge-tide" title="Tide Badge">TIDE</div>
+                  <div class="badge-item" id="badge-pulse" title="Pulse Badge">PULSE</div>
+                  <div class="badge-item" id="badge-cipher" title="Cipher Badge">CIPHER</div>
                 </div>
               </div>
             </div>
@@ -1131,36 +1048,33 @@
           <div class="pip-screen-view" id="view-lore" style="display: none;">
             <div class="pip-lore-container">
               <div class="lore-header-bar">
-                <h3>📜 CHRONICLES OF THE AETHER GRID // ANCIENT LORE</h3>
+                <h3>CHRONICLES OF THE AETHER GRID // ANCIENT LORE</h3>
                 <button class="lore-close-btn" id="lore-close-btn">&times; Close Lore</button>
               </div>
               <div class="lore-scroll-body">
                 <div class="lore-card-panel">
-                  <h4 class="lore-panel-title">⚡ CHAPTER I: THE PRIMAL CONVERGENCE &amp; THE FRACTURE</h4>
+                  <h4 class="lore-panel-title">CHAPTER I: THE PRIMAL CONVERGENCE &amp; THE FRACTURE</h4>
                   <p class="lore-panel-desc">Before the Great Rupture, the Aether Grid existed in perpetual balance, anchored by the ancient <strong>Prime Core</strong>. From its harmonious vibrations arose ten primordial avatars known as <strong>The Sacred Pips</strong>, each embodying a fundamental force of the cosmos: Ember, Verdance, Tide, Lightning, Melody, Paradox, Shadow, Dynamo, Slumber, and Pure Intellect.</p>
                   <p class="lore-panel-desc">When a dimensional rift destabilized the Core, the ten guardian spirits scattered across the wild biomes, causing elemental leylines to surge and reality itself to fracture.</p>
                 </div>
 
                 <div class="lore-card-panel">
-                  <h4 class="lore-panel-title">🗺️ CHAPTER II: THE THREE SACRED BIOMES</h4>
+                  <h4 class="lore-panel-title">CHAPTER II: THE THREE SACRED BIOMES</h4>
                   <div class="lore-biomes-grid">
                     <div class="biome-card">
                       <div class="biome-card-header">
-                        <span class="biome-icon">🌿</span>
                         <span class="biome-name">Route 1: Verdant Meadow</span>
                       </div>
                       <p>Fertile sunlit highlands warmed by solar leylines. Roaming grounds of <strong>Flamechar (#004)</strong> with its undying tail ember, <strong>Bulbasprout (#001)</strong> rooting in ancient groves, the lightning-fast <strong>Sparkpip (#025)</strong>, and the melodious <strong>Jigglypip (#039)</strong>.</p>
                     </div>
                     <div class="biome-card">
                       <div class="biome-card-header">
-                        <span class="biome-icon">🌊</span>
                         <span class="biome-name">Route 2: Whispering Lake</span>
                       </div>
                       <p>Deep turquoise reservoir fed by subterranean crystal springs. Guarded for centuries by <strong>Aquabyte (#007)</strong>, whose hardened shell deflects storm surges, and the peaceful giant <strong>Snorlaxpip (#143)</strong>, asleep on the wooden crossway.</p>
                     </div>
                     <div class="biome-card">
                       <div class="biome-card-header">
-                        <span class="biome-icon">🔮</span>
                         <span class="biome-name">Route 3: Obsidian Glitchlands</span>
                       </div>
                       <p>Ground zero of the Core Rupture. A fractured matrix where code and reality blur. Haunted by <strong>Buggypip (#054)</strong>, the phantom <strong>Spectrepip (#094)</strong>, the magnetic dynamo <strong>Voltasync (#081)</strong>, and the mythical artificial deity <strong>NEUROPIP (#150)</strong>.</p>
@@ -1169,9 +1083,9 @@
                 </div>
 
                 <div class="lore-card-panel">
-                  <h4 class="lore-panel-title">🏆 CHAPTER III: THE TRAINER'S SACRED CALLING</h4>
-                  <p class="lore-panel-desc">Archivist Oak and the sanctuary guardians watch the leylines. Prophecy tells of a traveler who shall explore the lands, engage the wild spirits with tactical mastery, and register all ten resonances into the <strong>Pip-Dex</strong>.</p>
-                  <p class="lore-panel-desc">When all 10 Sacred Pips are caught, the fractured leylines will harmonize once more, sealing the glitches and restoring eternal equilibrium to the Aether Grid!</p>
+                  <h4 class="lore-panel-title">CHAPTER III: THE TRAINER'S SACRED CALLING</h4>
+                  <p class="lore-panel-desc">Archivist Oak and the sanctuary guardians watch the leylines. Prophecy tells of a traveler who shall explore the lands, defeat the five Gym Leaders, engage the wild spirits with tactical mastery, and register all ten resonances into the <strong>Pip-Dex</strong>.</p>
+                  <p class="lore-panel-desc">When all 5 Badges are claimed and all 10 Sacred Pips are caught, the fractured leylines will harmonize once more, sealing the glitches and restoring eternal equilibrium to the Aether Grid!</p>
                 </div>
               </div>
             </div>
@@ -1214,7 +1128,7 @@
       <div class="window-titlebar">
         <span class="window-title" id="runner-modal-title">C:\DEEPSHIKHA\live_demos\app_runner.exe</span>
         <div class="window-controls">
-          <a id="runner-external-link" href="#" target="_blank" class="win-btn maximize" title="Open in New Tab">↗</a>
+          <a id="runner-external-link" href="#" target="_blank" class="win-btn maximize" title="Open in New Tab">EXPAND</a>
           <button class="win-btn close close-runner-btn" title="Close">×</button>
         </div>
       </div>
@@ -1237,7 +1151,7 @@
         </div>
       </div>
       <div class="modal-content">
-        <h3 class="modal-heading">Let's Connect &amp; Collaborate! ✉️</h3>
+        <h3 class="modal-heading">Let's Connect &amp; Collaborate!</h3>
         <p class="modal-desc">
           Feel free to reach out for software engineering, data science internships, full-time opportunities, or collaborative projects.
         </p>
@@ -1341,7 +1255,7 @@
 
           <!-- Self Introduction / Executive Summary -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title"><span>✦</span> EXECUTIVE PROFILE</h4>
+            <h4 class="rsp-sec-title">EXECUTIVE PROFILE</h4>
             <div class="rsp-summary-card">
               <p class="rsp-text">
                 B.Tech Computer Science student specializing in <strong>Data Science &amp; Cyber Security</strong> (CGPA: <strong>8.94 / 10.0</strong>, Recent SGPA: <strong>9.45</strong>). Proven track record across multiple industry engineering internships bridging the gap between full-stack frontend interfaces and data analytics pipelines. Experienced in orchestrating high-performance telemetry monitoring with Python and SQL, creating enterprise BI dashboards with Tableau, and leading agile cross-functional engineering teams.
@@ -1352,7 +1266,7 @@
           <!-- Dynamic Interactive Technical Skills -->
           <div class="rsp-section">
             <div class="rsp-sec-header-row">
-              <h4 class="rsp-sec-title"><span>✦</span> TECHNICAL COMPETENCIES</h4>
+              <h4 class="rsp-sec-title">TECHNICAL COMPETENCIES</h4>
               <div class="skills-filter-row" id="resume-skills-filters">
                 <button type="button" class="skill-filter-btn active" data-skill-cat="all">All</button>
                 <button type="button" class="skill-filter-btn" data-skill-cat="languages">Languages</button>
@@ -1433,7 +1347,7 @@
 
           <!-- Interactive Experience Timeline -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title"><span>✦</span> INDUSTRY EXPERIENCE</h4>
+            <h4 class="rsp-sec-title">INDUSTRY EXPERIENCE</h4>
             
             <div class="resume-timeline-container">
               <!-- Timeline Item 1 -->
@@ -1513,7 +1427,7 @@
 
           <!-- Academic Education Section -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title"><span>✦</span> ACADEMIC CREDENTIALS</h4>
+            <h4 class="rsp-sec-title">ACADEMIC CREDENTIALS</h4>
             <div class="resume-education-grid">
               <div class="edu-card-highlight">
                 <div class="ech-top">
@@ -1524,8 +1438,8 @@
                   <span class="ech-years">2023 &ndash; 2027</span>
                 </div>
                 <div class="ech-score-strip">
-                  <span class="score-badge cgpa">⭐ Cumulative CGPA: <strong>8.94 / 10.0</strong></span>
-                  <span class="score-badge sgpa">🎯 Recent Semester SGPA: <strong>9.45 / 10.0</strong></span>
+                  <span class="score-badge cgpa">Cumulative CGPA: <strong>8.94 / 10.0</strong></span>
+                  <span class="score-badge sgpa">Recent Semester SGPA: <strong>9.45 / 10.0</strong></span>
                 </div>
               </div>
               <div class="edu-card-simple">
@@ -1551,7 +1465,7 @@
 
           <!-- Languages & Soft Skills -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title"><span>✦</span> LANGUAGES &amp; LEADERSHIP</h4>
+            <h4 class="rsp-sec-title">LANGUAGES &amp; LEADERSHIP</h4>
             <div class="rsp-two-col-grid">
               <div class="rsp-mini-block">
                 <h6>Spoken &amp; Written Languages</h6>
