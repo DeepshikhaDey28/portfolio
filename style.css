@@ -4442,16 +4442,29 @@ html, body {
   flex-direction: row;
 }
 
-/* Status Cards (Creature & Player HUD) */
+/* Status Cards (Authentic Pokémon Diamond/Pearl/Platinum Metallic Angled HUD) */
 .pip-status-card {
-  background-color: #f8fafc;
-  border: 3px solid #1e293b;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #ebebeb 45%, #d8d8d8 50%, #c8c8c8 100%);
+  border: 2.5px solid #1e293b;
+  border-radius: 6px;
+  padding: 0.65rem 1rem 0.6rem;
   color: #0f172a;
   min-width: 250px;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
   font-family: var(--font-mono);
+  position: relative;
+}
+
+.pip-status-card.enemy-card {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 18px;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%);
+}
+
+.pip-status-card.player-card {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 18px;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%);
 }
 
 .psc-header {
@@ -4465,12 +4478,13 @@ html, body {
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.04em;
+  color: #0f172a;
 }
 
 .psc-level {
   font-size: 0.85rem;
-  font-weight: 700;
-  color: #475569;
+  font-weight: 800;
+  color: #334155;
 }
 
 .psc-type-row {
@@ -4506,65 +4520,74 @@ html, body {
 .psc-hp-wrap {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   margin-bottom: 0.25rem;
 }
 
 .psc-hp-label {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 900;
-  color: #b45309;
+  background-color: #facc15;
+  color: #0f172a;
+  border: 1.5px solid #1e293b;
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
 }
 
 .psc-hp-track {
   flex: 1;
   height: 10px;
-  background-color: #cbd5e1;
-  border: 1.5px solid #1e293b;
-  border-radius: 5px;
+  background-color: #1e293b;
+  border: 1.5px solid #0f172a;
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .psc-hp-fill {
   height: 100%;
-  background-color: #22c55e;
+  background: linear-gradient(180deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
   transition: width 0.4s ease, background-color 0.4s ease;
 }
 
 .psc-hp-numbers {
   text-align: right;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: 0.04em;
 }
 
 .psc-exp-wrap {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.35rem;
-  padding-top: 0.35rem;
-  border-top: 1px dashed #cbd5e1;
+  margin-top: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(30, 41, 59, 0.2);
 }
 
 .psc-exp-label {
-  font-size: 0.65rem;
-  font-weight: 800;
-  color: #4338ca;
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: #2563eb;
+  letter-spacing: 0.05em;
 }
 
 .psc-exp-track {
   flex: 1;
-  height: 6px;
-  background-color: #e2e8f0;
+  height: 5px;
+  background-color: #cbd5e1;
   border: 1px solid #1e293b;
-  border-radius: 3px;
+  border-radius: 2px;
   overflow: hidden;
 }
 
 .psc-exp-fill {
   height: 100%;
-  background-color: #3b82f6;
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
 }
 
 /* Pedestals & Sprites */
@@ -4636,18 +4659,18 @@ html, body {
 
 .enemy-speech-balloon {
   position: absolute;
-  bottom: calc(100% - 8px);
-  right: -10px;
+  top: 10px;
+  right: calc(100% + 14px);
   background-color: #ffffff;
   color: #0f172a;
   border: 2px solid #1e293b;
   border-radius: 10px;
-  padding: 0.4rem 0.75rem;
+  padding: 0.45rem 0.8rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.35;
-  max-width: 220px;
+  max-width: 210px;
   box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
   z-index: 10;
   pointer-events: none;
@@ -4657,13 +4680,13 @@ html, body {
 .enemy-speech-balloon::after {
   content: "";
   position: absolute;
-  bottom: -6px;
-  left: 20px;
+  top: 14px;
+  right: -6px;
   width: 10px;
   height: 10px;
   background-color: #fff;
+  border-top: 2px solid #1e293b;
   border-right: 2px solid #1e293b;
-  border-bottom: 2px solid #1e293b;
   transform: rotate(45deg);
 }
 
@@ -4742,12 +4765,14 @@ html, body {
 }
 
 .pip-dialogue-section {
-  background-color: #020617;
-  border: 3px solid #38bdf8;
-  border-radius: 12px;
+  background-color: #ffffff;
+  border: 3.5px solid #1e293b;
+  border-left: 14px solid #ef4444;
+  border-right: 14px solid #ef4444;
+  border-radius: 8px;
   padding: 1rem 1.25rem;
   min-height: 100px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -4760,8 +4785,8 @@ html, body {
 }
 
 .dialogue-prompt-icon {
-  color: #38bdf8;
-  font-size: 1.1rem;
+  color: #ef4444;
+  font-size: 1.15rem;
   line-height: 1.4;
   animation: prompt-blink 0.9s infinite;
 }
@@ -4774,8 +4799,9 @@ html, body {
 .dialogue-text-stream {
   font-family: var(--font-mono);
   font-size: 1.05rem;
+  font-weight: 700;
   line-height: 1.5;
-  color: #f8fafc;
+  color: #0f172a;
   flex: 1;
   word-break: break-word;
 }
@@ -4784,7 +4810,7 @@ html, body {
 .pip-submenu-panel {
   margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px dashed rgba(56, 189, 248, 0.4);
+  border-top: 2px dashed rgba(30, 41, 59, 0.25);
 }
 
 .submenu-title-bar {
@@ -4795,23 +4821,24 @@ html, body {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 800;
-  color: #38bdf8;
+  color: #0f172a;
 }
 
 .submenu-back-btn {
-  background: none;
-  border: 1px solid #64748b;
-  color: #94a3b8;
+  background: #f1f5f9;
+  border: 1.5px solid #cbd5e1;
+  color: #334155;
   border-radius: 4px;
-  padding: 0.15rem 0.5rem;
+  padding: 0.18rem 0.6rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .submenu-back-btn:hover {
-  background-color: #334155;
-  color: #fff;
+  background-color: #e2e8f0;
+  color: #0f172a;
 }
 
 .submenu-options-grid {
@@ -4821,11 +4848,11 @@ html, body {
 }
 
 .submenu-item-btn {
-  background-color: #1e293b;
-  border: 2px solid #475569;
+  background-color: #f8fafc;
+  border: 2px solid #cbd5e1;
   border-radius: 8px;
   padding: 0.65rem 0.85rem;
-  color: #f8fafc;
+  color: #0f172a;
   cursor: pointer;
   text-align: left;
   display: flex;
@@ -4834,23 +4861,24 @@ html, body {
 }
 
 .submenu-item-btn:hover {
-  background-color: #334155;
-  border-color: #38bdf8;
+  background-color: #ffffff;
+  border-color: #ef4444;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.2);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
 }
 
 .sub-item-name {
   font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 800;
-  color: #facc15;
+  color: #b91c1c;
   margin-bottom: 0.15rem;
 }
 
 .sub-item-meta {
   font-size: 0.75rem;
-  color: #94a3b8;
+  font-weight: 600;
+  color: #475569;
 }
 
 /* Bullet Hell Dodging Arena (Undertale Engine) */
@@ -6219,29 +6247,32 @@ html, body {
   }
 
   .enemy-speech-balloon {
-    max-width: 175px !important;
-    font-size: 0.65rem !important;
+    max-width: 150px !important;
+    font-size: 0.62rem !important;
     padding: 0.3rem 0.5rem !important;
-    bottom: calc(100% - 6px) !important;
-    right: -4px !important;
+    top: 6px !important;
+    bottom: auto !important;
+    right: calc(100% + 8px) !important;
   }
 
-  .trainer-avatar-frame {
-    width: 115px !important;
-    height: 165px !important;
-  }
-
-  .trainer-pfp-img {
-    max-height: 140px !important;
+  .enemy-speech-balloon::after {
+    top: 10px !important;
+    right: -5px !important;
+    bottom: auto !important;
+    left: auto !important;
+    border-top: 2px solid #1e293b !important;
+    border-right: 2px solid #1e293b !important;
+    border-left: none !important;
+    border-bottom: none !important;
   }
 
   .player-partner-sprite-card {
-    width: 68px !important;
-    height: 68px !important;
+    width: 100px !important;
+    height: 100px !important;
   }
 
   .player-partner-img {
-    max-height: 48px !important;
+    max-height: 90px !important;
   }
 
   #pip-overworld-canvas {
@@ -6450,32 +6481,29 @@ html, body {
 }
 
 .player-partner-sprite-card {
-  width: 96px;
-  height: 96px;
-  border-radius: 16px;
-  background: radial-gradient(circle at 50% 50%, rgba(250, 204, 21, 0.25) 0%, rgba(15, 23, 42, 0.85) 100%);
-  border: 2px solid #facc15;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), 0 0 12px rgba(250, 204, 21, 0.3);
+  position: relative;
+  z-index: 2;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px;
-  position: relative;
-  animation: partner-bob 2.2s ease-in-out infinite alternate;
+  animation: partner-bob 2.4s ease-in-out infinite alternate;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 @keyframes partner-bob {
   0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(-4px) scale(1.03); }
+  100% { transform: translateY(-8px) scale(1.02); }
 }
 
 .player-partner-img {
-  width: 100%;
-  height: 100%;
-  max-height: 72px;
+  width: 140px;
+  height: 140px;
+  max-height: 140px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+  display: block;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
 }
 
 .partner-card-tag {

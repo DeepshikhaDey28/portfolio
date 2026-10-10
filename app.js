@@ -29,7 +29,11 @@ class RetroAudioEngine {
       gameBgm: new Audio('assets/sounds/game_bgm.mp3'),
       click: new Audio('assets/sounds/game_click.mp3'),
       death: new Audio('assets/sounds/game_death.mp3'),
-      walk: new Audio('assets/sounds/walk.mp3')
+      walkObsidian: new Audio('assets/sounds/walk_obsidian.mp3'),
+      walkSwim: new Audio('assets/sounds/walk_swim.mp3'),
+      walkGrass: new Audio('assets/sounds/walk_grass.mp3'),
+      walkSand: new Audio('assets/sounds/walk_sand.mp3'),
+      walkGravel: new Audio('assets/sounds/walk_gravel.mp3')
     };
 
     try {
@@ -43,7 +47,12 @@ class RetroAudioEngine {
 
       this.audioFiles.click.volume = 0.50;
       this.audioFiles.death.volume = 0.55;
-      this.audioFiles.walk.volume = 0.28;
+
+      this.audioFiles.walkObsidian.volume = 0.35;
+      this.audioFiles.walkSwim.volume = 0.38;
+      this.audioFiles.walkGrass.volume = 0.32;
+      this.audioFiles.walkSand.volume = 0.35;
+      this.audioFiles.walkGravel.volume = 0.35;
     } catch (e) {}
 
     // Web Audio synthesizer for chiptune & retro backup
@@ -116,15 +125,25 @@ class RetroAudioEngine {
     this.playClick();
   }
 
-  // Real walking footstep sound
-  playWalk() {
+  // Real walking footstep sounds per surface type
+  playWalk(surface = 'gravel') {
     if (!this.sfxEnabled) return;
     const now = Date.now();
-    if (now - this.lastWalkTime < 240) return; // Throttled footstep cadence
+    if (now - this.lastWalkTime < 220) return; // Throttled footstep cadence
     this.lastWalkTime = now;
+
+    let audio = this.audioFiles.walkGravel;
+    if (surface === 'obsidian') audio = this.audioFiles.walkObsidian;
+    else if (surface === 'water' || surface === 'swim') audio = this.audioFiles.walkSwim;
+    else if (surface === 'grass') audio = this.audioFiles.walkGrass;
+    else if (surface === 'sand') audio = this.audioFiles.walkSand;
+    else if (surface === 'gravel') audio = this.audioFiles.walkGravel;
+
     try {
-      this.audioFiles.walk.currentTime = 0;
-      this.audioFiles.walk.play().catch(() => {});
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      }
     } catch (e) {}
   }
 
@@ -1040,10 +1059,14 @@ class CatchThatPipGame {
     this.dodgeInterval = null;
     this.bullets = [];
 
-    // Map Dimensions (80 x 60 tiles @ 32px each = 2560 x 1920 world)
-    this.mapCols = 80;
-    this.mapRows = 60;
+    // Map Dimensions (100 x 80 tiles @ 32px each = 3200 x 2560 expansive world)
+    this.mapCols = 100;
+    this.mapRows = 80;
     this.tileSize = 32;
+
+    // Preload Player Overworld Sprite (Image 2 - Auburn Hair, Brown Cap, Pink Blouse)
+    this.playerSpriteImg = new Image();
+    this.playerSpriteImg.src = 'assets/player_sprite.png';
 
     // 5 Gym Leader Badges State
     this.badges = {
@@ -1073,13 +1096,14 @@ class CatchThatPipGame {
     // 0: Lab Floor (Parquet)
     // 1: Lab Wall (Solid)
     // 2: Lab Furniture/Desk/PC (Solid)
-    // 3: Outdoor Cobble/Dirt Path (Walkable)
-    // 4: Outdoor Meadow Grass (Walkable)
-    // 5: Tall Wild Grass (Walkable, triggers encounters!)
-    // 6: Deep Water (Solid)
-    // 7: Wooden Bridge (Walkable)
-    // 8: Cyber Circuit Matrix (Walkable)
+    // 3: Outdoor Cobble/Dirt Path (Walkable - Gravel walk sound)
+    // 4: Outdoor Meadow Grass (Walkable - Grass sound)
+    // 5: Tall Wild Grass (Walkable - Grass sound, triggers encounters!)
+    // 6: Deep Water (Walkable/Swimmable! - Swim sound)
+    // 7: Wooden Bridge (Walkable - Gravel/Wood sound)
+    // 8: Cyber Circuit Matrix (Walkable - Obsidian sound)
     // 9: Outer Pine Trees / Border / Monoliths (Solid)
+    // 10: Golden Sand Beach Shore (Walkable - Sand sound)
     this.tiles = [];
     for (let r = 0; r < this.mapRows; r++) {
       this.tiles[r] = [];
@@ -1088,95 +1112,95 @@ class CatchThatPipGame {
         if (r === 0 || r === this.mapRows - 1 || c === 0 || c === this.mapCols - 1) {
           this.tiles[r][c] = 9;
         }
-        // PALLET DEV LAB BUILDING (c: 3..21, r: 2..15)
-        else if (c >= 3 && c <= 21 && r >= 2 && r <= 15) {
-          if (r === 2 || c === 3 || c === 21 || (r === 15 && c !== 11 && c !== 12)) {
-            this.tiles[r][c] = 1; // Lab Wall (Door at c:11,12)
-          } else if (r === 4 && ((c >= 5 && c <= 8) || (c >= 15 && c <= 19))) {
+        // PALLET DEV LAB BUILDING (c: 3..25, r: 2..18)
+        else if (c >= 3 && c <= 25 && r >= 2 && r <= 18) {
+          if (r === 2 || c === 3 || c === 25 || (r === 18 && c !== 13 && c !== 14)) {
+            this.tiles[r][c] = 1; // Lab Wall (Door at c:13,14)
+          } else if (r === 4 && ((c >= 5 && c <= 10) || (c >= 18 && c <= 23))) {
             this.tiles[r][c] = 2; // Lab Computer Desks & Terminals
-          } else if (r === 8 && (c >= 17 && c <= 19)) {
+          } else if (r === 9 && (c >= 20 && c <= 23)) {
             this.tiles[r][c] = 2; // Bookshelves & Servers
           } else {
             this.tiles[r][c] = 0; // Lab Parquet Floor
           }
         }
-        // SANCTUARY COURTYARD & PATHS (c: 1..26, r: 1..22)
-        else if (c <= 26 && r <= 22) {
-          if ((c >= 10 && c <= 13) || r === 16 || r === 21 || (c === 26 && r >= 16)) {
+        // SANCTUARY COURTYARD & PATHS (c: 1..32, r: 1..26)
+        else if (c <= 32 && r <= 26) {
+          if ((c >= 12 && c <= 15) || r === 19 || r === 25 || (c === 32 && r >= 19)) {
             this.tiles[r][c] = 3; // Cobble Path
           } else {
             this.tiles[r][c] = 4; // Courtyard Grass
           }
         }
-        // CROSSROADS HUB (c: 27..38, r: 20..27)
-        else if (c >= 27 && c <= 38 && r >= 20 && r <= 27) {
-          if (r === 23 || r === 24 || c === 32 || c === 33) {
+        // CROSSROADS HUB (c: 33..48, r: 22..32)
+        else if (c >= 33 && c <= 48 && r >= 22 && r <= 32) {
+          if (r === 26 || r === 27 || c === 40 || c === 41) {
             this.tiles[r][c] = 3; // Main Crossroad Highway
           } else {
             this.tiles[r][c] = 4; // Hub Grass
           }
         }
-        // ROUTE 2: WHISPERING DATA LAKE (Bottom-Left: c: 1..37, r: 26..58)
-        else if (c <= 37 && r >= 26) {
-          // Shore path around lake perimeter
-          if (c <= 3 || c >= 35 || r <= 27 || r >= 57) {
-            this.tiles[r][c] = 3; // Shore path
+        // ROUTE 2: WHISPERING DATA LAKE & SANDY BEACH (Bottom-Left: c: 1..46, r: 33..78)
+        else if (c <= 46 && r >= 33) {
+          // Golden sand beach perimeter around entire lake!
+          if (c <= 5 || c >= 42 || r <= 36 || r >= 75) {
+            this.tiles[r][c] = 10; // Golden Sand Beach Shore
           }
-          // Main North-South Wooden Bridge: c: 17..19, r: 28..41
-          else if ((c >= 17 && c <= 19) && r >= 28 && r <= 41) {
+          // Main North-South Wooden Bridge: c: 22..24, r: 37..52
+          else if ((c >= 22 && c <= 24) && r >= 37 && r <= 52) {
             this.tiles[r][c] = 7; // Wooden Bridge
           }
-          // Azure Marina Gym Island: c: 15..21, r: 42..47
-          else if (c >= 15 && c <= 21 && r >= 42 && r <= 47) {
-            this.tiles[r][c] = (r === 42 || r === 47 || c === 15 || c === 21) ? 7 : 3; // Gym Pier Deck
+          // Azure Marina Gym Island: c: 19..27, r: 53..60
+          else if (c >= 19 && c <= 27 && r >= 53 && r <= 60) {
+            this.tiles[r][c] = (r === 53 || r === 60 || c === 19 || c === 27) ? 7 : 10; // Marina Sand / Pier Deck
           }
-          // South Bridge to Shore: c: 17..19, r: 48..56
-          else if ((c >= 17 && c <= 19) && r >= 48 && r <= 56) {
+          // South Bridge to Shore: c: 22..24, r: 61..74
+          else if ((c >= 22 && c <= 24) && r >= 61 && r <= 74) {
             this.tiles[r][c] = 7; // Wooden Bridge
           }
-          // East lake walkway to Matrix: c: 20..35, r: 35..36
-          else if (r >= 35 && r <= 36 && c >= 20 && c <= 35) {
+          // East lake walkway to Matrix: c: 25..44, r: 46..47
+          else if (r >= 46 && r <= 47 && c >= 25 && c <= 44) {
             this.tiles[r][c] = 7; // Bridge
           }
           else {
-            this.tiles[r][c] = 6; // Deep Animated Water
+            this.tiles[r][c] = 6; // Deep Swimmable Water!
           }
         }
-        // ROUTE 3: OBSIDIAN GLITCHLANDS & CYBER MATRIX (Bottom-Right: c: 38..78, r: 26..58)
-        else if (c >= 38 && r >= 26) {
-          // Cyber paths and monoliths
-          if (c === 38 || r === 26 || c === 56 || r === 44) {
+        // ROUTE 3: OBSIDIAN GLITCHLANDS & CYBER MATRIX (Bottom-Right: c: 47..98, r: 33..78)
+        else if (c >= 47 && r >= 33) {
+          // Cyber divider paths
+          if (c === 47 || r === 33 || c === 72 || r === 56) {
             this.tiles[r][c] = 3; // Path divider
           }
           // Cyber server pillars / monoliths
-          else if ((r === 32 || r === 48 || r === 54) && (c === 46 || c === 66 || c === 74)) {
+          else if ((r === 42 || r === 62 || r === 70) && (c === 60 || c === 82 || c === 92)) {
             this.tiles[r][c] = 9; // Server Monolith
           }
-          // Gym 5 Obsidian Void Sanctum (c: 66..74, r: 48..56)
-          else if (c >= 66 && c <= 74 && r >= 48 && r <= 56) {
-            this.tiles[r][c] = (c === 66 || c === 74 || r === 48 || r === 56) ? 9 : 8; // Sanctum Ring
+          // Gym 5 Obsidian Void Sanctum (c: 80..92, r: 60..72)
+          else if (c >= 80 && c <= 92 && r >= 60 && r <= 72) {
+            this.tiles[r][c] = (c === 80 || c === 92 || r === 60 || r === 72) ? 9 : 8; // Sanctum Ring
           }
           else {
-            this.tiles[r][c] = 8; // Cyber Circuit Matrix
+            this.tiles[r][c] = 8; // Cyber Circuit Matrix (Obsidian Floor)
           }
         }
-        // ROUTE 1: VERDANT MEADOW & ARBORETUM (Top-Right: c: 27..78, r: 1..25)
+        // ROUTE 1: VERDANT MEADOW & ARBORETUM (Top-Right: c: 33..98, r: 1..32)
         else {
           // Cobble Path Network
-          if (r === 16 || r === 17 || c === 42 || c === 43 || (r === 8 && c >= 36 && c <= 72) || (c === 70 && r >= 8 && r <= 16)) {
+          if (r === 18 || r === 19 || c === 54 || c === 55 || (r === 10 && c >= 42 && c <= 90) || (c === 88 && r >= 10 && r <= 20)) {
             this.tiles[r][c] = 3; // Cobble Path
           }
           // Tall Wild Grass Patches (triggers encounters!)
           else if (
-            (c >= 30 && c <= 40 && r >= 4 && r <= 13) ||
-            (c >= 46 && c <= 62 && r >= 4 && r <= 12) ||
-            (c >= 52 && c <= 68 && r >= 14 && r <= 22) ||
-            (c >= 71 && c <= 76 && r >= 6 && r <= 22)
+            (c >= 36 && c <= 50 && r >= 4 && r <= 16) ||
+            (c >= 58 && c <= 78 && r >= 4 && r <= 15) ||
+            (c >= 64 && c <= 86 && r >= 17 && r <= 28) ||
+            (c >= 90 && c <= 96 && r >= 8 && r <= 28)
           ) {
             this.tiles[r][c] = 5; // Tall Wild Grass
           }
           // Pine tree groves
-          else if ((r === 4 || r === 20) && (c === 48 || c === 64)) {
+          else if ((r === 6 || r === 24) && (c === 62 || c === 82)) {
             this.tiles[r][c] = 9; // Decorative Pine
           }
           else {
@@ -1186,7 +1210,7 @@ class CatchThatPipGame {
       }
     }
 
-    // 5 Official Regional Gym Leaders
+    // 5 Official Regional Gym Leaders (Distributed across 100x80 world)
     this.gymLeaders = [
       {
         id: 'gym_brock',
@@ -1194,8 +1218,8 @@ class CatchThatPipGame {
         gymName: 'Ember Core Gym',
         badge: 'EMBER',
         badgeKey: 'ember',
-        x: 44 * 32,
-        y: 8 * 32,
+        x: 54 * 32,
+        y: 10 * 32,
         color: '#dc2626',
         hatColor: '#ef4444',
         signatureSpecies: 'flamechar',
@@ -1209,8 +1233,8 @@ class CatchThatPipGame {
         gymName: 'Meadow Arboretum Gym',
         badge: 'FLORA',
         badgeKey: 'flora',
-        x: 72 * 32,
-        y: 12 * 32,
+        x: 88 * 32,
+        y: 14 * 32,
         color: '#16a34a',
         hatColor: '#86efac',
         signatureSpecies: 'bulbasprout',
@@ -1224,8 +1248,8 @@ class CatchThatPipGame {
         gymName: 'Azure Marina Gym',
         badge: 'TIDE',
         badgeKey: 'tide',
-        x: 18 * 32,
-        y: 44 * 32,
+        x: 23 * 32,
+        y: 56 * 32,
         color: '#0284c7',
         hatColor: '#38bdf8',
         signatureSpecies: 'aquabyte',
@@ -1239,8 +1263,8 @@ class CatchThatPipGame {
         gymName: 'Cyber Pulse Gym',
         badge: 'PULSE',
         badgeKey: 'pulse',
-        x: 56 * 32,
-        y: 36 * 32,
+        x: 72 * 32,
+        y: 46 * 32,
         color: '#eab308',
         hatColor: '#fde047',
         signatureSpecies: 'voltasync',
@@ -1254,8 +1278,8 @@ class CatchThatPipGame {
         gymName: 'Obsidian Void Gym',
         badge: 'CIPHER',
         badgeKey: 'cipher',
-        x: 70 * 32,
-        y: 52 * 32,
+        x: 86 * 32,
+        y: 66 * 32,
         color: '#7c3aed',
         hatColor: '#c084fc',
         signatureSpecies: 'neuropip',
@@ -1412,32 +1436,38 @@ class CatchThatPipGame {
       },
       {
         type: 'sign',
-        x: 70 * 32,
+        x: 52 * 32,
+        y: 10 * 32,
+        text: "GYM 1: EMBER CORE GYM. Leader: PYRO BROCK. Type: Fire/Rock."
+      },
+      {
+        type: 'sign',
+        x: 86 * 32,
         y: 14 * 32,
         text: "GYM 2: MEADOW ARBORETUM GYM. Leader: FLORA ERIKA. Type: Grass/Nature."
       },
       {
         type: 'sign',
-        x: 17 * 32,
-        y: 42 * 32,
+        x: 21 * 32,
+        y: 54 * 32,
         text: "GYM 3: AZURE MARINA GYM. Leader: MISTY TIDE. Type: Water/Ice."
       },
       {
         type: 'sign',
-        x: 54 * 32,
-        y: 36 * 32,
+        x: 70 * 32,
+        y: 46 * 32,
         text: "GYM 4: CYBER PULSE GYM. Leader: LT. VOLT. Type: Electric/Protocol."
       },
       {
         type: 'sign',
-        x: 68 * 32,
-        y: 50 * 32,
+        x: 84 * 32,
+        y: 64 * 32,
         text: "GYM 5: OBSIDIAN VOID GYM. Leader: GIOVANNI CIPHER. Type: Psychic/Glitch."
       },
       {
         type: 'item',
-        x: 64 * 32,
-        y: 6 * 32,
+        x: 76 * 32,
+        y: 8 * 32,
         name: '3x Pip-Capsules',
         collected: false,
         grant: () => {
@@ -1448,7 +1478,7 @@ class CatchThatPipGame {
       {
         type: 'item',
         x: 8 * 32,
-        y: 56 * 32,
+        y: 68 * 32,
         name: 'Sacred Elixir',
         collected: false,
         grant: () => {
@@ -1458,8 +1488,8 @@ class CatchThatPipGame {
       },
       {
         type: 'item',
-        x: 75 * 32,
-        y: 32 * 32,
+        x: 90 * 32,
+        y: 40 * 32,
         name: 'Rare Candy',
         collected: false,
         grant: () => {
@@ -1469,18 +1499,18 @@ class CatchThatPipGame {
       }
     ];
 
-    // Roaming Wild Pips in Open World (Expanded 80x60 Map)
+    // Roaming Wild Pips in Open World (Expanded 100x80 Map)
     this.roamingPips = [
-      { species: 'flamechar', x: 38 * 32, y: 10 * 32, origX: 38 * 32, origY: 10 * 32, wander: 1.5, active: true },
-      { species: 'bulbasprout', x: 58 * 32, y: 8 * 32, origX: 58 * 32, origY: 8 * 32, wander: 1.5, active: true },
-      { species: 'jigglypip', x: 66 * 32, y: 18 * 32, origX: 66 * 32, origY: 18 * 32, wander: 1.2, active: true },
-      { species: 'aquabyte', x: 10 * 32, y: 36 * 32, origX: 10 * 32, origY: 36 * 32, wander: 1.2, active: true },
-      { species: 'snorlaxpip', x: 26 * 32, y: 44 * 32, origX: 26 * 32, origY: 44 * 32, wander: 0.5, active: true },
-      { species: 'sparkpip', x: 48 * 32, y: 22 * 32, origX: 48 * 32, origY: 22 * 32, wander: 1.8, active: true },
-      { species: 'voltasync', x: 48 * 32, y: 34 * 32, origX: 48 * 32, origY: 34 * 32, wander: 1.5, active: true },
-      { species: 'buggypip', x: 62 * 32, y: 38 * 32, origX: 62 * 32, origY: 38 * 32, wander: 1.5, active: true },
-      { species: 'spectrepip', x: 44 * 32, y: 50 * 32, origX: 44 * 32, origY: 50 * 32, wander: 1.4, active: true },
-      { species: 'neuropip', x: 70 * 32, y: 54 * 32, origX: 70 * 32, origY: 54 * 32, wander: 1.0, active: true }
+      { species: 'flamechar', x: 48 * 32, y: 12 * 32, origX: 48 * 32, origY: 12 * 32, wander: 1.5, active: true },
+      { species: 'bulbasprout', x: 68 * 32, y: 10 * 32, origX: 68 * 32, origY: 10 * 32, wander: 1.5, active: true },
+      { species: 'jigglypip', x: 80 * 32, y: 22 * 32, origX: 80 * 32, origY: 22 * 32, wander: 1.2, active: true },
+      { species: 'aquabyte', x: 18 * 32, y: 46 * 32, origX: 18 * 32, origY: 46 * 32, wander: 1.6, active: true }, // Swimming in lake!
+      { species: 'snorlaxpip', x: 8 * 32, y: 38 * 32, origX: 8 * 32, origY: 38 * 32, wander: 0.6, active: true }, // Relaxing on sand beach
+      { species: 'sparkpip', x: 58 * 32, y: 24 * 32, origX: 58 * 32, origY: 24 * 32, wander: 1.8, active: true },
+      { species: 'voltasync', x: 62 * 32, y: 42 * 32, origX: 62 * 32, origY: 42 * 32, wander: 1.5, active: true },
+      { species: 'buggypip', x: 78 * 32, y: 46 * 32, origX: 78 * 32, origY: 46 * 32, wander: 1.5, active: true },
+      { species: 'spectrepip', x: 56 * 32, y: 64 * 32, origX: 56 * 32, origY: 64 * 32, wander: 1.4, active: true },
+      { species: 'neuropip', x: 86 * 32, y: 68 * 32, origX: 86 * 32, origY: 68 * 32, wander: 1.0, active: true }
     ];
   }
 
@@ -1503,6 +1533,7 @@ class CatchThatPipGame {
         else if (t === 6) color = '#0284c7';
         else if (t === 8) color = '#0f172a';
         else if (t === 9) color = '#14532d';
+        else if (t === 10) color = '#f59e0b'; // Golden Sand Beach Shore
         mctx.fillStyle = color;
         mctx.fillRect(c * scaleX, r * scaleY, scaleX + 0.1, scaleY + 0.1);
       }
@@ -1828,8 +1859,23 @@ class CatchThatPipGame {
         p.animTimer = 0;
       }
 
-      // Footstep audio
-      sfx.playWalk();
+      // Footstep audio per surface type (obsidian, water/swim, grass, sand, gravel)
+      const pTileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
+      const pTileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
+      const curTile = (this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] !== undefined) ? this.tiles[pTileRow][pTileCol] : 4;
+      let walkSurface = 'gravel';
+      if (curTile === 6) {
+        walkSurface = 'water';
+      } else if (curTile === 4 || curTile === 5) {
+        walkSurface = 'grass';
+      } else if (curTile === 10) {
+        walkSurface = 'sand';
+      } else if (curTile === 8) {
+        walkSurface = 'obsidian';
+      } else {
+        walkSurface = 'gravel';
+      }
+      sfx.playWalk(walkSurface);
 
       // Normalize diagonal
       if (dx !== 0 && dy !== 0) {
@@ -1982,7 +2028,7 @@ class CatchThatPipGame {
     const top = Math.floor((py + 10) / this.tileSize); // allow walking close to top
     const bottom = Math.floor((py + this.player.h - 1) / this.tileSize);
 
-    const solidTypes = [1, 2, 6, 9]; // Wall, Desk, Water, Trees/Border
+    const solidTypes = [1, 2, 9]; // Wall, Desk, Trees/Monoliths. Water (6) and Sand (10) are walkable/swimmable!
     for (let r = top; r <= bottom; r++) {
       for (let c = left; c <= right; c++) {
         if (!this.tiles[r] || solidTypes.includes(this.tiles[r][c])) {
@@ -2106,6 +2152,15 @@ class CatchThatPipGame {
           ctx.beginPath();
           ctx.arc(tx + 16, ty + 16, 14, 0, Math.PI * 2);
           ctx.fill();
+        } else if (t === 10) {
+          // Golden Sand Beach Shore
+          ctx.fillStyle = (r + c) % 2 === 0 ? '#f7dc9f' : '#edd08d';
+          ctx.fillRect(tx, ty, this.tileSize, this.tileSize);
+          if ((r * 11 + c * 17) % 5 === 0) {
+            ctx.fillStyle = '#dfbe75';
+            ctx.fillRect(tx + 6, ty + 8, 3, 3);
+            ctx.fillRect(tx + 20, ty + 18, 3, 3);
+          }
         }
       }
     }
@@ -2361,16 +2416,17 @@ class CatchThatPipGame {
     // 5.5 Draw HeartGold Following Partner Pokémon
     this.drawFollowingPokemon(ctx, cx, cy, time);
 
-    // 6. Draw Player Trainer Deepshikha (Exact Match to User's Official Character Design)
+    // 6. Draw Player Trainer (Using Image 2 Sprite - Auburn Hair, Brown Cap, Pink Top, White Skirt)
     const p = this.player;
     const px = Math.floor(p.x - cx);
     const py = Math.floor(p.y - cy);
-    this.drawTrainerDeepshikha(ctx, px, py, p.dir, p.animFrame, p.isMoving);
-
-    // Tall Grass Overlay over Player's feet when inside grass (classic Pokemon immersion!)
     const pTileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
     const pTileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
-    if (this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] === 5) {
+    const isWater = (this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] === 6);
+    this.drawTrainerDeepshikha(ctx, px, py, p.dir, p.animFrame, p.isMoving, isWater);
+
+    // Tall Grass Overlay over Player's feet when inside grass (classic Pokemon immersion!)
+    if (!isWater && this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] === 5) {
       ctx.fillStyle = '#84cc16';
       ctx.fillRect(px + 2, py + 22, 20, 6);
     }
@@ -2382,122 +2438,77 @@ class CatchThatPipGame {
     this.drawMinimap();
   }
 
-  drawTrainerDeepshikha(ctx, px, py, dir, animFrame, isMoving) {
-    const stepOffset = isMoving ? (animFrame % 2 === 0 ? 2 : -2) : 0;
-    const sway = isMoving ? Math.sin(animFrame * 1.5) * 1.5 : 0;
+  drawTrainerDeepshikha(ctx, px, py, dir, animFrame, isMoving, isWater = false) {
+    const bob = isMoving ? (animFrame % 2 === 0 ? 1 : -1) : 0;
+    const drawW = 24;
+    const drawH = 36;
+    const drawX = px;
+    const drawY = py - 8 + bob;
 
-    // 1. Trainer Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.beginPath();
-    ctx.ellipse(px + 12, py + 27, 10, 4, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // 1. Water Swimming Ripples vs Ground Shadow
+    if (isWater) {
+      ctx.save();
+      const wavePulse = Math.sin(Date.now() * 0.006) * 1.5;
+      ctx.strokeStyle = 'rgba(186, 230, 253, 0.85)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(px + 12, py + 24, 13 + wavePulse, 5 + wavePulse * 0.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
 
-    // 2. Dark Brown Mary Jane Strapped Shoes
-    ctx.fillStyle = '#2b1810';
-    ctx.fillRect(px + 6, py + 23 + (dir === 0 ? stepOffset : 0), 4, 5);
-    ctx.fillRect(px + 14, py + 23 - (dir === 0 ? stepOffset : 0), 4, 5);
-
-    // 3. Bohemian Tiered Ruffled Maxi Skirt (Rich Mocha Brown)
-    ctx.fillStyle = '#452e24';
-    ctx.beginPath();
-    ctx.moveTo(px + 4 + sway, py + 16);
-    ctx.lineTo(px + 20 + sway, py + 16);
-    ctx.lineTo(px + 21, py + 24);
-    ctx.lineTo(px + 3, py + 24);
-    ctx.closePath();
-    ctx.fill();
-    // Skirt Ruffle Frill Layers (Tier shadows and frills)
-    ctx.fillStyle = '#36231b';
-    ctx.fillRect(px + 3, py + 20, 18, 2);
-    ctx.fillStyle = '#52372b';
-    ctx.fillRect(px + 4, py + 23, 16, 1.5);
-
-    // 4. Gold Coin Belt at Waistline
-    ctx.fillStyle = '#facc15';
-    for (let bx = px + 6; bx <= px + 18; bx += 3) {
-      ctx.fillRect(bx, py + 15, 2, 2);
-    }
-
-    // 5. Chic Black Wrap Cropped Top
-    ctx.fillStyle = '#242120';
-    ctx.fillRect(px + 5, py + 9, 14, 6);
-    // V-neckline opening
-    ctx.fillStyle = '#df9f7e';
-    ctx.fillRect(px + 10, py + 9, 4, 3);
-    // Gold Heart Necklace
-    ctx.fillStyle = '#fbbf24';
-    ctx.fillRect(px + 11, py + 11, 2, 2);
-
-    // Flared Bell Sleeves
-    ctx.fillStyle = '#242120';
-    ctx.fillRect(px + 3, py + 10, 3, 6);
-    ctx.fillRect(px + 18, py + 10, 3, 6);
-
-    // 6. Brown Leather Shoulder Bag
-    ctx.fillStyle = '#5c3826';
-    if (dir === 0 || dir === 2) {
-      ctx.fillRect(px + 17, py + 13, 5, 6);
-      ctx.fillRect(px + 7, py + 9, 2, 6);
-    }
-
-    // 7. Hand Holding Pokéball
-    if (dir === 0 || dir === 3) {
-      ctx.fillStyle = '#df9f7e';
-      ctx.fillRect(px + 20, py + 12, 3, 3);
-      // Miniature Pokéball
-      ctx.fillStyle = '#ef4444';
-      ctx.fillRect(px + 21, py + 11, 4, 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(px + 21, py + 13, 4, 2);
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(px + 22, py + 12, 2, 1);
-    }
-
-    // 8. Head & Warm Radiant Face
-    ctx.fillStyle = '#df9f7e';
-    ctx.beginPath();
-    ctx.arc(px + 12, py + 7, 6.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 9. Facial Features & Gold Hoop Earring
-    if (dir === 0) { // Facing down
-      ctx.fillStyle = '#1c1917';
-      ctx.fillRect(px + 9, py + 6, 2, 2);
-      ctx.fillRect(px + 13, py + 6, 2, 2);
-      ctx.fillStyle = '#c4715a';
-      ctx.fillRect(px + 10, py + 9, 4, 1);
-      // Gold hoop earring on side
-      ctx.fillStyle = '#facc15';
-      ctx.fillRect(px + 5, py + 7, 2, 3);
-    } else if (dir === 2) { // Facing left
-      ctx.fillStyle = '#1c1917';
-      ctx.fillRect(px + 8, py + 6, 2, 2);
-      ctx.fillStyle = '#facc15';
-      ctx.fillRect(px + 15, py + 7, 2, 3);
-    } else if (dir === 3) { // Facing right
-      ctx.fillStyle = '#1c1917';
-      ctx.fillRect(px + 14, py + 6, 2, 2);
-      ctx.fillStyle = '#facc15';
-      ctx.fillRect(px + 7, py + 7, 2, 3);
-    }
-
-    // 10. Long Wavy Brunette/Black Hair (Cascading Naturally, NO CAP)
-    ctx.fillStyle = '#1c1917';
-    ctx.fillRect(px + 6, py + 1, 12, 4);
-    // Parting line highlight
-    ctx.fillStyle = '#322622';
-    ctx.fillRect(px + 11, py + 1, 2, 3);
-
-    // Cascading waves down sides & shoulders
-    ctx.fillStyle = '#1c1917';
-    if (dir === 1) { // Facing up - hair flows down back
-      ctx.fillRect(px + 5, py + 2, 14, 12);
-      ctx.fillRect(px + 4, py + 6, 16, 8);
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(px + 12, py + 26, 17, 6.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
     } else {
-      ctx.fillRect(px + 4, py + 3, 4, 11);
-      ctx.fillRect(px + 16, py + 3, 4, 11);
-      ctx.fillRect(px + 3, py + 8, 3, 5);
-      ctx.fillRect(px + 18, py + 8, 3, 5);
+      ctx.fillStyle = 'rgba(0,0,0,0.32)';
+      ctx.beginPath();
+      ctx.ellipse(px + 12, py + 28, 9, 3.5, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 2. Draw Sprite Image (Image 2 - Auburn Hair, Brown Cap, Pink Top, White Skirt, Boots)
+    if (this.playerSpriteImg && this.playerSpriteImg.complete && this.playerSpriteImg.naturalWidth > 0) {
+      ctx.save();
+      ctx.imageSmoothingEnabled = false; // preserve pixelated look
+      if (dir === 2) {
+        // Facing Left: flip horizontally
+        ctx.translate(px + 12, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.playerSpriteImg, -12, drawY, drawW, drawH);
+      } else {
+        // Facing Right / Down / Up
+        ctx.drawImage(this.playerSpriteImg, drawX, drawY, drawW, drawH);
+      }
+      ctx.restore();
+
+      // Translucent water wash over submerged legs when swimming in water
+      if (isWater) {
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.45)';
+        ctx.fillRect(px + 2, py + 18, 20, 10);
+      }
+      return;
+    }
+
+    // Procedural Fallback if image still loading (Image 2 Colors)
+    ctx.fillStyle = '#9a3412'; // Brown cap
+    ctx.fillRect(px + 6, py - 6 + bob, 12, 5);
+    ctx.fillStyle = '#78350f'; // Auburn hair
+    ctx.fillRect(px + 4, py - 2 + bob, 16, 10);
+    ctx.fillStyle = '#fed7aa'; // Face
+    ctx.fillRect(px + 7, py - 1 + bob, 10, 7);
+    ctx.fillStyle = '#1e293b'; // Eyes
+    ctx.fillRect(px + 9, py + 1 + bob, 2, 2);
+    ctx.fillRect(px + 13, py + 1 + bob, 2, 2);
+    ctx.fillStyle = '#f472b6'; // Pink blouse / top
+    ctx.fillRect(px + 5, py + 7 + bob, 14, 8);
+    ctx.fillStyle = '#ffffff'; // White skirt
+    ctx.fillRect(px + 6, py + 15 + bob, 12, 5);
+    if (!isWater) {
+      ctx.fillStyle = '#78350f'; // Brown boots
+      ctx.fillRect(px + 7, py + 20 + bob, 4, 6);
+      ctx.fillRect(px + 13, py + 20 + bob, 4, 6);
     }
   }
 
@@ -2931,8 +2942,8 @@ class CatchThatPipGame {
 
     this.updateHpUI();
     const introMsg = options.isGym
-      ? `Gym Leader ${options.leader.name} sent out ${this.pip.name}! Go, ${activeData.name}! What will DEEPSHIKHA do?`
-      : `Wild ${this.pip.name} appeared! Go, ${activeData.name}! What will DEEPSHIKHA do?`;
+      ? `Gym Leader ${options.leader.name} sent out ${this.pip.name}! Go, ${activeData.name}! What will ${activeData.name} do?`
+      : `Wild ${this.pip.name} appeared! Go, ${activeData.name}! What will ${activeData.name} do?`;
     this.typeDialogue(introMsg);
   }
 
@@ -3450,7 +3461,8 @@ class CatchThatPipGame {
     if (dodgeSection) dodgeSection.style.display = 'none';
     if (dSection) dSection.style.display = 'flex';
 
-    this.typeDialogue(`What will PIP-MASTER DEEPSHIKHA do next?`);
+    const activePoke = this.speciesData[this.activePokemonKey] || { name: 'FLAMECHAR' };
+    this.typeDialogue(`What will ${activePoke.name} do next?`);
   }
 
   // ========================================================
