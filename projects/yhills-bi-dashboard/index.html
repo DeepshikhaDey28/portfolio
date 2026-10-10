@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yhills — Executive Business Intelligence & KPI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --accent: #ec4899;
+      --green: #22c55e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 1.25rem;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .badge {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid var(--primary);
+      color: #a5b4fc;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-family: 'Fira Code', monospace;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    .kpi-title { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+    .kpi-val { font-size: 1.5rem; font-weight: 800; margin: 0.35rem 0; font-family: 'Fira Code', monospace; }
+    .kpi-trend { font-size: 0.75rem; color: var(--green); font-weight: 600; }
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    @media (max-width: 800px) {
+      .charts-row { grid-template-columns: 1fr; }
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .chart-head { font-size: 0.92rem; font-weight: 700; margin-bottom: 1rem; }
+    canvas { width: 100% !important; max-height: 250px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 class="brand-title">
+        📊 Business Intelligence &amp; KPI Dashboard
+        <span class="badge">EDA &bull; TABLEAU INSIGHTS</span>
+      </h1>
+      <p style="font-size: 0.8rem; color: var(--muted); margin-top: 2px;">
+        Yhills Data Science Internship Deliverable &bull; Cleaned &amp; Modeled by Deepshikha Dey
+      </p>
+    </div>
+    <div style="font-family: 'Fira Code', monospace; font-size: 0.78rem; color: #a5b4fc;">
+      Validated Records: 245,890 &bull; Accuracy: 99.4%
+    </div>
+  </header>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-title">Gross Revenue</div>
+      <div class="kpi-val">$1.42M</div>
+      <div class="kpi-trend">↑ +18.4% YoY</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Customer Retention</div>
+      <div class="kpi-val">87.6%</div>
+      <div class="kpi-trend">↑ +3.2% vs Benchmark</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Avg Order Value</div>
+      <div class="kpi-val">$148.50</div>
+      <div class="kpi-trend">↑ +9.1% Growth</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Conversion Rate</div>
+      <div class="kpi-val">4.82%</div>
+      <div class="kpi-trend">Top Decile Segment</div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-head">Quarterly Revenue Growth &amp; Forecast (Q1 – Q4)</div>
+      <canvas id="revChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-head">Channel Distribution</div>
+      <canvas id="channelChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Revenue Bar / Line Chart
+    new Chart(document.getElementById('revChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Cleaned Actuals ($k)',
+          data: [65, 78, 90, 85, 96, 115, 120, 134, 142, 155, 170, 185],
+          backgroundColor: 'rgba(99, 102, 241, 0.7)',
+          borderRadius: 6
+        }, {
+          label: 'Predictive Trend',
+          type: 'line',
+          data: [60, 72, 85, 90, 100, 112, 122, 130, 140, 150, 165, 180],
+          borderColor: '#ec4899',
+          tension: 0.3,
+          borderWidth: 2.5
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { labels: { color: '#94a3b8' } } },
+        scales: {
+          x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } },
+          y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } }
+        }
+      }
+    });
+
+    // Channel Doughnut Chart
+    new Chart(document.getElementById('channelChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Direct B2B', 'Organic Search', 'Referral', 'Partners'],
+        datasets: [{
+          data: [42, 28, 18, 12],
+          backgroundColor: ['#6366f1', '#ec4899', '#22c55e', '#fbbf24'],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -611,6 +611,13 @@ const WORKING_REPOS_MAP = {
     tag: 'PRODUCTIVITY APP',
     lang: 'HTML / CSS / JS'
   },
+  'First_Python': {
+    url: 'projects/First_Python/index.html',
+    title: 'First_Python',
+    desc: 'Interactive Python 3 computational algorithm runner & variable scope explorer with live terminal console.',
+    tag: 'PYTHON ALGORITHMS',
+    lang: 'Python'
+  },
   'B2B-bussiness-website-': {
     url: 'projects/B2B-bussiness-website-/index.html',
     title: 'B2B-bussiness-website-',
@@ -626,6 +633,41 @@ const WORKING_REPOS_MAP = {
     lang: 'JavaScript'
   }
 };
+
+function renderFeaturedProjects(repos) {
+  const container = document.getElementById('featured-projects-grid');
+  if (!container) return;
+
+  // Filter for projects with a working interactive app, excluding the portfolio itself
+  const workingProjects = repos
+    .filter(r => r.name !== 'portfolio' && WORKING_REPOS_MAP[r.name])
+    .sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0))
+    .slice(0, 5);
+
+  if (workingProjects.length === 0) return;
+
+  container.innerHTML = '';
+  workingProjects.forEach(repo => {
+    const app = WORKING_REPOS_MAP[repo.name];
+    const card = document.createElement('div');
+    card.className = 'emg-card run-project-btn';
+    card.setAttribute('data-url', app.url);
+    card.setAttribute('data-title', repo.name);
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('title', `Click to launch ${repo.name} in in-app popup window`);
+
+    card.innerHTML = `
+      <div class="emg-card-header">
+        <span class="emg-card-tag">${app.tag}</span>
+        <span class="emg-popup-hint">⤢ In-App</span>
+      </div>
+      <h4 class="emg-card-title">${repo.name}</h4>
+      <p class="emg-card-desc">${app.desc}</p>
+    `;
+    container.appendChild(card);
+  });
+}
 
 async function fetchGitHubRepos(forceRefresh = false) {
   const statusBadge = document.getElementById('github-sync-status-badge');
@@ -680,8 +722,17 @@ async function fetchGitHubRepos(forceRefresh = false) {
       renderRepos(parsed.data);
       updateSyncUI(parsed.data.length, 'Offline Cache');
     } else {
-      // Fallback seed repositories based on user's GitHub
+      // Fallback seed repositories based on user's GitHub sorted newest first
       const fallbackRepos = [
+        {
+          name: 'portfolio',
+          html_url: 'https://github.com/DeepshikhaDey28/portfolio',
+          description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
+          language: 'HTML',
+          stargazers_count: 2,
+          forks_count: 0,
+          updated_at: '2026-10-10T18:51:13Z'
+        },
         {
           name: 'smart_traffic_simulation',
           html_url: 'https://github.com/DeepshikhaDey28/smart_traffic_simulation',
@@ -689,7 +740,7 @@ async function fetchGitHubRepos(forceRefresh = false) {
           language: 'JavaScript',
           stargazers_count: 1,
           forks_count: 0,
-          updated_at: '2026-09-01T14:20:00Z'
+          updated_at: '2026-10-06T15:43:46Z'
         },
         {
           name: 'weatherwhether',
@@ -698,7 +749,7 @@ async function fetchGitHubRepos(forceRefresh = false) {
           language: 'JavaScript',
           stargazers_count: 1,
           forks_count: 0,
-          updated_at: '2026-08-20T10:15:00Z'
+          updated_at: '2026-09-29T11:56:15Z'
         },
         {
           name: 'deep_thoughts_app_for_notes',
@@ -707,16 +758,7 @@ async function fetchGitHubRepos(forceRefresh = false) {
           language: 'HTML',
           stargazers_count: 1,
           forks_count: 0,
-          updated_at: '2026-07-15T09:30:00Z'
-        },
-        {
-          name: 'B2B-bussiness-website-',
-          html_url: 'https://github.com/DeepshikhaDey28/B2B-bussiness-website-',
-          description: 'Commercial front-end multi-product wholesale & retail storefront catalog template with shopping cart.',
-          language: 'HTML',
-          stargazers_count: 1,
-          forks_count: 0,
-          updated_at: '2026-06-01T11:49:52Z'
+          updated_at: '2026-09-28T12:35:04Z'
         },
         {
           name: 'First_Python',
@@ -728,13 +770,13 @@ async function fetchGitHubRepos(forceRefresh = false) {
           updated_at: '2026-08-25T14:41:50Z'
         },
         {
-          name: 'portfolio',
-          html_url: 'https://github.com/DeepshikhaDey28/portfolio',
-          description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
+          name: 'B2B-bussiness-website-',
+          html_url: 'https://github.com/DeepshikhaDey28/B2B-bussiness-website-',
+          description: 'Commercial front-end multi-product wholesale & retail storefront catalog template with shopping cart.',
           language: 'HTML',
-          stargazers_count: 2,
+          stargazers_count: 1,
           forks_count: 0,
-          updated_at: '2026-10-10T22:00:00Z'
+          updated_at: '2026-06-01T11:49:57Z'
         }
       ];
       renderRepos(fallbackRepos);
@@ -758,6 +800,9 @@ function updateSyncUI(count, statusText) {
 }
 
 function renderRepos(repos) {
+  // Sync the Featured Projects window with the newest projects
+  renderFeaturedProjects(repos);
+
   const container = document.getElementById('github-repos-container');
   if (!container) return;
 
@@ -768,6 +813,14 @@ function renderRepos(repos) {
     card.setAttribute('data-category', 'github ' + (repo.language ? repo.language.toLowerCase() : ''));
 
     const workingApp = WORKING_REPOS_MAP[repo.name];
+    if (workingApp) {
+      card.classList.add('run-project-btn');
+      card.setAttribute('data-url', workingApp.url);
+      card.setAttribute('data-title', repo.name);
+      card.style.cursor = 'pointer';
+      card.setAttribute('title', `Click to launch ${repo.name} in in-app popup window`);
+    }
+
     const lang = repo.language || 'Code';
     const langColor = langColors[lang] || langColors.Default;
     const desc = (workingApp && workingApp.desc) ? workingApp.desc : (repo.description || 'Public repository under @DeepshikhaDey28.');
@@ -902,6 +955,19 @@ function closeProjectRunner() {
 
 // Global Event Delegation for all .run-project-btn and runner controls
 document.addEventListener('click', (e) => {
+  // Respect explicit external or full tab links
+  if (e.target.closest('a[target="_blank"]')) return;
+
+  // View All Projects button in Featured Projects window
+  const viewAllBtn = e.target.closest('#emg-view-all-btn, #emg-card-all');
+  if (viewAllBtn) {
+    e.preventDefault();
+    sfx.playClick();
+    switchView('works');
+    return;
+  }
+
+  // Any button or card with .run-project-btn
   const runBtn = e.target.closest('.run-project-btn');
   if (runBtn) {
     e.preventDefault();

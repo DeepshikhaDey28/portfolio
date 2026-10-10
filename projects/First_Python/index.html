@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First_Python — Interactive Python Code Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --gold: #f4d06f;
+      --maroon: #541219;
+      --green: #3fb950;
+      --red: #f85149;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Fira Code', monospace;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #11141c;
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .py-icon { font-size: 1.4rem; }
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+    .brand-badge {
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0.5rem 1.25rem;
+      background: #090d13;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      color: #f0f6fc;
+      background: var(--card-bg);
+      border-color: var(--border);
+      border-bottom-color: var(--gold);
+    }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      overflow: hidden;
+    }
+    @media (max-width: 850px) {
+      main { grid-template-columns: 1fr; }
+    }
+    .code-pane, .term-pane {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-right: 1px solid var(--border);
+    }
+    .pane-header {
+      background: var(--card-bg);
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .run-btn {
+      background: #238636;
+      border: 1px solid rgba(240, 246, 252, 0.1);
+      color: #ffffff;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s;
+    }
+    .run-btn:hover { background: #2ea043; }
+    .code-view {
+      flex: 1;
+      background: #0d1117;
+      padding: 1rem;
+      overflow: auto;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #e6edf3;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .terminal-view {
+      flex: 1;
+      background: #010409;
+      padding: 1rem;
+      overflow: auto;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--green);
+      font-family: 'Fira Code', monospace;
+      white-space: pre-wrap;
+    }
+    .term-prompt { color: var(--gold); }
+    .term-output { color: #f0f6fc; margin-top: 0.5rem; }
+    .gh-link {
+      color: var(--gold);
+      font-size: 0.75rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .gh-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="py-icon">🐍</span>
+      <span class="brand-title">First_Python</span>
+      <span class="brand-badge">Python 3 &bull; Algorithms &amp; Operations</span>
+    </div>
+    <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="gh-link">
+      <span>🐙 GitHub Repository</span>
+    </a>
+  </header>
+
+  <div class="nav-tabs" id="script-tabs">
+    <button class="tab-btn active" data-file="Variable.py">📄 Variable.py</button>
+    <button class="tab-btn" data-file="scope.py">📄 scope.py</button>
+    <button class="tab-btn" data-file="Operators.py">📄 Operators.py</button>
+    <button class="tab-btn" data-file="TypeCasting.py">📄 TypeCasting.py</button>
+    <button class="tab-btn" data-file="InputFunction.py">📄 InputFunction.py</button>
+  </div>
+
+  <main>
+    <div class="code-pane">
+      <div class="pane-header">
+        <span id="current-filename">Variable.py</span>
+        <button class="run-btn" id="run-script-btn">▶ Run Script</button>
+      </div>
+      <pre class="code-view" id="code-content"></pre>
+    </div>
+
+    <div class="term-pane">
+      <div class="pane-header">
+        <span>Terminal Console (Python 3.12 Virtual Environment)</span>
+        <span style="color: var(--green);">● Ready</span>
+      </div>
+      <div class="terminal-view" id="terminal-content">
+        <span class="term-prompt">deepshikha@portfolio:~/First_Python$</span> python3 Variable.py
+        <div class="term-output" id="output-text"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const SCRIPTS = {
+      'Variable.py': {
+        code: `# variable is a container for value\\n\\n#Strings\\nFirst_Name = "Deepshikha"\\nLast_Name = "Dey"\\nSeason = "Winter"\\n\\nprint("First_Name")\\nprint(First_Name)\\nprint(f"The name is : {First_Name} {Last_Name}")\\nprint(f"Favorite Season is {Season}")\\n\\n#Integers\\nAge = 21\\nitems = 4\\nparties = 2\\n\\nprint(f"{First_Name} is {Age} years old and is celebrating {parties} parties this year. She has received {items} this year :) ")\\n\\n#Float\\nCgpa = 8.9\\nprice = 20.99\\n\\nprint(f"Her Cgpa uptil 5th semester is {Cgpa} And she has spent \${price} on food")\\n\\n#Boolean\\nIs_student = True\\nIs_married = False\\n\\nif Is_married and Is_student :\\n    print("she is married and is a student")\\nelif not Is_married and Is_student :\\n    print("She is a student and is not married")\\nelif not Is_student and Is_married :\\n    print("Is married and not a student")\\nelse :\\n    print("Not married and not a student")`,
+        output: `First_Name\\nDeepshikha\\nThe name is : Deepshikha Dey\\nFavorite Season is Winter\\nDeepshikha is 21 years old and is celebrating 2 parties this year. She has received 4 this year :) \\nHer Cgpa uptil 5th semester is 8.9 And she has spent $20.99 on food\\nShe is a student and is not married`
+      },
+      'scope.py': {
+        code: `# Python code to demonstrate call by value / reference\\n\\n# Same Reference, No Change\\ndef same_list(list):\\n    return list\\n\\nmylist = ["X"]\\nsame_list(mylist)\\nprint(mylist)\\n\\nstring = "Deepshikha"\\n\\n# Re-assignment with Immutable behavior\\ndef add(list):\\n    list = ["X", "B"]  # reassignment, not in-place modification\\n    return list\\n\\nmy_lists = ["X"]\\nadd(my_lists)\\nprint(my_lists)\\n\\n# Immutable Integer\\ndef fun(x):\\n    x = x + 10\\n    print("Inside function:", x)\\n\\nnum = 5\\nfun(num)\\nprint("Outside function:", num)\\n\\n# String Scope\\ndef test(string):\\n    string = "Deepshikhadey"\\n    print("Inside Function:", string)\\n\\ntest(string)\\nprint("Outside Function:", string)`,
+        output: `['X']\\n['X']\\nInside function: 15\\nOutside function: 5\\nInside Function: Deepshikhadey\\nOutside Function: Deepshikha`
+      },
+      'Operators.py': {
+        code: `# Python Arithmetic & Comparison Operators\\na = 15\\nb = 4\\n\\nprint(f"a = {a}, b = {b}")\\nprint(f"Addition (a + b): {a + b}")\\nprint(f"Subtraction (a - b): {a - b}")\\nprint(f"Multiplication (a * b): {a * b}")\\nprint(f"Division (a / b): {a / b}")\\nprint(f"Floor Division (a // b): {a // b}")\\nprint(f"Modulus (a % b): {a % b}")\\nprint(f"Exponentiation (a ** b): {a ** b}")\\n\\nprint("\\n--- Logical & Comparison ---")\\nprint(f"a > b: {a > b}")\\nprint(f"a == b: {a == b}")\\nprint(f"(a > 10) and (b < 5): {(a > 10) and (b < 5)}")`,
+        output: `a = 15, b = 4\\nAddition (a + b): 19\\nSubtraction (a - b): 11\\nMultiplication (a * b): 60\\nDivision (a / b): 3.75\\nFloor Division (a // b): 3\\nModulus (a % b): 3\\nExponentiation (a ** b): 50625\\n\\n--- Logical & Comparison ---\\na > b: True\\na == b: False\\n(a > 10) and (b < 5): True`
+      },
+      'TypeCasting.py': {
+        code: `# Typecasting in Python\\nname = "Deepshikha"\\nage = 21\\ngpa = 8.9\\nis_student = True\\n\\nprint(type(name))\\nprint(type(age))\\nprint(type(gpa))\\nprint(type(is_student))\\n\\n# Explicit Type Conversion\\ngpa_int = int(gpa)\\nprint(f"GPA cast to int: {gpa_int} ({type(gpa_int)})")\\nage_str = str(age)\\nprint(f"Age cast to str: '{age_str}' ({type(age_str)})")`,
+        output: `<class 'str'>\\n<class 'int'>\\n<class 'float'>\\n<class 'bool'>\\nGPA cast to int: 8 (<class 'int'>)\\nAge cast to str: '21' (<class 'str'>)`
+      },
+      'InputFunction.py': {
+        code: `# Input function & formatted user prompt\\n# Simulated automated input execution\\nuser_name = "Deepshikha Dey"\\nrole = "Full Stack & AI Engineer"\\n\\nprint(f"Hello {user_name}!")\\nprint(f"Profile role registered as: {role}")\\nprint("Welcome to Python interactive execution.")`,
+        output: `Hello Deepshikha Dey!\\nProfile role registered as: Full Stack & AI Engineer\\nWelcome to Python interactive execution.`
+      }
+    };
+
+    let activeFile = 'Variable.py';
+    const codeEl = document.getElementById('code-content');
+    const termEl = document.getElementById('output-text');
+    const filenameEl = document.getElementById('current-filename');
+    const tabs = document.querySelectorAll('.tab-btn');
+
+    function loadScript(filename) {
+      activeFile = filename;
+      tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-file') === filename));
+      filenameEl.textContent = filename;
+      const data = SCRIPTS[filename];
+      if (data) {
+        codeEl.textContent = data.code.replace(/\\\\n/g, '\\n').replace(/\\\\\$/g, '$');
+        termEl.textContent = 'Click [▶ Run Script] to execute code...';
+      }
+    }
+
+    function runScript() {
+      const data = SCRIPTS[activeFile];
+      if (!data) return;
+      termEl.innerHTML = '<span style="color: #58a6ff;">Executing python3 ' + activeFile + '...</span>\\n' +
+        data.output.replace(/\\\\n/g, '\\n');
+    }
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loadScript(btn.getAttribute('data-file'));
+      });
+    });
+
+    document.getElementById('run-script-btn').addEventListener('click', runScript);
+
+    // Initial load
+    loadScript('Variable.py');
+    runScript();
+  </script>
+</body>
+</html>

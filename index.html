@@ -216,10 +216,15 @@
       <!-- 4. Third Row: Featured Projects Window -->
       <article class="editorial-mini-gallery editorial-full-gallery">
         <div class="emg-top-bar">
-          <span class="emg-title">FEATURED PROJECTS &amp; WORKING REPOSITORIES</span>
-          <span class="emg-badge">LIVE IN-APP DEMOS</span>
+          <div class="emg-title-group">
+            <span class="emg-title">FEATURED PROJECTS &amp; REPOSITORIES</span>
+            <span class="emg-badge">NEWEST 5 PROJECTS</span>
+          </div>
+          <button id="emg-view-all-btn" class="emg-all-btn" title="View all projects in Works catalog">
+            <span>All Projects &rarr;</span>
+          </button>
         </div>
-        <div class="emg-grid">
+        <div class="emg-grid" id="featured-projects-grid">
           <!-- 1. smart_traffic_simulation -->
           <div class="emg-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="smart_traffic_simulation" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="emg-card-header">
@@ -250,24 +255,24 @@
             <p class="emg-card-desc">Minimalist responsive Markdown note taking &amp; creative journaling application</p>
           </div>
 
-          <!-- 4. B2B-bussiness-website- -->
+          <!-- 4. First_Python -->
+          <div class="emg-card run-project-btn" data-url="projects/First_Python/index.html" data-title="First_Python" role="button" tabindex="0" title="Click to launch live preview within website">
+            <div class="emg-card-header">
+              <span class="emg-card-tag">PYTHON &bull; ALGORITHMS</span>
+              <span class="emg-popup-hint">⤢ In-App</span>
+            </div>
+            <h4 class="emg-card-title">First_Python</h4>
+            <p class="emg-card-desc">Interactive computational algorithm runner &amp; variable scope explorer in Python 3</p>
+          </div>
+
+          <!-- 5. B2B-bussiness-website- -->
           <div class="emg-card run-project-btn" data-url="projects/B2B-bussiness-website-/index.html" data-title="B2B-bussiness-website-" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="emg-card-header">
-              <span class="emg-card-tag">COMMERCE UI &bull; HTML</span>
+              <span class="emg-card-tag">COMMERCE &bull; HTML</span>
               <span class="emg-popup-hint">⤢ In-App</span>
             </div>
             <h4 class="emg-card-title">B2B-bussiness-website-</h4>
-            <p class="emg-card-desc">Front-end commercial multi-product wholesale &amp; retail storefront catalog template</p>
-          </div>
-
-          <!-- 5. All Repositories -->
-          <div class="emg-card" id="emg-card-all" role="button" tabindex="0" title="Browse all GitHub repositories">
-            <div class="emg-card-header">
-              <span class="emg-card-tag">CATALOG &bull; GITHUB</span>
-              <span class="emg-popup-hint">&rarr; View All</span>
-            </div>
-            <h4 class="emg-card-title">All Repositories</h4>
-            <p class="emg-card-desc">Browse complete GitHub portfolio with live synchronization &amp; code feeds</p>
+            <p class="emg-card-desc">Commercial multi-product wholesale storefront with cart management and auth</p>
           </div>
         </div>
       </article>
@@ -583,9 +588,9 @@
           <div class="works-filter-bar scrapbook-filter-bar">
             <button class="filter-tab-btn active" data-filter="all">All Projects</button>
             <button class="filter-tab-btn" data-filter="github">Live GitHub Repos</button>
-            <button class="filter-tab-btn" data-filter="live">Interactive Live Apps (3)</button>
-            <button class="filter-tab-btn" data-filter="frontend">Frontend &amp; UI (3)</button>
-            <button class="filter-tab-btn" data-filter="data">Data Science &amp; Telemetry (4)</button>
+            <button class="filter-tab-btn" data-filter="live">Interactive Live Apps</button>
+            <button class="filter-tab-btn" data-filter="frontend">Frontend &amp; UI</button>
+            <button class="filter-tab-btn" data-filter="data">Data Science &amp; Telemetry</button>
           </div>
         </div>
 
@@ -616,11 +621,12 @@
         <div class="projects-catalog-grid">
 
           <!-- PROJECT 1: smart_traffic_simulation -->
-          <article class="project-showcase-card" data-category="live frontend">
+          <article class="project-showcase-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="smart_traffic_simulation" data-category="live frontend" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
                 <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">Simulation &amp; Game</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -650,11 +656,12 @@
           </article>
 
           <!-- PROJECT 2: weatherwhether -->
-          <article class="project-showcase-card" data-category="live data">
+          <article class="project-showcase-card run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="weatherwhether" data-category="live data" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
                 <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">Analytics Hub</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -684,11 +691,12 @@
           </article>
 
           <!-- PROJECT 3: deep_thoughts_app_for_notes -->
-          <article class="project-showcase-card" data-category="live frontend">
+          <article class="project-showcase-card run-project-btn" data-url="projects/deep_thoughts_app_for_notes/index.html" data-title="deep_thoughts_app_for_notes" data-category="live frontend" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
                 <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">Productivity App</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -717,12 +725,48 @@
             </div>
           </article>
 
-          <!-- PROJECT 4: B2B-bussiness-website- -->
-          <article class="project-showcase-card" data-category="live frontend">
+          <!-- PROJECT 4: First_Python -->
+          <article class="project-showcase-card run-project-btn" data-url="projects/First_Python/index.html" data-title="First_Python" data-category="live data" role="button" tabindex="0" title="Click to launch live preview within website">
+            <div class="psc-topbar">
+              <div class="psc-tags-top">
+                <span class="tag-status live">LIVE IN-APP DEMO</span>
+                <span class="tag-type">Python Algorithms</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
+              </div>
+            </div>
+            <div class="psc-body">
+              <h2 class="psc-title">First_Python</h2>
+              <p class="psc-desc">
+                Interactive computational algorithm runner and variable scope explorer in Python 3. Features syntax inspection and simulated terminal execution for operators, typecasting, dynamic input handling, and call-by-value/reference mechanics.
+              </p>
+              <div class="psc-tech-pills">
+                <span class="tpill">Python 3</span>
+                <span class="tpill">Algorithms</span>
+                <span class="tpill">Data Structures</span>
+                <span class="tpill">Scope Mechanics</span>
+                <span class="tpill">Terminal Console</span>
+              </div>
+            </div>
+            <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/First_Python/index.html" data-title="First_Python">
+                <span>▶ Launch in Popup</span>
+              </button>
+              <a href="projects/First_Python/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab</span>
+              </a>
+              <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="retro-btn secondary" title="View Source on GitHub">
+                <span>GitHub Repo</span>
+              </a>
+            </div>
+          </article>
+
+          <!-- PROJECT 5: B2B-bussiness-website- -->
+          <article class="project-showcase-card run-project-btn" data-url="projects/B2B-bussiness-website-/index.html" data-title="B2B-bussiness-website-" data-category="live frontend" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
                 <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">E-Commerce Platform</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -751,12 +795,13 @@
             </div>
           </article>
 
-          <!-- PROJECT 5: auracalc-suite -->
-          <article class="project-showcase-card" data-category="live frontend">
+          <!-- PROJECT 6: auracalc-suite -->
+          <article class="project-showcase-card run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="auracalc-suite" data-category="live frontend" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
                 <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">Glassmorphism Tool</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -782,12 +827,13 @@
             </div>
           </article>
 
-          <!-- PROJECT 5: SevraOS Telemetry -->
-          <article class="project-showcase-card" data-category="data frontend">
+          <!-- PROJECT 7: SevraOS Telemetry -->
+          <article class="project-showcase-card run-project-btn" data-url="projects/sevra-os-telemetry/index.html" data-title="SevraOS Telemetry Engine" data-category="live data frontend" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
-                <span class="tag-status internship">TEAM LEAD INTERN</span>
+                <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">IoT &amp; Telemetry</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -804,43 +850,23 @@
               </div>
             </div>
             <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/sevra-os-telemetry/index.html" data-title="SevraOS Telemetry Engine">
+                <span>▶ Launch in Popup</span>
+              </button>
+              <a href="projects/sevra-os-telemetry/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab</span>
+              </a>
               <span class="card-footer-badge">Sevra AI (MyCare) &bull; June – July 2026</span>
             </div>
           </article>
 
-          <!-- PROJECT 6: Python Hub -->
-          <article class="project-showcase-card" data-category="data">
+          <!-- PROJECT 8: Yhills BI -->
+          <article class="project-showcase-card run-project-btn" data-url="projects/yhills-bi-dashboard/index.html" data-title="Yhills BI Dashboard" data-category="live data" role="button" tabindex="0" title="Click to launch live preview within website">
             <div class="psc-topbar">
               <div class="psc-tags-top">
-                <span class="tag-status github">GITHUB REPO</span>
-                <span class="tag-type">Core CS &amp; Algorithms</span>
-              </div>
-            </div>
-            <div class="psc-body">
-              <h2 class="psc-title">Python Data Operations &amp; Algorithmic Hub</h2>
-              <p class="psc-desc">
-                Core computational implementations covering algorithms, data structures, variable scope rules, input handling, and type-casting mechanics in Python. Serves as a modular foundation for data preprocessing and algorithmic problem-solving.
-              </p>
-              <div class="psc-tech-pills">
-                <span class="tpill">Python 3</span>
-                <span class="tpill">Data Structures</span>
-                <span class="tpill">Algorithms</span>
-                <span class="tpill">Scope &amp; Memory</span>
-              </div>
-            </div>
-            <div class="psc-actions">
-              <a href="https://github.com/DeepshikhaDey28/First_Python" target="_blank" class="retro-btn primary">
-                <span>GitHub Repository</span>
-              </a>
-            </div>
-          </article>
-
-          <!-- PROJECT 7: Yhills BI -->
-          <article class="project-showcase-card" data-category="data">
-            <div class="psc-topbar">
-              <div class="psc-tags-top">
-                <span class="tag-status internship">DATA SCIENCE INTERN</span>
+                <span class="tag-status live">LIVE IN-APP DEMO</span>
                 <span class="tag-type">Business Intelligence</span>
+                <span class="tag-popup-hint">⤢ In-App Popup</span>
               </div>
             </div>
             <div class="psc-body">
@@ -857,6 +883,12 @@
               </div>
             </div>
             <div class="psc-actions">
+              <button class="retro-btn primary run-project-btn" data-url="projects/yhills-bi-dashboard/index.html" data-title="Yhills BI Dashboard">
+                <span>▶ Launch in Popup</span>
+              </button>
+              <a href="projects/yhills-bi-dashboard/index.html" target="_blank" class="retro-btn secondary">
+                <span>Open Full Tab</span>
+              </a>
               <span class="card-footer-badge">Yhills &bull; May – July 2024</span>
             </div>
           </article>
