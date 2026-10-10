@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <filter id="msg-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1.5" dy="2.5" stdDeviation="0" flood-color="#1e251a" flood-opacity="0.28"/>
+    </filter>
+    <linearGradient id="env-body" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+    <linearGradient id="letter-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Letter Sheet peeking out -->
+  <rect x="14" y="10" width="36" height="32" rx="4" fill="url(#letter-grad)" stroke="#1e251a" stroke-width="2.2" filter="url(#msg-shadow)"/>
+  <line x1="20" y1="17" x2="34" y2="17" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="22" x2="44" y2="22" stroke="#64748b" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="20" y1="27" x2="40" y2="27" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+
+  <!-- Envelope Back & Pocket -->
+  <path d="M8 22 C8 19 10.5 17 13.5 17 H50.5 C53.5 17 56 19 56 22 V48 C56 51.314 53.314 54 50 54 H14 C10.686 54 8 51.314 8 48 Z" fill="url(#env-body)" stroke="#1e251a" stroke-width="2.5" filter="url(#msg-shadow)"/>
+
+  <!-- Envelope Fold Lines (V-Shape Flap Fold) -->
+  <path d="M8 22 L32 38 L56 22" stroke="#1e251a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M8 48 L25 34" stroke="#1e251a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M56 48 L39 34" stroke="#1e251a" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Wax Seal (Warm Coral / Red) with Heart Stamp -->
+  <circle cx="32" cy="38" r="7" fill="#ef4444" stroke="#1e251a" stroke-width="1.8"/>
+  <path d="M32 42 C32 42 28.5 39.5 28.5 37.5 C28.5 36 29.8 35 31 35 C31.8 35 32 35.8 32 35.8 C32 35.8 32.2 35 33 35 C34.2 35 35.5 36 35.5 37.5 C35.5 39.5 32 42 32 42 Z" fill="#ffffff"/>
+</svg>
