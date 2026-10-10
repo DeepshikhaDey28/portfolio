@@ -1,43 +1,85 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <filter id="bug-glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#a855f7"/>
-    </filter>
-    <linearGradient id="glitch-purple" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c084fc"/>
-      <stop offset="50%" stop-color="#7c3aed"/>
-      <stop offset="100%" stop-color="#4c1d95"/>
+    <linearGradient id="bp-duck-grad" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="35%" stop-color="#facc15"/>
+      <stop offset="80%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
     </linearGradient>
+    <linearGradient id="bp-bill-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="bp-psychic-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="50%" stop-color="#d946ef"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+    <filter id="bp-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#713f12" flood-opacity="0.35"/>
+    </filter>
   </defs>
 
-  <!-- Glowing Pixel Cyber Wings -->
-  <ellipse cx="44" cy="55" rx="26" ry="14" fill="#38bdf8" opacity="0.75" transform="rotate(-30 44 55)" filter="url(#bug-glow)"/>
-  <ellipse cx="116" cy="55" rx="26" ry="14" fill="#38bdf8" opacity="0.75" transform="rotate(30 116 55)" filter="url(#bug-glow)"/>
+  <!-- Ambient Ground Shadow -->
+  <ellipse cx="64" cy="116" rx="36" ry="8" fill="#1e293b" opacity="0.35"/>
 
-  <!-- Bug Legs -->
-  <path d="M42 95 L22 110 M48 105 L32 125 M118 95 L138 110 M112 105 L128 125" stroke="#4c1d95" stroke-width="4" stroke-linecap="round"/>
+  <!-- Radiating Psychic Confusion Energy Rings (Around Head) -->
+  <g id="psychic-rings">
+    <ellipse cx="64" cy="42" rx="42" ry="16" fill="none" stroke="url(#bp-psychic-ring)" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.85"/>
+    <ellipse cx="64" cy="38" rx="52" ry="20" fill="none" stroke="url(#bp-psychic-ring)" stroke-width="1.8" stroke-dasharray="12 8" opacity="0.6"/>
+    <!-- Glitch Digital Pixels drifting -->
+    <rect x="24" y="26" width="4" height="4" fill="#38bdf8"/>
+    <rect x="100" y="24" width="5" height="5" fill="#f43f5e"/>
+    <rect x="18" y="44" width="3" height="3" fill="#d946ef"/>
+    <rect x="106" y="46" width="4" height="4" fill="#facc15"/>
+  </g>
 
-  <!-- Round Cute Chubby Bug Body -->
-  <circle cx="80" cy="90" r="38" fill="url(#glitch-purple)" stroke="#2e1065" stroke-width="3" filter="url(#bug-glow)"/>
+  <!-- 3 Head Hairs -->
+  <g id="hairs">
+    <path d="M64 26 Q62 10 58 6" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <path d="M65 25 Q68 12 72 8" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <path d="M64 25 Q64 12 64 6" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  </g>
 
-  <!-- Glitch Circuit Strips on Body -->
-  <rect x="62" y="75" width="36" height="5" rx="2" fill="#38bdf8"/>
-  <rect x="70" y="105" width="20" height="4" rx="2" fill="#facc15"/>
+  <!-- Duck Body Assembly -->
+  <g id="body-assembly" filter="url(#bp-shadow)">
+    <!-- Webbed Feet -->
+    <ellipse cx="46" cy="112" rx="14" ry="7" fill="url(#bp-bill-grad)" stroke="#b45309" stroke-width="1.8"/>
+    <ellipse cx="82" cy="112" rx="14" ry="7" fill="url(#bp-bill-grad)" stroke="#b45309" stroke-width="1.8"/>
 
-  <!-- Big Pixel Eyes -->
-  <circle cx="66" cy="85" r="9" fill="#facc15"/>
-  <circle cx="94" cy="85" r="9" fill="#facc15"/>
-  <circle cx="67" cy="85" r="4.5" fill="#0f172a"/>
-  <circle cx="95" cy="85" r="4.5" fill="#0f172a"/>
-  <circle cx="69" cy="83" r="2.5" fill="#ffffff"/>
-  <circle cx="97" cy="83" r="2.5" fill="#ffffff"/>
+    <!-- Chubby Torso -->
+    <ellipse cx="64" cy="84" rx="30" ry="26" fill="url(#bp-duck-grad)" stroke="#a16207" stroke-width="2"/>
 
-  <!-- Antennae with Glowing Nodes -->
-  <path d="M68 56 Q55 35 45 36" stroke="#c084fc" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <circle cx="44" cy="36" r="6" fill="#38bdf8" filter="url(#bug-glow)"/>
-  <path d="M92 56 Q105 35 115 36" stroke="#c084fc" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-  <circle cx="116" cy="36" r="6" fill="#38bdf8" filter="url(#bug-glow)"/>
+    <!-- Big Round Head -->
+    <circle cx="64" cy="46" r="26" fill="url(#bp-duck-grad)" stroke="#a16207" stroke-width="2"/>
 
-  <!-- Tiny Cute Fang / Smile -->
-  <path d="M74 100 Q80 106 86 100" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <!-- Paws Clutching Head in Confusion/Headache -->
+    <!-- Left Paw on Temple -->
+    <ellipse cx="38" cy="44" rx="7" ry="9" fill="url(#bp-duck-grad)" stroke="#a16207" stroke-width="1.8" transform="rotate(-20 38 44)"/>
+    <path d="M34 40 Q38 38 40 44" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+    <!-- Right Paw on Temple -->
+    <ellipse cx="90" cy="44" rx="7" ry="9" fill="url(#bp-duck-grad)" stroke="#a16207" stroke-width="1.8" transform="rotate(20 90 44)"/>
+    <path d="M94 40 Q90 38 88 44" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+    <!-- Bewildered Black-Dot Eyes with Shimmer -->
+    <!-- Left Eye -->
+    <ellipse cx="50" cy="40" rx="7" ry="9" fill="#ffffff" stroke="#78350f" stroke-width="1.8"/>
+    <circle cx="50" cy="40" r="3.2" fill="#0f172a"/>
+    <circle cx="49" cy="38" r="1.2" fill="#ffffff"/>
+
+    <!-- Right Eye -->
+    <ellipse cx="78" cy="40" rx="7" ry="9" fill="#ffffff" stroke="#78350f" stroke-width="1.8"/>
+    <circle cx="78" cy="40" r="3.2" fill="#0f172a"/>
+    <circle cx="77" cy="38" r="1.2" fill="#ffffff"/>
+
+    <!-- Long Broad Cream Duck Bill -->
+    <path d="M42 54 Q64 46 86 54 Q88 66 64 68 Q40 66 42 54 Z" fill="url(#bp-bill-grad)" stroke="#b45309" stroke-width="2"/>
+    <!-- Nostrils -->
+    <circle cx="58" cy="54" r="1.5" fill="#78350f"/>
+    <circle cx="70" cy="54" r="1.5" fill="#78350f"/>
+    <!-- Bill Smile/Perplexity Line -->
+    <path d="M48 60 Q64 64 80 60" stroke="#b45309" stroke-width="1.5" fill="none"/>
+  </g>
 </svg>

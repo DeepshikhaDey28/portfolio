@@ -66,42 +66,33 @@
 
       <!-- 2. Large Hero Editorial Feature Card (Reference Top Card) -->
       <article class="editorial-hero-card">
-        <!-- Main Featured Photo Frame with Floating Widgets -->
+        <!-- Main Featured Photo Frame (Unobstructed Portrait) -->
         <div class="ehc-image-wrap">
           <img src="assets/profile.jpg" alt="Deepshikha Dey Portrait" class="ehc-main-photo">
-          
-          <!-- Bottom-Left Music Floating Pill Widget -->
-          <button type="button" class="ehc-music-pill" id="ehc-music-toggle" title="Toggle Soundtrack">
-            <div class="emp-cover-wrap">
-              <img src="assets/profile.jpg" alt="Now Playing" class="emp-cover">
-            </div>
-            <span class="emp-notes">🎵</span>
-            <span class="emp-text">Ambient Lofi Music</span>
-          </button>
-
-          <!-- Bottom-Right Identity Floating Pill Widget -->
-          <div class="ehc-badge-pill" id="ehc-badge-pill">
-            <img src="assets/profile.jpg" alt="Deepshikha Dey" class="ebp-avatar">
-            <div class="ebp-text-col">
-              <span class="ebp-name">Deepshikha Dey</span>
-              <span class="ebp-role">Data Scientist &amp; SWE</span>
-            </div>
-          </div>
         </div>
 
         <!-- Underneath Image Content Row -->
         <div class="ehc-content-row">
-          <div class="ehc-thumbs-col">
-            <button class="ehc-thumb-btn run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" title="Smart Traffic Grid Simulation">
-              <img src="assets/icon_projects_laptop.png" alt="Traffic Simulator">
+          <!-- Relocated Pills (Replaces red-circled icons with clean widgets) -->
+          <div class="ehc-pills-col">
+            <!-- Music Pill Widget -->
+            <button type="button" class="ehc-music-pill inline-hero-pill" id="ehc-music-toggle" title="Toggle Soundtrack">
+              <div class="emp-cover-wrap">
+                <img src="assets/profile.jpg" alt="Now Playing" class="emp-cover">
+              </div>
+              <span class="emp-text">Ambient Lofi Music</span>
             </button>
-            <button class="ehc-thumb-btn run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" title="GlobalPulse Weather Hub">
-              <img src="assets/icon_game_modern.svg" alt="Weather Telemetry">
-            </button>
-            <button class="ehc-thumb-btn" id="ehc-thumb-bio" title="Open Full Biography">
-              <img src="assets/profile.jpg" alt="Deepshikha Dey">
-            </button>
+
+            <!-- Identity Pill Widget -->
+            <div class="ehc-badge-pill inline-hero-pill" id="ehc-badge-pill">
+              <img src="assets/profile.jpg" alt="Deepshikha Dey" class="ebp-avatar">
+              <div class="ebp-text-col">
+                <span class="ebp-name">Deepshikha Dey</span>
+                <span class="ebp-role">Data Scientist &amp; SWE</span>
+              </div>
+            </div>
           </div>
+
           <div class="ehc-bio-col">
             <h2 class="ehc-name-heading">Deepshikha Dey</h2>
             <p class="ehc-bio-text">
@@ -115,7 +106,7 @@
       <div class="editorial-grid-two">
         <!-- Left: Square Photo Card -->
         <div class="editorial-photo-card">
-          <img src="assets/profile.jpg" alt="Deepshikha Dey" class="epc-photo-img">
+          <img src="assets/editorial_gallery_portrait.jpg" alt="Deepshikha Dey" class="epc-photo-img">
         </div>
 
         <!-- Right: Social Profile Stats Card with Wine Border -->
@@ -126,16 +117,15 @@
           </div>
 
           <div class="epc-handle-row">
-            <div class="epc-lock-handle">
-              <span class="epc-lock-icon">🔒</span>
-              <span class="epc-email">dey.deepshikha.283@gmail.com</span>
+            <div class="epc-location-pill">
+              <span class="epc-location-tag">Pune, Maharashtra &bull; India</span>
             </div>
             <div class="epc-social-icons">
-              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="epc-icon-link" title="LinkedIn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.76v8.37H6.46v-8.37M7.84 6.2a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
+              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="epc-icon-link linkedin-link" title="LinkedIn Profile">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.76v8.37H6.46v-8.37M7.84 6.2a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/></svg>
               </a>
-              <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="epc-icon-link" title="GitHub">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="epc-icon-link github-link" title="GitHub Profile">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
               </a>
             </div>
           </div>
@@ -160,7 +150,7 @@
           <div class="epc-actions-row">
             <button class="epc-action-pill" id="epc-btn-projects">Explore Projects</button>
             <button class="epc-action-pill" id="epc-btn-resume">Official Resume</button>
-            <button class="epc-action-pill epc-wine-pill" id="epc-btn-game">Play Game 🎮</button>
+            <button class="epc-action-pill epc-wine-pill" id="epc-btn-game">Play Mini-Game</button>
           </div>
         </article>
       </div>
@@ -184,30 +174,29 @@
           <!-- Mini Gallery Window with Wine Header -->
           <article class="editorial-mini-gallery">
             <div class="emg-top-bar">
-              <span class="emg-icon">🏠</span>
-              <span class="emg-title">Projects &amp; Repositories</span>
-              <span class="emg-icon">🔍</span>
+              <span class="emg-title">FEATURED PROJECTS</span>
+              <span class="emg-badge">4 REPOSITORIES</span>
             </div>
             <div class="emg-grid">
               <div class="emg-card run-project-btn" data-url="projects/traffic-grid-simulation/index.html" data-title="Smart Traffic Grid" role="button" tabindex="0">
-                <div class="emg-card-thumb sim-thumb">🚦</div>
-                <span class="emg-card-title">Traffic Simulator</span>
-                <span class="emg-card-tag">Interactive</span>
+                <span class="emg-card-tag">AUTONOMOUS FLOW</span>
+                <h4 class="emg-card-title">Smart Traffic Grid</h4>
+                <p class="emg-card-desc">Real-time telemetry simulation engine</p>
               </div>
               <div class="emg-card run-project-btn" data-url="projects/weather-telemetry-hub/index.html" data-title="GlobalPulse Weather Hub" role="button" tabindex="0">
-                <div class="emg-card-thumb weather-thumb">🌦️</div>
-                <span class="emg-card-title">Weather Hub</span>
-                <span class="emg-card-tag">Telemetry</span>
+                <span class="emg-card-tag">LIVE TELEMETRY</span>
+                <h4 class="emg-card-title">GlobalPulse Weather</h4>
+                <p class="emg-card-desc">Atmospheric multi-city sensor network</p>
               </div>
               <div class="emg-card run-project-btn" data-url="projects/auracalc-suite/index.html" data-title="AuraCalc Calculator Suite" role="button" tabindex="0">
-                <div class="emg-card-thumb calc-thumb">🧮</div>
-                <span class="emg-card-title">AuraCalc Suite</span>
-                <span class="emg-card-tag">Utility</span>
+                <span class="emg-card-tag">MATH SUITE</span>
+                <h4 class="emg-card-title">AuraCalc Suite</h4>
+                <p class="emg-card-desc">Precision algorithmic calculation utility</p>
               </div>
               <div class="emg-card" id="emg-card-all" role="button" tabindex="0">
-                <div class="emg-card-thumb repo-thumb">💻</div>
-                <span class="emg-card-title">All Repositories</span>
-                <span class="emg-card-tag">View All &rarr;</span>
+                <span class="emg-card-tag">OPEN SOURCE</span>
+                <h4 class="emg-card-title">All Repositories</h4>
+                <p class="emg-card-desc">Browse complete GitHub portfolio &rarr;</p>
               </div>
             </div>
           </article>
@@ -221,13 +210,13 @@
           <h3 class="pinterest-name">Deepshikha</h3>
           <p class="pinterest-role">Front-End Engineer &bull; Data Analyst</p>
           <p class="pinterest-contact-line">
-            dey.deepshikha.283@gmail.com &bull; Pune, India
+            Pune, Maharashtra &bull; India
           </p>
           <div class="pinterest-stats-line">
             <span>Specializing in Cyber Security &amp; Python Telemetry</span>
           </div>
           <button class="pinterest-contact-btn" id="pinterest-contact-btn">
-            Get In Touch / Contact ✉️
+            Get In Touch / Contact
           </button>
         </article>
       </div>
@@ -274,9 +263,9 @@
                 <span class="handle-at">@DeepshikhaDey28</span>
               </div>
               <div class="contact-details-list">
-                <a href="mailto:dey.deepshikha.283@gmail.com" class="c-link">dey.deepshikha.283@gmail.com</a>
                 <span class="c-phone">Pune, Maharashtra, India</span>
                 <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="c-link linkedin-link">linkedin.com/in/deepshikha-dey</a>
+                <a href="https://github.com/DeepshikhaDey28" target="_blank" class="c-link github-link">github.com/DeepshikhaDey28</a>
               </div>
             </div>
 
@@ -813,22 +802,27 @@
     <!-- Main Game Wrapper with CRT retro console screen -->
     <div class="pip-game-wrapper">
       
-      <!-- Top Arcade Game Logo Banner -->
-      <div class="pip-logo-banner-wrap">
-        <img src="assets/pips_logo.svg" alt="Catch That Pip! Game Logo" class="pip-arcade-logo-img">
+      <!-- Simple Clean Header: pip-world -->
+      <div class="pip-world-header">
+        <h1 class="pip-world-title">pip-world</h1>
       </div>
 
       <div class="pip-game-cabinet">
         
-        <!-- Retro Cabinet Top Title Bar (Cute Go to Desktop Button) -->
+        <!-- Retro Cabinet Top Title Bar (Cute Go to Desktop Button & Lore/Dex Toggles) -->
         <div class="cabinet-top-strip single-nav-cabinet-strip">
           <button id="game-back-to-desktop-btn" class="cute-desktop-btn" title="Return to Desktop OS">
             <span class="cute-desktop-arrow">←</span> Go to desktop
           </button>
           <span class="cabinet-title">PIP-BOY ADVANCE // OPEN WORLD DEV REGION</span>
-          <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Press [Q] for Pip-Dex" style="display: none;">
-            <span>📖 Pip-Dex</span>
-          </button>
+          <div class="cabinet-ctrl-group">
+            <button id="game-lore-toggle-btn" class="cabinet-ctrl-pill lore-ctrl-pill" title="Read Realm Lore &amp; Chronicles">
+              <span>📜 Game Lore</span>
+            </button>
+            <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Press [Q] for Pip-Dex">
+              <span>📖 Pip-Dex</span>
+            </button>
+          </div>
         </div>
 
         <!-- SCREEN CONTAINER (Houses Overworld, Battle Arena, and Pip-Dex Menu) -->
@@ -912,24 +906,31 @@
                 <!-- Player Pedestal & Character Sprite -->
                 <div class="pip-sprite-pedestal player-pedestal">
                   <div class="pedestal-shadow"></div>
-                  <div class="player-trainer-sprite-card" id="player-sprite">
-                    <div class="trainer-avatar-frame">
-                      <img src="assets/trainer_encounter_transparent.png" alt="Trainer Deepshikha" class="trainer-pfp-img" id="trainer-pfp-img">
-                      <div class="trainer-badge-pill">DEEPSHIKHA</div>
+                  <div class="player-battle-combatants">
+                    <div class="player-trainer-sprite-card" id="player-sprite">
+                      <div class="trainer-avatar-frame">
+                        <img src="assets/trainer_encounter_transparent.png" alt="Trainer Deepshikha" class="trainer-pfp-img" id="trainer-pfp-img">
+                        <div class="trainer-badge-pill">DEEPSHIKHA</div>
+                      </div>
+                      <div class="trainer-aura-glow"></div>
                     </div>
-                    <div class="trainer-aura-glow"></div>
+                    <div class="player-partner-sprite-card" id="player-partner-sprite-card" title="Active Battle Partner">
+                      <img src="assets/flamechar_sprite.svg" alt="Active Partner Pokémon" class="player-partner-img" id="player-partner-img">
+                      <span class="partner-card-tag" id="partner-card-tag">PARTNER</span>
+                    </div>
                   </div>
                 </div>
 
                 <!-- Player Status Box -->
                 <div class="pip-status-card player-card">
                   <div class="psc-header">
-                    <span class="psc-name">DEEPSHIKHA</span>
+                    <span class="psc-name" id="player-battle-name">FLAMECHAR</span>
                     <span class="psc-level" id="player-level-badge">:L28</span>
                   </div>
-                  <div class="psc-type-row">
-                    <span class="psc-badge type-trainer">TRAINER</span>
-                    <span class="psc-badge type-cs">DATA &amp; CS</span>
+                  <div class="psc-type-row" id="player-battle-types">
+                    <span class="psc-badge type-fire" id="player-type-badge-1">FIRE</span>
+                    <span class="psc-badge type-code" id="player-type-badge-2">CODE</span>
+                    <span class="psc-status-tag" id="player-trainer-tag">DEEPSHIKHA</span>
                   </div>
                   <div class="psc-hp-wrap">
                     <span class="psc-hp-label">HP</span>
@@ -994,9 +995,9 @@
                   <span class="cmd-sub">4 Attacks</span>
                 </button>
                 <button class="pip-cmd-btn btn-commune" id="btn-pip-act" data-action="act">
-                  <span class="cmd-icon">💬</span>
-                  <span class="cmd-title">ACT</span>
-                  <span class="cmd-sub">Refactor &amp; Chai</span>
+                  <span class="cmd-icon">⚡</span>
+                  <span class="cmd-title">POKÉMON</span>
+                  <span class="cmd-sub">Switch Team</span>
                 </button>
                 <button class="pip-cmd-btn btn-bag" id="btn-pip-item" data-action="item">
                   <span class="cmd-icon">🎒</span>
@@ -1026,17 +1027,67 @@
               </div>
               <div class="dex-trainer-card">
                 <div class="dtc-left">
-                  <img src="assets/profile.jpg" alt="Deepshikha Dey" class="dtc-avatar">
+                  <img src="assets/profile.jpg" alt="Trainer Deepshikha" class="dtc-avatar">
                   <div>
-                    <h4>TRAINER DEEPSHIKHA DEY</h4>
-                    <p>B.Tech Computer Science &bull; CGPA 8.94 / 10.0 &bull; Grad 2027</p>
+                    <h4>TRAINER DEEPSHIKHA</h4>
+                    <p>Grand Arbiter Aspirant &bull; Pip Champion &bull; Aether Grid</p>
                   </div>
                 </div>
                 <div class="dtc-badges-row">
-                  <div class="badge-item active" title="Python Hub Badge">🏆 PYTHON</div>
-                  <div class="badge-item active" title="Data Analytics Badge">📊 DATA VIZ</div>
-                  <div class="badge-item active" title="SevraOS Telemetry Badge">🛰️ TELEMETRY</div>
-                  <div class="badge-item active" title="Frontend Web Badge">⚛️ REACT</div>
+                  <div class="badge-item active" title="Ember Badge">🔥 EMBER</div>
+                  <div class="badge-item active" title="Flora Badge">🌿 FLORA</div>
+                  <div class="badge-item active" title="Tide Badge">🌊 TIDE</div>
+                  <div class="badge-item active" title="Pulse Badge">⚡ PULSE</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN LAYER 4: REALM LORE & CHRONICLES ARCHIVE -->
+          <div class="pip-screen-view" id="view-lore" style="display: none;">
+            <div class="pip-lore-container">
+              <div class="lore-header-bar">
+                <h3>📜 CHRONICLES OF THE AETHER GRID // ANCIENT LORE</h3>
+                <button class="lore-close-btn" id="lore-close-btn">&times; Close Lore</button>
+              </div>
+              <div class="lore-scroll-body">
+                <div class="lore-card-panel">
+                  <h4 class="lore-panel-title">⚡ CHAPTER I: THE PRIMAL CONVERGENCE &amp; THE FRACTURE</h4>
+                  <p class="lore-panel-desc">Before the Great Rupture, the Aether Grid existed in perpetual balance, anchored by the ancient <strong>Prime Core</strong>. From its harmonious vibrations arose ten primordial avatars known as <strong>The Sacred Pips</strong>, each embodying a fundamental force of the cosmos: Ember, Verdance, Tide, Lightning, Melody, Paradox, Shadow, Dynamo, Slumber, and Pure Intellect.</p>
+                  <p class="lore-panel-desc">When a dimensional rift destabilized the Core, the ten guardian spirits scattered across the wild biomes, causing elemental leylines to surge and reality itself to fracture.</p>
+                </div>
+
+                <div class="lore-card-panel">
+                  <h4 class="lore-panel-title">🗺️ CHAPTER II: THE THREE SACRED BIOMES</h4>
+                  <div class="lore-biomes-grid">
+                    <div class="biome-card">
+                      <div class="biome-card-header">
+                        <span class="biome-icon">🌿</span>
+                        <span class="biome-name">Route 1: Verdant Meadow</span>
+                      </div>
+                      <p>Fertile sunlit highlands warmed by solar leylines. Roaming grounds of <strong>Flamechar (#004)</strong> with its undying tail ember, <strong>Bulbasprout (#001)</strong> rooting in ancient groves, the lightning-fast <strong>Sparkpip (#025)</strong>, and the melodious <strong>Jigglypip (#039)</strong>.</p>
+                    </div>
+                    <div class="biome-card">
+                      <div class="biome-card-header">
+                        <span class="biome-icon">🌊</span>
+                        <span class="biome-name">Route 2: Whispering Lake</span>
+                      </div>
+                      <p>Deep turquoise reservoir fed by subterranean crystal springs. Guarded for centuries by <strong>Aquabyte (#007)</strong>, whose hardened shell deflects storm surges, and the peaceful giant <strong>Snorlaxpip (#143)</strong>, asleep on the wooden crossway.</p>
+                    </div>
+                    <div class="biome-card">
+                      <div class="biome-card-header">
+                        <span class="biome-icon">🔮</span>
+                        <span class="biome-name">Route 3: Obsidian Glitchlands</span>
+                      </div>
+                      <p>Ground zero of the Core Rupture. A fractured matrix where code and reality blur. Haunted by <strong>Buggypip (#054)</strong>, the phantom <strong>Spectrepip (#094)</strong>, the magnetic dynamo <strong>Voltasync (#081)</strong>, and the mythical artificial deity <strong>NEUROPIP (#150)</strong>.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lore-card-panel">
+                  <h4 class="lore-panel-title">🏆 CHAPTER III: THE TRAINER'S SACRED CALLING</h4>
+                  <p class="lore-panel-desc">Archivist Oak and the sanctuary guardians watch the leylines. Prophecy tells of a traveler who shall explore the lands, engage the wild spirits with tactical mastery, and register all ten resonances into the <strong>Pip-Dex</strong>.</p>
+                  <p class="lore-panel-desc">When all 10 Sacred Pips are caught, the fractured leylines will harmonize once more, sealing the glitches and restoring eternal equilibrium to the Aether Grid!</p>
                 </div>
               </div>
             </div>
@@ -1109,34 +1160,25 @@
 
         <div class="contact-info-cards">
           <div class="c-info-card">
-            <span class="ci-icon">📧</span>
-            <div class="ci-details">
-              <span class="ci-label">Email Address</span>
-              <span class="ci-val">dey.deepshikha.283@gmail.com</span>
-            </div>
-            <button class="copy-btn" data-copy="dey.deepshikha.283@gmail.com" title="Copy to clipboard">Copy</button>
-          </div>
-
-          <div class="c-info-card">
-            <span class="ci-icon">💼</span>
+            <span class="ci-tag">NETWORK</span>
             <div class="ci-details">
               <span class="ci-label">LinkedIn</span>
               <span class="ci-val">in/deepshikha-dey-904a931aa</span>
             </div>
-            <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="visit-btn">Visit ↗</a>
+            <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="visit-btn">Visit &rarr;</a>
           </div>
 
           <div class="c-info-card">
-            <span class="ci-icon">🐙</span>
+            <span class="ci-tag">CODE</span>
             <div class="ci-details">
               <span class="ci-label">GitHub</span>
               <span class="ci-val">DeepshikhaDey28</span>
             </div>
-            <a href="https://github.com/DeepshikhaDey28" target="_blank" class="visit-btn">Visit ↗</a>
+            <a href="https://github.com/DeepshikhaDey28" target="_blank" class="visit-btn">Visit &rarr;</a>
           </div>
 
           <div class="c-info-card">
-            <span class="ci-icon">📍</span>
+            <span class="ci-tag">LOCATION</span>
             <div class="ci-details">
               <span class="ci-label">Location</span>
               <span class="ci-val">Pune, Maharashtra, India</span>
@@ -1145,8 +1187,8 @@
         </div>
 
         <div class="modal-action-row">
-          <a href="mailto:dey.deepshikha.283@gmail.com?subject=Hello%20Deepshikha!" class="retro-btn primary">
-            <span>Send Direct Email &rarr;</span>
+          <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" class="retro-btn primary">
+            <span>Connect on LinkedIn &rarr;</span>
           </a>
           <button class="retro-btn secondary close-modal-btn">
             <span>Close</span>
@@ -1163,9 +1205,9 @@
   <div class="retro-modal-overlay" id="resume-modal" role="dialog" aria-modal="true" aria-labelledby="modal-resume-title">
     <div class="retro-modal-box large">
       <div class="window-titlebar">
-        <span class="window-title" id="modal-resume-title">C:\DEEPSHIKHA\documents\resume_deepshikha_dey.pdf</span>
+        <span class="window-title" id="modal-resume-title">resume_deepshikha_dey.pdf</span>
         <div class="window-controls">
-          <button class="win-btn close close-modal-btn">×</button>
+          <button class="win-btn close close-modal-btn" aria-label="Close Resume Window" title="Close Resume Window (Esc)">×</button>
         </div>
       </div>
       <div class="modal-content">
@@ -1179,8 +1221,11 @@
               <span>Toggle PDF / Formatted View</span>
             </button>
             <a href="assets/resume.pdf" download="Deepshikha_Dey_Resume.pdf" class="retro-btn primary">
-              <span>⬇ Download PDF</span>
+              <span>Download PDF</span>
             </a>
+            <button class="retro-btn secondary close-modal-btn resume-header-close-btn" title="Close Resume Window">
+              <span>✕ Close</span>
+            </button>
           </div>
         </div>
 
@@ -1200,18 +1245,12 @@
               </div>
               <p class="rdh-sub">B.Tech Computer Science (Cyber Security) &bull; Pune, Maharashtra, India</p>
               <div class="rdh-contacts-bar">
-                <a href="mailto:dey.deepshikha.283@gmail.com" class="rdh-contact-pill" title="Send Email">
-                  <span class="rcp-icon">✉️</span> dey.deepshikha.283@gmail.com
-                </a>
                 <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="rdh-contact-pill" title="LinkedIn Profile">
-                  <span class="rcp-icon">💼</span> LinkedIn
+                  LinkedIn Profile &rarr;
                 </a>
                 <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="rdh-contact-pill" title="GitHub Profile">
-                  <span class="rcp-icon">🐙</span> GitHub
+                  GitHub Profile &rarr;
                 </a>
-                <button type="button" class="rdh-contact-pill copy-btn" id="resume-copy-email-btn" title="Copy Email to Clipboard">
-                  <span class="rcp-icon">📋</span> Copy Email
-                </button>
               </div>
             </div>
           </div>

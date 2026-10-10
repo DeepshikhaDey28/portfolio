@@ -750,10 +750,10 @@ class CatchThatPipGame {
 
     // Pip-Dex Caught Registry (Classic 150 Reference Species)
     this.dex = {
-      flamechar: false,
-      bulbasprout: false,
-      aquabyte: false,
-      sparkpip: false,
+      flamechar: true,
+      bulbasprout: true,
+      aquabyte: true,
+      sparkpip: true,
       jigglypip: false,
       buggypip: false,
       spectrepip: false,
@@ -761,6 +761,31 @@ class CatchThatPipGame {
       snorlaxpip: false,
       neuropip: false
     };
+
+    // HeartGold Team & Following Partner State
+    this.activePokemonKey = 'flamechar';
+    this.playerTeam = ['flamechar', 'bulbasprout', 'aquabyte', 'sparkpip'];
+    this.partner = {
+      x: 8 * 32,
+      y: 7 * 32 + 24,
+      dir: 0,
+      animFrame: 0
+    };
+
+    // HGSS Autumn Leaf & Breeze Particles
+    this.windLeaves = [];
+    for (let i = 0; i < 20; i++) {
+      this.windLeaves.push({
+        x: Math.random() * 640,
+        y: Math.random() * 360,
+        speedX: 0.9 + Math.random() * 1.6,
+        speedY: 0.4 + Math.random() * 0.8,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: 0.03 + Math.random() * 0.05,
+        size: 3.5 + Math.random() * 2.5,
+        color: Math.random() > 0.5 ? '#f59e0b' : '#f97316'
+      });
+    }
 
     // Species Catalog referencing original 150 Pokémon
     this.speciesData = {
@@ -771,18 +796,18 @@ class CatchThatPipGame {
         hp: 85,
         maxHp: 85,
         type1: 'FIRE',
-        type2: 'CODE',
+        type2: 'DRAGON',
         badgeClass: 'type-fire',
         spriteSrc: 'assets/flamechar_sprite.svg',
         zone: 'Route 1: Python Meadow',
-        greeting: 'Wild FLAMECHAR sparks with enthusiasm! Its tail flame crackles with Python bytecode!',
-        inspect: 'FLAMECHAR (#004 Charmander ref): Fire Pip! Known for fiery performance and fast execution.',
+        greeting: 'Wild FLAMECHAR sparks with enthusiasm! Its tail flame crackles with burning passion!',
+        inspect: 'FLAMECHAR (#004 Charmander/Cyndaquil ref): Fire Pip! Known for scorching blaze attacks and loyalty.',
         bulletType: 'fire',
         moves: [
-          { name: 'Python Strike', type: 'FIRE', dmg: 35, desc: 'Fiery bytecode pulse' },
-          { name: 'Vector Blast', type: 'CODE', dmg: 45, desc: 'Vectorized tensor beam' },
-          { name: 'Flamethrower', type: 'FIRE', dmg: 40, desc: 'Blazing flame stream' },
-          { name: 'Overclock Hotfix', type: 'CODE', dmg: 55, desc: 'Critical deploy burst' }
+          { name: 'Flamethrower', type: 'FIRE', dmg: 45, desc: 'Blazing torrent of scorching fire' },
+          { name: 'Fire Spin', type: 'FIRE', dmg: 35, desc: 'Spiraling fiery vortex trap' },
+          { name: 'Dragon Breath', type: 'DRAGON', dmg: 48, desc: 'Furious breath of draconic energy' },
+          { name: 'Slash', type: 'NORMAL', dmg: 32, desc: 'High-critical razor claw swipe' }
         ]
       },
       bulbasprout: {
@@ -792,18 +817,18 @@ class CatchThatPipGame {
         hp: 90,
         maxHp: 90,
         type1: 'GRASS',
-        type2: 'DATA',
+        type2: 'POISON',
         badgeClass: 'type-trainer',
         spriteSrc: 'assets/bulbasprout_sprite.svg',
         zone: 'Route 1: Python Meadow',
-        greeting: 'Wild BULBASPROUT emerged from the Pandas DataFrame with fresh decision trees!',
-        inspect: 'BULBASPROUT (#001 Bulbasaur ref): Grass/Data Pip! Rapidly grows with clean datasets.',
+        greeting: 'Wild BULBASPROUT emerged with fresh blooming petals and ancient forest energy!',
+        inspect: 'BULBASPROUT (#001 Bulbasaur ref): Grass Saurian Pip! Rapidly channels raw solar power.',
         bulletType: 'data',
         moves: [
-          { name: 'Vine Whip', type: 'GRASS', dmg: 30, desc: 'Pandas column whip' },
-          { name: 'SQL Query Splash', type: 'DATA', dmg: 40, desc: 'Heavy indexed query' },
-          { name: 'Razor Leaf', type: 'GRASS', dmg: 45, desc: 'Sharp leaf storm' },
-          { name: 'Solar Beam', type: 'GRASS', dmg: 60, desc: 'High-energy beam' }
+          { name: 'Vine Whip', type: 'GRASS', dmg: 35, desc: 'Slender graceful vines whip the foe' },
+          { name: 'Razor Leaf', type: 'GRASS', dmg: 45, desc: 'Sharp whirlwind of cutting leaves' },
+          { name: 'Solar Beam', type: 'GRASS', dmg: 60, desc: 'Concentrated solar energy blast' },
+          { name: 'Seed Bomb', type: 'GRASS', dmg: 40, desc: 'Explosive hard seed bombardment' }
         ]
       },
       aquabyte: {
@@ -813,18 +838,18 @@ class CatchThatPipGame {
         hp: 92,
         maxHp: 92,
         type1: 'WATER',
-        type2: 'SQL',
+        type2: 'STEEL',
         badgeClass: 'type-code',
         spriteSrc: 'assets/aquabyte_sprite.svg',
         zone: 'Route 2: Data Lake',
-        greeting: 'Wild AQUABYTE surfaced from the SQL stream! Its database shell glistens with queries!',
-        inspect: 'AQUABYTE (#007 Squirtle ref): Water/SQL Pip! Hardened shell resistant to unindexed queries.',
+        greeting: 'Wild AQUABYTE surfaced from the lake! Its hardened shell glistens with crystal water!',
+        inspect: 'AQUABYTE (#007 Squirtle ref): Water Turtle Pip! Reinforced carapace deflects all heavy blows.',
         bulletType: 'data',
         moves: [
-          { name: 'Water Gun', type: 'WATER', dmg: 35, desc: 'High-speed relational stream' },
-          { name: 'Hydro Pump', type: 'WATER', dmg: 55, desc: 'Pressurized water tsunami' },
-          { name: 'Telemetry Pulse', type: 'SQL', dmg: 40, desc: 'Live sensor pressure surge' },
-          { name: 'Bubble Beam', type: 'WATER', dmg: 38, desc: 'Cleansing bubble barrage' }
+          { name: 'Water Gun', type: 'WATER', dmg: 35, desc: 'Pressurized jet of swift water' },
+          { name: 'Hydro Pump', type: 'WATER', dmg: 60, desc: 'Massive blast of tidal water cannon' },
+          { name: 'Bubble Beam', type: 'WATER', dmg: 40, desc: 'Forceful spray of iridescent bubbles' },
+          { name: 'Aqua Tail', type: 'WATER', dmg: 46, desc: 'Wave-crested crashing tail smash' }
         ]
       },
       sparkpip: {
@@ -838,14 +863,14 @@ class CatchThatPipGame {
         badgeClass: 'type-fire',
         spriteSrc: 'assets/sparkpip_sprite.svg',
         zone: 'Route 1: Python Meadow',
-        greeting: 'Wild SPARKPIP crackles with 60 FPS electric speed! "Pika-pip!"',
+        greeting: 'Wild SPARKPIP crackles with high-voltage speed! "Pika-pip!"',
         inspect: 'SPARKPIP (#025 Pikachu ref): Electric Mouse Pip! Generates pure lightning from rosy cheeks.',
         bulletType: 'fire',
         moves: [
-          { name: 'Thunderbolt', type: 'ELECTRIC', dmg: 48, desc: 'High-voltage lightning strike' },
-          { name: 'Quick Attack', type: 'SPEED', dmg: 32, desc: 'High-priority agile dash' },
-          { name: 'Volt Tackle', type: 'ELECTRIC', dmg: 58, desc: 'Electrified tackle charge' },
-          { name: 'Thunder Wave', type: 'ELECTRIC', dmg: 25, desc: 'Paralyzing spark pulse' }
+          { name: 'Thunderbolt', type: 'ELECTRIC', dmg: 50, desc: 'Fierce bolt of lightning from heaven' },
+          { name: 'Volt Tackle', type: 'ELECTRIC', dmg: 60, desc: 'Electrified high-speed tackle' },
+          { name: 'Thunder Wave', type: 'ELECTRIC', dmg: 25, desc: 'Paralyzing arc of pure voltage' },
+          { name: 'Iron Tail', type: 'STEEL', dmg: 40, desc: 'Hardened metallic tail strike' }
         ]
       },
       jigglypip: {
@@ -860,13 +885,13 @@ class CatchThatPipGame {
         spriteSrc: 'assets/jigglypip_sprite.svg',
         zone: 'Route 1: Python Meadow',
         greeting: 'Wild JIGGLYPIP puffed up its cheeks and began singing a soothing melody!',
-        inspect: 'JIGGLYPIP (#039 Jigglypuff ref): Balloon Fairy Pip! Soothing songs calm any runtime bugs.',
+        inspect: 'JIGGLYPIP (#039 Jigglypuff ref): Balloon Fairy Pip! Melodic vibrations entrance any foe.',
         bulletType: 'data',
         moves: [
-          { name: 'Singing Lullaby', type: 'FAIRY', dmg: 25, desc: 'Hypnotic melodic vibration' },
-          { name: 'Double Slap', type: 'SOUND', dmg: 35, desc: 'Rhythmic double slap' },
-          { name: 'Dazzling Gleam', type: 'FAIRY', dmg: 50, desc: 'Radiant fairy sparkle blast' },
-          { name: 'Body Slam', type: 'NORMAL', dmg: 40, desc: 'Heavy full-weight bounce' }
+          { name: 'Hyper Voice', type: 'NORMAL', dmg: 45, desc: 'Resonating ultrasonic voice shockwave' },
+          { name: 'Dazzling Gleam', type: 'FAIRY', dmg: 50, desc: 'Radiant brilliant burst of fairy light' },
+          { name: 'Sing & Slap', type: 'FAIRY', dmg: 32, desc: 'Hypnotic melody rhythm combo' },
+          { name: 'Body Slam', type: 'NORMAL', dmg: 42, desc: 'Heavy full-weight crushing drop' }
         ]
       },
       buggypip: {
@@ -875,19 +900,19 @@ class CatchThatPipGame {
         level: 28,
         hp: 75,
         maxHp: 75,
-        type1: 'GLITCH',
-        type2: 'PSYCHIC',
+        type1: 'PSYCHIC',
+        type2: 'WATER',
         badgeClass: 'type-glitch',
         spriteSrc: 'assets/buggypip_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
-        greeting: 'Wild BUGGYPIP clutches its head in confusion! "Uncaught TypeError at index.js:42"!',
-        inspect: 'BUGGYPIP (#054 Psyduck ref): Glitch Duck Pip! Unleashes raw psychic power when confused.',
+        greeting: 'Wild BUGGYPIP clutches its temples with glowing psychic eyes!',
+        inspect: 'BUGGYPIP (#054 Psyduck ref): Psionic Duck Pip! Releases latent psychic power when perplexed.',
         bulletType: 'glitch',
         moves: [
-          { name: 'Confusion', type: 'PSYCHIC', dmg: 38, desc: 'Null reference psychic shock' },
-          { name: 'Memory Leak', type: 'GLITCH', dmg: 45, desc: 'RAM exhaustion wave' },
-          { name: 'Water Pulse', type: 'WATER', dmg: 40, desc: 'Confusing ultrasonic ring' },
-          { name: 'Infinite Loop', type: 'GLITCH', dmg: 52, desc: 'Thread blocking spike' }
+          { name: 'Confusion', type: 'PSYCHIC', dmg: 42, desc: 'Psionic telekinetic wave of vertigo' },
+          { name: 'Water Pulse', type: 'WATER', dmg: 38, desc: 'Ultrasonic ring of pulsating water' },
+          { name: 'Zen Headbutt', type: 'PSYCHIC', dmg: 45, desc: 'Focused mind-force forehead smash' },
+          { name: 'Psychic', type: 'PSYCHIC', dmg: 55, desc: 'Overwhelming telekinetic crush' }
         ]
       },
       spectrepip: {
@@ -901,14 +926,14 @@ class CatchThatPipGame {
         badgeClass: 'type-glitch',
         spriteSrc: 'assets/spectrepip_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
-        greeting: 'Wild SPECTREPIP materialized from asynchronous shadows with a mischievous grin!',
-        inspect: 'SPECTREPIP (#094 Gengar ref): Shadow Ghost Pip! Lurks in event loops with playful tricks.',
+        greeting: 'Wild SPECTREPIP materialized from the shadows with a wicked grin!',
+        inspect: 'SPECTREPIP (#094 Gengar ref): Shadow Ghost Pip! Lurks in the darkness with playful tricks.',
         bulletType: 'glitch',
         moves: [
-          { name: 'Shadow Ball', type: 'GHOST', dmg: 50, desc: 'Dark blob of ghostly energy' },
-          { name: 'Night Shade', type: 'GHOST', dmg: 38, desc: 'Phantom mirage strike' },
-          { name: 'Sludge Bomb', type: 'POISON', dmg: 45, desc: 'Toxic sludge detonation' },
-          { name: 'Hypnosis', type: 'PSYCHIC', dmg: 20, desc: 'Deep sleep suggestion wave' }
+          { name: 'Shadow Ball', type: 'GHOST', dmg: 50, desc: 'Dark shadowy orb of phantom energy' },
+          { name: 'Night Shade', type: 'GHOST', dmg: 40, desc: 'Terrifying mirage of pure darkness' },
+          { name: 'Sludge Bomb', type: 'POISON', dmg: 45, desc: 'Explosive blast of unsanitary sludge' },
+          { name: 'Dark Pulse', type: 'DARK', dmg: 48, desc: 'Malevolent dark aura pulse' }
         ]
       },
       voltasync: {
@@ -922,14 +947,14 @@ class CatchThatPipGame {
         badgeClass: 'type-fire',
         spriteSrc: 'assets/voltasync_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
-        greeting: 'Wild VOLTASYNC discharged async promises! Lightning sparks from its React state ears!',
-        inspect: 'VOLTASYNC (#081 Magnemite ref): Electric/Steel Pip! Rotates electromagnetic state at 120 FPS!',
+        greeting: 'Wild VOLTASYNC spins its horseshoe magnets, crackling with cyan sparks!',
+        inspect: 'VOLTASYNC (#081 Magnemite ref): Electromagnetic Steel Pip! Generates magnetic levitation field.',
         bulletType: 'fire',
         moves: [
-          { name: 'Spark Wave', type: 'ELECTRIC', dmg: 35, desc: 'Virtual DOM re-render zap' },
-          { name: 'Flash Cannon', type: 'STEEL', dmg: 45, desc: 'Concentrated steel ray' },
-          { name: 'Thunder Shock', type: 'ELECTRIC', dmg: 50, desc: 'High-voltage hook surge' },
-          { name: 'Sonic Boom', type: 'NORMAL', dmg: 30, desc: 'Direct shockwave pulse' }
+          { name: 'Thunder Shock', type: 'ELECTRIC', dmg: 40, desc: 'High-voltage electric hook jolt' },
+          { name: 'Flash Cannon', type: 'STEEL', dmg: 50, desc: 'Concentrated steel ray laser' },
+          { name: 'Zap Cannon', type: 'ELECTRIC', dmg: 60, desc: 'Supercharged electromagnetic plasma' },
+          { name: 'Sonic Boom', type: 'NORMAL', dmg: 32, desc: 'Supersonic destructive shockwave' }
         ]
       },
       snorlaxpip: {
@@ -947,10 +972,10 @@ class CatchThatPipGame {
         inspect: 'SNORLAXPIP (#143 Snorlax ref): Slumber Bear Pip! Massive HP. Only wakes for delicious snacks.',
         bulletType: 'data',
         moves: [
-          { name: 'Body Slam', type: 'NORMAL', dmg: 50, desc: 'Heavy full-weight drop' },
-          { name: 'Snore Blast', type: 'NORMAL', dmg: 35, desc: 'Echoing slumber shockwave' },
-          { name: 'Mega Punch', type: 'NORMAL', dmg: 42, desc: 'Heavy paw blow' },
-          { name: 'Headbutt', type: 'NORMAL', dmg: 38, desc: 'Rock-solid forehead charge' }
+          { name: 'Body Slam', type: 'NORMAL', dmg: 55, desc: 'Titanic full-weight crushing drop' },
+          { name: 'Mega Punch', type: 'NORMAL', dmg: 45, desc: 'Devastating muscular paw blow' },
+          { name: 'Giga Impact', type: 'NORMAL', dmg: 65, desc: 'All-out brute force charge' },
+          { name: 'Headbutt', type: 'NORMAL', dmg: 38, desc: 'Rock-solid forehead tackle' }
         ]
       },
       neuropip: {
@@ -960,18 +985,18 @@ class CatchThatPipGame {
         hp: 88,
         maxHp: 88,
         type1: 'PSYCHIC',
-        type2: 'AI',
+        type2: 'AURA',
         badgeClass: 'type-trainer',
         spriteSrc: 'assets/neuropip_sprite.svg',
         zone: 'Route 3: Cyber Matrix',
-        greeting: 'Wild NEUROPIP hovered into reality! Its neural crystal glows with deep learning embeddings!',
-        inspect: 'NEUROPIP (#150 Mewtwo ref): Genetic AI Pip! Analyzes and optimizes deep neural architectures.',
+        greeting: 'Wild NEUROPIP hovered into reality! Its telepathic aura pulses with infinite intellect!',
+        inspect: 'NEUROPIP (#150 Mewtwo ref): Genetic Deity Pip! The most powerful psionic force in the realm.',
         bulletType: 'glitch',
         moves: [
-          { name: 'Psychic Beam', type: 'PSYCHIC', dmg: 52, desc: 'Multi-layer perceptron ray' },
-          { name: 'Tensor Strike', type: 'AI', dmg: 45, desc: 'Multi-dimensional matrix hit' },
-          { name: 'Psywave', type: 'PSYCHIC', dmg: 40, desc: 'Harmonic brainwave blast' },
-          { name: 'Barrier', type: 'PSYCHIC', dmg: 0, desc: 'Hardened cognitive firewall' }
+          { name: 'Psystrike', type: 'PSYCHIC', dmg: 65, desc: 'Materialized psionic shockwave' },
+          { name: 'Psychic', type: 'PSYCHIC', dmg: 55, desc: 'Unstoppable telekinetic burst' },
+          { name: 'Aura Sphere', type: 'FIGHTING', dmg: 48, desc: 'Pure aura power that never misses' },
+          { name: 'Shadow Ball', type: 'GHOST', dmg: 50, desc: 'Concentrated dark energy sphere' }
         ]
       }
     };
@@ -1070,118 +1095,160 @@ class CatchThatPipGame {
     this.npcs = [
       {
         id: 'oak',
-        name: 'DEV MENTOR OAK',
+        name: 'ARCHIVIST OAK',
         x: 8 * 32,
         y: 4 * 32,
         color: '#dc2626',
         hatColor: '#ffffff',
-        dialogue: "Welcome, Deepshikha! Use [WASD] to roam. Press [E] or Space near any NPC to interact! In battle, use [1-4] to attack, or press [R] anytime to run away!"
+        dialogueIndex: 0,
+        dialogues: [
+          "Greetings, young Trainer! The Prime Core has fractured into ten elemental frequencies, scattering the wild Pips across the realm. Your quest is to roam the three biomes, tame all 10 in your Pip-Dex, and restore harmony to the Aether Grid!",
+          "Field Tip: Soften a wild Pip's HP into the red or calm its spirit before throwing a Pip-Capsule. A weakened Pip is far easier to capture!",
+          "Ancient scrolls tell of Neuropip (#150)—a mythical psychic intellect forged from the Prime Core's neural crystal, sleeping in Route 3's Cyber Matrix. Only a true champion can face its psychic barrier!"
+        ]
       },
       {
         id: 'nurse_chai',
-        name: 'NURSE CHAI (ESPRESSO HUB)',
+        name: 'NURSE CHAI (OASIS HUB)',
         x: 5 * 32,
         y: 3 * 32,
         color: '#f43f5e',
         hatColor: '#fecdd3',
-        dialogue: "Fresh espresso is ready! Deepshikha and all registered Pips were restored to 100% HP!",
+        dialogueIndex: 0,
+        dialogues: [
+          "Welcome to the Oasis Waystation! Let me brew a restorative pot of celestial blossom tea... ✨ Ding-ding! All your HP has been fully restored to 100%! Safe travels!",
+          "Wild Pips fight because the Core's fracture made them restless. When you battle them with respect and feed them Rare Candy, they become your most loyal companions.",
+          "If your team ever falls low on vitality after an intense encounter, return here anytime! My healing cauldron never runs dry."
+        ],
         action: () => this.healTrainer()
       },
       {
         id: 'pip_researcher',
-        name: 'PIP RESEARCHER MAYA',
+        name: 'RESEARCHER MAYA',
         x: 14 * 32,
         y: 8 * 32,
         color: '#8b5cf6',
         hatColor: '#c4b5fd',
-        dialogue: "Wild Pips roam freely in the grass! Approach any creature to initiate battle. Weaken their HP before throwing a Pip-Capsule for a guaranteed capture!"
+        dialogueIndex: 0,
+        dialogues: [
+          "I study wild Pip biology! Each species has elemental strengths: Fire burns Grass, Grass absorbs Water, Water douses Fire, and Electric shocks everything in between!",
+          "Wild Pips roam freely in the grass! Approach any creature to initiate battle. Remember to use keys [1-4] to select your attacks, or press [R] to flee if things get dangerous.",
+          "Have you heard a sweet melody floating across the meadows? That's Jigglypip! Its soothing lullaby can put even the fiercest dragon into deep slumber."
+        ]
       },
       {
-        id: 'python_dev',
-        name: 'PYTHON ENGINEER',
+        id: 'ranger_kael',
+        name: 'MEADOW RANGER KAEL',
         x: 27 * 32,
         y: 7 * 32,
         color: '#2563eb',
         hatColor: '#1d4ed8',
-        dialogue: "Did you know? Deepshikha architected the First_Python algorithmic hub and B2B eCommerce platform! Wild Flamechar and Bulbasprout love clean Python loops!"
+        dialogueIndex: 0,
+        dialogues: [
+          "Shh! Tread lightly through the amber tall grass of Route 1. Bulbasprouts nest in root hollows, while Flamechars sunbathe on heated boulders.",
+          "Old folklore says a Flamechar's tail flame never dims, even in torrential storms. Its fire reflects its trainer's fighting spirit!",
+          "Keep an eye out for Sparkpip darting through the meadow! It crackles with 60 FPS electric discharge and dashes faster than the wind."
+        ]
       },
       {
-        id: 'data_rea',
-        name: 'DATA SCIENTIST REA',
+        id: 'diver_mira',
+        name: 'LAKE GUARDIAN MIRA',
         x: 18 * 32,
         y: 12 * 32,
         color: '#0284c7',
         hatColor: '#38bdf8',
-        dialogue: "I'm monitoring the SQL stream in the Data Lake! Deepshikha's 8.94 CGPA and Tableau expertise make telemetry analysis look effortless. Look for Aquabyte nearby!"
+        dialogueIndex: 0,
+        dialogues: [
+          "Look into the turquoise depths of Route 2's Whispering Lake... Ancient legends say Aquabyte has guarded these waters for three centuries. Its crystalline shell deflects any blow!",
+          "See that giant sleeping across the bridge? That's Snorlaxpip! It has been snoozing since the last solar eclipse. Don't wake it unless you're prepared for a massive Body Slam!",
+          "The lake's water is fed by subterranean crystal springs. Old myths claim bathing a wild Pip in its waters purifies them of cyber glitch corruption."
+        ]
       },
       {
-        id: 'telemetry_lead',
-        name: 'SEVRA TELEMETRY LEAD',
+        id: 'fisherman_tide',
+        name: 'OLD ANGLER FINN',
         x: 9 * 32,
         y: 16 * 32,
         color: '#059669',
         hatColor: '#34d399',
-        dialogue: "At Sevra AI, Deepshikha led front-end UI and built SQL data pipelines monitoring device telemetry in real-time. Look into the Data Lake for wild Aquabyte!"
+        dialogueIndex: 0,
+        dialogues: [
+          "Ahoy, young traveler! In my fifty years fishing these shores, I've seen the lake glow with phosphorescent tides whenever Aquabyte unleashes Hydro Pump!",
+          "Take caution around the wooden bridge on foggy nights. The shadow creature Spectrepip lurks between dimensions, chuckling softly before casting Shadow Ball!",
+          "Here's an old salt's secret: always keep Sacred Elixirs in your bag. Once you cross into the Glitchlands, there are no healing stations for miles!"
+        ]
       },
       {
         id: 'speedrun_alex',
-        name: 'TRAINER ALEX',
+        name: 'ACE TRAINER ALEX',
         x: 22 * 32,
         y: 15 * 32,
         color: '#ea580c',
         hatColor: '#f97316',
-        dialogue: "Hey Deepshikha! I'm trying to catch all 6 wild Pips. Sparkpip is fast as lightning with 60 FPS electric attacks!"
+        dialogueIndex: 0,
+        dialogues: [
+          "My speed tracker is pinging like crazy! Sparkpip is roaming somewhere nearby. It dodges attacks before you can even blink!",
+          "During battle, pay close attention when the enemy attacks! You must guide your soul inside the combat box and dodge incoming energy bullets to survive!",
+          "I'm on a journey to catch all 10 mythical Pips and become the Grand Arbiter! But you have fire in your eyes too... let's see which of us completes the Pip-Dex first!"
+        ]
       },
       {
-        id: 'cyber_sec',
-        name: 'SECURITY ANALYST',
+        id: 'cipher_sage',
+        name: 'ARCHON CIPHER',
         x: 23 * 32,
         y: 20 * 32,
         color: '#7c3aed',
         hatColor: '#a78bfa',
-        dialogue: "Deepshikha's B.Tech Computer Science Cyber Security specialization (CGPA 8.94)! In this Cyber Matrix, Buggypip, Voltasync, and Neuropip thrive!"
+        dialogueIndex: 0,
+        dialogues: [
+          "HALT! You stand at the threshold of the Obsidian Glitchlands—the epicenter of the Great Rupture! Here, raw energy loops upon itself, birthing strange anomalies.",
+          "Beware Buggypip! A paradox entity tormented by psychic headaches. When its confusion erupts, it creates Memory Leaks that block the event loop of reality!",
+          "Deep inside the obsidian monolith hovers NEUROPIP (#150). It possesses the genetic intellect of the ancient gods. Capture it, and you shall restore the fractured world!"
+        ]
       }
     ];
 
-    // Interactive Objects (Healing Station, Signs, Items)
+    // Interactive Objects (Healing Station, Ancient Core PC, Signs, Items)
     this.interactives = [
       {
         type: 'heal',
         x: 4 * 32,
         y: 3 * 32,
-        label: 'Coffee / Nurse Station',
+        label: 'Oasis Waystation',
         action: () => this.healTrainer()
       },
       {
         type: 'pc',
         x: 12 * 32,
         y: 3 * 32,
-        label: 'Dev PC Terminal',
-        action: () => this.showDialogue('DEV TERMINAL', "Git status: Clean branch 'main'. 4 projects deployed to Vercel and GitHub with 0 lint errors!")
+        label: 'Prime Archive Terminal',
+        action: () => {
+          this.setMode('lore');
+        }
       },
       {
         type: 'sign',
         x: 8 * 32,
         y: 14 * 32,
-        text: "📍 PALLET DEV LAB: Deepshikha Dey's Engineering Headquarters. Exit ahead to Route 1."
+        text: "📍 ARCHIVIST SANCTUARY: Research post of the Prime Core. North: Oasis Waystation. South: Exit to Route 1."
       },
       {
         type: 'sign',
         x: 20 * 32,
         y: 4 * 32,
-        text: "📍 ROUTE 1: PYTHON MEADOW. High concentration of wild Flamechar & Bulbasprout in the tall grass!"
+        text: "📍 ROUTE 1: VERDANT MEADOW. High concentration of wild Flamechar, Bulbasprout & Sparkpip in the tall grass!"
       },
       {
         type: 'sign',
         x: 8 * 32,
         y: 16 * 32,
-        text: "📍 ROUTE 2: DATA LAKE & TELEMETRY SPRINGS. Cross bridge for live SQL streams."
+        text: "📍 ROUTE 2: WHISPERING DATA LAKE. Home of ancient Aquabyte and slumbering Snorlaxpip. Cross bridge with care."
       },
       {
         type: 'sign',
         x: 19 * 32,
         y: 16 * 32,
-        text: "📍 ROUTE 3: CYBER MATRIX RUINS. Warning: Glitches and electric neural state spikes!"
+        text: "📍 ROUTE 3: OBSIDIAN GLITCHLANDS. Warning: Reality distortion field. Ghostly Spectrepip & Genetic Neuropip spotted."
       },
       {
         type: 'item',
@@ -1191,29 +1258,29 @@ class CatchThatPipGame {
         collected: false,
         grant: () => {
           this.inventory.capsules += 3;
-          this.showDialogue('FOUND ITEM', "Deepshikha picked up 3x Pip-Capsules! Ready to catch wild Pips!");
+          this.showDialogue('FOUND ITEM', "You obtained 3x Pip-Capsules! High-tech spherical orbs designed to capture wild Pips.");
         }
       },
       {
         type: 'item',
         x: 4 * 32,
         y: 26 * 32,
-        name: 'StackOverflow Elixir',
+        name: 'Sacred Elixir',
         collected: false,
         grant: () => {
           this.inventory.elixirs += 1;
-          this.showDialogue('FOUND ITEM', "Deepshikha found a StackOverflow Elixir (+60 HP Restore)!");
+          this.showDialogue('FOUND ITEM', "You obtained a Sacred Elixir (+60 HP Restore)! Brewed from crystal spring herbs.");
         }
       },
       {
         type: 'item',
         x: 36 * 32,
         y: 22 * 32,
-        name: 'Rare Code Candy',
+        name: 'Rare Candy',
         collected: false,
         grant: () => {
           this.inventory.candies += 1;
-          this.showDialogue('FOUND ITEM', "Deepshikha found a Rare Code Candy (+1 Level Boost)!");
+          this.showDialogue('FOUND ITEM', "You obtained a Rare Candy (+1 Level Boost)! Crackling with ancient Core energy.");
         }
       }
     ];
@@ -1251,8 +1318,13 @@ class CatchThatPipGame {
           const d = Math.hypot(clickX - (npc.x + 16), clickY - (npc.y + 16));
           if (d < 38) {
             sfx.playClick();
-            if (npc.action) npc.action();
-            else this.showDialogue(npc.name, npc.dialogue);
+            if (npc.action) {
+              npc.action();
+            } else {
+              const msg = npc.dialogues ? npc.dialogues[npc.dialogueIndex % npc.dialogues.length] : (npc.dialogue || "Safe travels, Trainer!");
+              if (npc.dialogues) npc.dialogueIndex++;
+              this.showDialogue(npc.name, msg);
+            }
             return;
           }
         }
@@ -1341,6 +1413,12 @@ class CatchThatPipGame {
         if (this.mode === 'dex') this.setMode('overworld');
         else if (this.mode === 'overworld') this.setMode('dex');
       }
+
+      // Realm Lore toggle via [L]
+      if (k === 'l') {
+        if (this.mode === 'lore') this.setMode('overworld');
+        else if (this.mode === 'overworld') this.setMode('lore');
+      }
     });
 
     window.addEventListener('keyup', (e) => {
@@ -1373,7 +1451,7 @@ class CatchThatPipGame {
     document.getElementById('btn-ctrl-b')?.addEventListener('mouseup', () => { this.player.isSprinting = false; });
     document.getElementById('btn-ctrl-b')?.addEventListener('click', () => {
       if (this.dialogueActive) this.closeDialogue();
-      else if (this.mode === 'dex') this.setMode('overworld');
+      else if (this.mode === 'dex' || this.mode === 'lore') this.setMode('overworld');
     });
 
     // Cabinet Top Strip Buttons
@@ -1390,6 +1468,17 @@ class CatchThatPipGame {
     });
 
     document.getElementById('dex-close-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.setMode('overworld');
+    });
+
+    document.getElementById('game-lore-toggle-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      if (this.mode === 'lore') this.setMode('overworld');
+      else this.setMode('lore');
+    });
+
+    document.getElementById('lore-close-btn')?.addEventListener('click', () => {
       sfx.playClick();
       this.setMode('overworld');
     });
@@ -1426,16 +1515,19 @@ class CatchThatPipGame {
     const owView = document.getElementById('view-overworld');
     const battleView = document.getElementById('view-battle');
     const dexView = document.getElementById('view-dex');
+    const loreView = document.getElementById('view-lore');
     const modeBtnText = document.getElementById('game-mode-text');
 
     if (owView) owView.style.display = targetMode === 'overworld' ? 'block' : 'none';
     if (battleView) battleView.style.display = targetMode === 'battle' ? 'block' : 'none';
     if (dexView) dexView.style.display = targetMode === 'dex' ? 'block' : 'none';
+    if (loreView) loreView.style.display = targetMode === 'lore' ? 'block' : 'none';
 
     if (modeBtnText) {
       if (targetMode === 'overworld') modeBtnText.textContent = '🗺️ Open World';
       else if (targetMode === 'battle') modeBtnText.textContent = '⚔️ Battle Arena';
-      else modeBtnText.textContent = '📖 Pip-Dex';
+      else if (targetMode === 'dex') modeBtnText.textContent = '📖 Pip-Dex';
+      else if (targetMode === 'lore') modeBtnText.textContent = '📜 Realm Lore';
     }
 
     if (targetMode === 'overworld') {
@@ -1446,6 +1538,8 @@ class CatchThatPipGame {
     } else if (targetMode === 'dex') {
       cancelAnimationFrame(this.owAnimId);
       this.renderDexUI();
+    } else if (targetMode === 'lore') {
+      cancelAnimationFrame(this.owAnimId);
     }
   }
 
@@ -1585,6 +1679,11 @@ class CatchThatPipGame {
 
       // Update zone banner name
       this.updateCurrentZoneName(tileCol, tileRow);
+
+      // Record player trail for following partner Pokemon (HGSS following mechanic)
+      if (!p.trail) p.trail = [];
+      p.trail.unshift({ x: p.x, y: p.y, dir: p.dir });
+      if (p.trail.length > 25) p.trail.pop();
     } else {
       p.isMoving = false;
       p.animFrame = 0;
@@ -1603,6 +1702,29 @@ class CatchThatPipGame {
       gp.y += gp.vy;
       gp.life -= 0.04;
       if (gp.life <= 0) p.grassParticles.splice(i, 1);
+    }
+
+    // HeartGold partner following update
+    if (this.partner) {
+      if (!p.trail) p.trail = [];
+      const followDelay = p.isSprinting ? 8 : 12;
+      if (p.trail.length > followDelay) {
+        const target = p.trail[followDelay];
+        this.partner.x += (target.x - this.partner.x) * 0.22;
+        this.partner.y += (target.y - this.partner.y) * 0.22;
+        this.partner.dir = target.dir;
+      }
+    }
+
+    // Autumn wind leaves animation update
+    if (this.windLeaves) {
+      this.windLeaves.forEach(leaf => {
+        leaf.x += leaf.speedX;
+        leaf.y += leaf.speedY;
+        leaf.rot += leaf.rotSpeed;
+        if (leaf.x > this.camera.width + 30) leaf.x = -30;
+        if (leaf.y > this.camera.height + 30) leaf.y = -30;
+      });
     }
 
     // Roaming Pips idle wander
@@ -1643,10 +1765,10 @@ class CatchThatPipGame {
   updateCurrentZoneName(c, r) {
     const pill = document.getElementById('ow-zone-pill');
     if (!pill) return;
-    let zone = 'Route 1: Python Meadow';
-    if (c <= 15 && r <= 13) zone = 'Pallet Dev Lab';
-    else if (c <= 16 && r >= 16) zone = 'Route 2: Data Lake';
-    else if (c >= 18 && r >= 16) zone = 'Route 3: Cyber Matrix';
+    let zone = 'Route 1: Verdant Meadow';
+    if (c <= 15 && r <= 13) zone = 'Archivist Sanctuary';
+    else if (c <= 16 && r >= 16) zone = 'Route 2: Whispering Lake';
+    else if (c >= 18 && r >= 16) zone = 'Route 3: Obsidian Glitchlands';
 
     pill.innerHTML = `<span>📍 ${zone}</span>`;
   }
@@ -1924,60 +2046,258 @@ class CatchThatPipGame {
     });
     ctx.globalAlpha = 1.0;
 
-    // 6. Draw Player Trainer Deepshikha
+    // 5.5 Draw HeartGold Following Partner Pokémon
+    this.drawFollowingPokemon(ctx, cx, cy, time);
+
+    // 6. Draw Player Trainer Deepshikha (Exact Match to User's Official Character Design)
     const p = this.player;
     const px = Math.floor(p.x - cx);
     const py = Math.floor(p.y - cy);
-
-    // Trainer Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.beginPath();
-    ctx.ellipse(px + 12, py + 26, 9, 4, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Leg step offsets based on animFrame
-    const stepOffset = p.isMoving ? (p.animFrame % 2 === 0 ? 3 : -3) : 0;
-
-    // Shoes
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(px + 6, py + 22 + (p.dir === 0 ? stepOffset : 0), 4, 6);
-    ctx.fillRect(px + 14, py + 22 - (p.dir === 0 ? stepOffset : 0), 4, 6);
-
-    // Red / Sage Trainer Jacket Body
-    ctx.fillStyle = '#dc2626';
-    ctx.fillRect(px + 5, py + 11, 14, 12);
-    // Yellow backpack straps
-    ctx.fillStyle = '#facc15';
-    ctx.fillRect(px + 7, py + 12, 2, 10);
-    ctx.fillRect(px + 15, py + 12, 2, 10);
-
-    // Head / Face
-    ctx.fillStyle = '#fcd34d';
-    ctx.beginPath();
-    ctx.arc(px + 12, py + 8, 7, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Flowing dark hair
-    ctx.fillStyle = '#1c1917';
-    ctx.fillRect(px + 4, py + 4, 16, 5);
-    ctx.fillRect(px + 3, py + 6, 4, 9);
-    ctx.fillRect(px + 17, py + 6, 4, 9);
-
-    // Trainer Red Cap
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(px + 4, py + 1, 16, 4);
-    // Cap visor facing direction
-    if (p.dir === 0) ctx.fillRect(px + 8, py + 4, 8, 2); // Facing Down
-    else if (p.dir === 2) ctx.fillRect(px + 2, py + 4, 6, 2); // Facing Left
-    else if (p.dir === 3) ctx.fillRect(px + 16, py + 4, 6, 2); // Facing Right
+    this.drawTrainerDeepshikha(ctx, px, py, p.dir, p.animFrame, p.isMoving);
 
     // Tall Grass Overlay over Player's feet when inside grass (classic Pokemon immersion!)
     const pTileCol = Math.floor((p.x + p.w / 2) / this.tileSize);
     const pTileRow = Math.floor((p.y + p.h / 2) / this.tileSize);
     if (this.tiles[pTileRow] && this.tiles[pTileRow][pTileCol] === 5) {
       ctx.fillStyle = '#84cc16';
-      ctx.fillRect(px + 2, py + 20, 20, 8);
+      ctx.fillRect(px + 2, py + 22, 20, 6);
     }
+
+    // 7. Draw Floating HGSS Autumn Leaves / Wind Particles
+    this.drawWindLeaves(ctx);
+  }
+
+  drawTrainerDeepshikha(ctx, px, py, dir, animFrame, isMoving) {
+    const stepOffset = isMoving ? (animFrame % 2 === 0 ? 2 : -2) : 0;
+    const sway = isMoving ? Math.sin(animFrame * 1.5) * 1.5 : 0;
+
+    // 1. Trainer Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.beginPath();
+    ctx.ellipse(px + 12, py + 27, 10, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Dark Brown Mary Jane Strapped Shoes
+    ctx.fillStyle = '#2b1810';
+    ctx.fillRect(px + 6, py + 23 + (dir === 0 ? stepOffset : 0), 4, 5);
+    ctx.fillRect(px + 14, py + 23 - (dir === 0 ? stepOffset : 0), 4, 5);
+
+    // 3. Bohemian Tiered Ruffled Maxi Skirt (Rich Mocha Brown)
+    ctx.fillStyle = '#452e24';
+    ctx.beginPath();
+    ctx.moveTo(px + 4 + sway, py + 16);
+    ctx.lineTo(px + 20 + sway, py + 16);
+    ctx.lineTo(px + 21, py + 24);
+    ctx.lineTo(px + 3, py + 24);
+    ctx.closePath();
+    ctx.fill();
+    // Skirt Ruffle Frill Layers (Tier shadows and frills)
+    ctx.fillStyle = '#36231b';
+    ctx.fillRect(px + 3, py + 20, 18, 2);
+    ctx.fillStyle = '#52372b';
+    ctx.fillRect(px + 4, py + 23, 16, 1.5);
+
+    // 4. Gold Coin Belt at Waistline
+    ctx.fillStyle = '#facc15';
+    for (let bx = px + 6; bx <= px + 18; bx += 3) {
+      ctx.fillRect(bx, py + 15, 2, 2);
+    }
+
+    // 5. Chic Black Wrap Cropped Top
+    ctx.fillStyle = '#242120';
+    ctx.fillRect(px + 5, py + 9, 14, 6);
+    // V-neckline opening
+    ctx.fillStyle = '#df9f7e';
+    ctx.fillRect(px + 10, py + 9, 4, 3);
+    // Gold Heart Necklace
+    ctx.fillStyle = '#fbbf24';
+    ctx.fillRect(px + 11, py + 11, 2, 2);
+
+    // Flared Bell Sleeves
+    ctx.fillStyle = '#242120';
+    ctx.fillRect(px + 3, py + 10, 3, 6);
+    ctx.fillRect(px + 18, py + 10, 3, 6);
+
+    // 6. Brown Leather Shoulder Bag
+    ctx.fillStyle = '#5c3826';
+    if (dir === 0 || dir === 2) {
+      ctx.fillRect(px + 17, py + 13, 5, 6);
+      ctx.fillRect(px + 7, py + 9, 2, 6);
+    }
+
+    // 7. Hand Holding Pokéball
+    if (dir === 0 || dir === 3) {
+      ctx.fillStyle = '#df9f7e';
+      ctx.fillRect(px + 20, py + 12, 3, 3);
+      // Miniature Pokéball
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(px + 21, py + 11, 4, 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(px + 21, py + 13, 4, 2);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(px + 22, py + 12, 2, 1);
+    }
+
+    // 8. Head & Warm Radiant Face
+    ctx.fillStyle = '#df9f7e';
+    ctx.beginPath();
+    ctx.arc(px + 12, py + 7, 6.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 9. Facial Features & Gold Hoop Earring
+    if (dir === 0) { // Facing down
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(px + 9, py + 6, 2, 2);
+      ctx.fillRect(px + 13, py + 6, 2, 2);
+      ctx.fillStyle = '#c4715a';
+      ctx.fillRect(px + 10, py + 9, 4, 1);
+      // Gold hoop earring on side
+      ctx.fillStyle = '#facc15';
+      ctx.fillRect(px + 5, py + 7, 2, 3);
+    } else if (dir === 2) { // Facing left
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(px + 8, py + 6, 2, 2);
+      ctx.fillStyle = '#facc15';
+      ctx.fillRect(px + 15, py + 7, 2, 3);
+    } else if (dir === 3) { // Facing right
+      ctx.fillStyle = '#1c1917';
+      ctx.fillRect(px + 14, py + 6, 2, 2);
+      ctx.fillStyle = '#facc15';
+      ctx.fillRect(px + 7, py + 7, 2, 3);
+    }
+
+    // 10. Long Wavy Brunette/Black Hair (Cascading Naturally, NO CAP)
+    ctx.fillStyle = '#1c1917';
+    ctx.fillRect(px + 6, py + 1, 12, 4);
+    // Parting line highlight
+    ctx.fillStyle = '#322622';
+    ctx.fillRect(px + 11, py + 1, 2, 3);
+
+    // Cascading waves down sides & shoulders
+    ctx.fillStyle = '#1c1917';
+    if (dir === 1) { // Facing up - hair flows down back
+      ctx.fillRect(px + 5, py + 2, 14, 12);
+      ctx.fillRect(px + 4, py + 6, 16, 8);
+    } else {
+      ctx.fillRect(px + 4, py + 3, 4, 11);
+      ctx.fillRect(px + 16, py + 3, 4, 11);
+      ctx.fillRect(px + 3, py + 8, 3, 5);
+      ctx.fillRect(px + 18, py + 8, 3, 5);
+    }
+  }
+
+  drawFollowingPokemon(ctx, cx, cy, time) {
+    if (!this.partner) return;
+    const k = this.activePokemonKey || 'flamechar';
+    const poke = this.speciesData[k];
+    if (!poke) return;
+
+    const px = Math.floor(this.partner.x - cx);
+    const py = Math.floor(this.partner.y - cy);
+    if (px < -32 || px > this.camera.width || py < -32 || py > this.camera.height) return;
+
+    const bob = (this.player.isMoving ? Math.sin(time * 8) * 2 : 0);
+
+    ctx.save();
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(px + 12, py + 24, 9, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Specific mini-sprite based on species
+    if (k === 'flamechar') {
+      ctx.fillStyle = '#ea580c';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 14 + bob, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fef08a';
+      ctx.fillRect(px + 9, py + 14 + bob, 6, 6);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(px + 9, py + 11 + bob, 2, 3);
+      ctx.fillRect(px + 13, py + 11 + bob, 2, 3);
+      // Flame tail
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(px + 4, py + 12 + bob + Math.sin(time * 12) * 2, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fde047';
+      ctx.beginPath();
+      ctx.arc(px + 4, py + 12 + bob + Math.sin(time * 12) * 2, 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (k === 'bulbasprout') {
+      ctx.fillStyle = '#22c55e';
+      ctx.fillRect(px + 5, py + 12 + bob, 14, 10);
+      ctx.fillStyle = '#ec4899';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 8 + bob, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#f472b6';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 7 + bob, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(px + 7, py + 13 + bob, 2, 3);
+      ctx.fillRect(px + 15, py + 13 + bob, 2, 3);
+    } else if (k === 'aquabyte') {
+      ctx.fillStyle = '#0284c7';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 14 + bob, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(px + 6, py + 11 + bob, 5, 8);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(px + 10, py + 12 + bob, 2, 3);
+      ctx.fillRect(px + 14, py + 12 + bob, 2, 3);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(px + 3, py + 16 + bob, 3, 3);
+    } else if (k === 'sparkpip') {
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 14 + bob, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillRect(px + 7, py + 5 + bob, 2, 4);
+      ctx.fillRect(px + 15, py + 5 + bob, 2, 4);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(px + 7, py + 3 + bob, 2, 2);
+      ctx.fillRect(px + 15, py + 3 + bob, 2, 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(px + 7, py + 15 + bob, 2, 2);
+      ctx.fillRect(px + 15, py + 15 + bob, 2, 2);
+      ctx.fillStyle = '#facc15';
+      ctx.fillRect(px + 3, py + 10 + bob, 3, 5);
+    } else {
+      ctx.fillStyle = poke.type1 === 'GHOST' ? '#7e22ce' : poke.type1 === 'FAIRY' ? '#f472b6' : '#eab308';
+      ctx.beginPath();
+      ctx.arc(px + 12, py + 14 + bob, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(px + 9, py + 12 + bob, 2, 3);
+      ctx.fillRect(px + 13, py + 12 + bob, 2, 3);
+    }
+
+    // Little Heart / Sparkle of Partner Bond
+    if (Math.sin(time * 2) > 0.8) {
+      ctx.fillStyle = '#f43f5e';
+      ctx.font = 'bold 8px monospace';
+      ctx.fillText('♥', px + 18, py + 6 + bob);
+    }
+
+    ctx.restore();
+  }
+
+  drawWindLeaves(ctx) {
+    if (!this.windLeaves) return;
+    this.windLeaves.forEach(leaf => {
+      ctx.save();
+      ctx.translate(leaf.x, leaf.y);
+      ctx.rotate(leaf.rot);
+      ctx.fillStyle = leaf.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, leaf.size, leaf.size / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
   }
 
   handleActionPress() {
@@ -2008,8 +2328,30 @@ class CatchThatPipGame {
         if (npc.action) {
           npc.action();
         } else {
-          this.showDialogue(npc.name, npc.dialogue);
+          const msg = npc.dialogues ? npc.dialogues[npc.dialogueIndex % npc.dialogues.length] : (npc.dialogue || "Safe travels, Trainer!");
+          if (npc.dialogues) npc.dialogueIndex++;
+          this.showDialogue(npc.name, msg);
         }
+        return;
+      }
+    }
+
+    // Check Partner Pokémon Interaction (HGSS Feature!)
+    if (this.partner) {
+      const distToPartner = Math.hypot(pxCenter - (this.partner.x + 12), pyCenter - (this.partner.y + 12));
+      const dirDistPartner = Math.hypot(checkX - (this.partner.x + 12), checkY - (this.partner.y + 12));
+      if (distToPartner < 38 || dirDistPartner < 38) {
+        sfx.playBlip();
+        const k = this.activePokemonKey || 'flamechar';
+        const poke = this.speciesData[k];
+        const dialogues = [
+          `${poke.name} looked up happily at DEEPSHIKHA! It seems full of energy! ♥`,
+          `${poke.name} is walking briskly alongside DEEPSHIKHA, matching her footsteps!`,
+          `${poke.name} rubbed gently against DEEPSHIKHA! Its bond with its Trainer grows stronger!`,
+          `${poke.name} looked around the route curiously, ready for whatever adventure comes next!`
+        ];
+        const quote = dialogues[Math.floor(Math.random() * dialogues.length)];
+        this.showDialogue(`PARTNER ${poke.name}`, quote);
         return;
       }
     }
@@ -2036,7 +2378,13 @@ class CatchThatPipGame {
     sfx.playHeal();
     this.player.hp = this.player.maxHp;
     this.updateHUD();
-    this.showDialogue('ESPRESSO NURSE HUB', "Nurse Chai brewed fresh espresso! Deepshikha and all registered Pips were restored to 100% HP!");
+    const nurse = this.npcs.find(n => n.id === 'nurse_chai');
+    let msg = "Welcome to the Oasis Waystation! Fresh celestial herbal tea is brewed! All your HP was restored to 100%!";
+    if (nurse && nurse.dialogues) {
+      msg = nurse.dialogues[nurse.dialogueIndex % nurse.dialogues.length];
+      nurse.dialogueIndex++;
+    }
+    this.showDialogue('NURSE CHAI (OASIS HUB)', msg);
   }
 
   showDialogue(speaker, message) {
@@ -2129,8 +2477,26 @@ class CatchThatPipGame {
       mascotImg.alt = this.pip.name;
     }
 
+    // Populate Player Active Pokémon UI
+    const activeData = this.speciesData[this.activePokemonKey] || this.speciesData.flamechar;
+    const pNameEl = document.getElementById('player-battle-name');
+    const pType1 = document.getElementById('player-type-badge-1');
+    const pType2 = document.getElementById('player-type-badge-2');
+    const pPartnerImg = document.getElementById('player-partner-img');
+
+    if (pNameEl) pNameEl.textContent = activeData.name;
+    if (pType1) {
+      pType1.textContent = activeData.type1;
+      pType1.className = `psc-badge ${activeData.badgeClass || 'type-trainer'}`;
+    }
+    if (pType2) pType2.textContent = activeData.type2 || 'PARTNER';
+    if (pPartnerImg) {
+      pPartnerImg.src = activeData.spriteSrc;
+      pPartnerImg.alt = activeData.name;
+    }
+
     this.updateHpUI();
-    this.typeDialogue(`Wild ${this.pip.name} appeared! What will DEEPSHIKHA do?`);
+    this.typeDialogue(`Wild ${this.pip.name} appeared! Go, ${activeData.name}! What will DEEPSHIKHA do?`);
   }
 
   typeDialogue(text, callback) {
@@ -2241,68 +2607,66 @@ class CatchThatPipGame {
     grid.innerHTML = '';
     panel.style.display = 'block';
 
+    const activeData = this.speciesData[this.activePokemonKey] || this.speciesData.flamechar;
+
     if (category === 'fight') {
-      title.textContent = 'CHOOSE A POKÉMON ATTACK:';
-      const trainerMoves = [
-        { name: 'Python Strike', type: 'FIRE', dmg: 35, desc: 'Fiery logic pulse' },
-        { name: 'SQL Query Blast', type: 'DATA', dmg: 45, desc: 'Indexed table impact' },
-        { name: 'React State Shock', type: 'ELECTRIC', dmg: 38, desc: 'High-speed async re-render' },
-        { name: 'Git Commit Patch', type: 'CODE', dmg: 55, desc: 'Critical deploy strike' }
+      title.textContent = `CHOOSE ${activeData.name}'S ATTACK:`;
+      const currentMoves = activeData.moves || [
+        { name: 'Tackle', type: 'NORMAL', dmg: 35, desc: 'A physical tackle' }
       ];
-      trainerMoves.forEach(m => {
+      currentMoves.forEach(m => {
         const btn = document.createElement('button');
         btn.className = 'submenu-item-btn';
-        btn.innerHTML = `<span class="sub-item-name">⚔ ${m.name}</span><span class="sub-item-meta">${m.desc} (${m.dmg} DMG)</span>`;
+        btn.innerHTML = `<span class="sub-item-name">⚔ ${m.name}</span><span class="sub-item-meta">[${m.type}] ${m.desc} (${m.dmg} DMG)</span>`;
         btn.addEventListener('click', () => this.executeAttack(m));
         grid.appendChild(btn);
       });
-    } else if (category === 'act') {
-      title.textContent = 'INTERACT & COMMUNE WITH PIP:';
-      const acts = [
-        { name: '* Inspect Pip', action: () => this.typeDialogue(this.pip.inspect, () => this.closeSubmenu()) },
-        {
-          name: '* Refactor Code',
-          action: () => {
-            this.isRefactored = true;
-            sfx.playHeal();
-            const tag = document.getElementById('enemy-status-tag');
-            if (tag) {
-              tag.textContent = 'REFACTORED';
-              tag.style.backgroundColor = '#a7f3d0';
-            }
-            this.typeDialogue(`You refactored ${this.pip.name}'s syntax! Catch probability boosted to 95%!`, () => this.triggerEnemyTurn());
-          }
-        },
-        {
-          name: '* Console.log Debug',
-          action: () => {
-            sfx.playSelect();
-            this.typeDialogue(`> console.log(${this.pip.name}): Status 200 OK. Memory leaks resolved!`, () => this.triggerEnemyTurn());
-          }
-        },
-        {
-          name: '* Share Chai Break',
-          action: () => {
-            sfx.playHeal();
-            this.player.hp = Math.min(this.player.maxHp, this.player.hp + 25);
-            this.updateHpUI();
-            this.typeDialogue(`You shared warm chai with ${this.pip.name}! Restored 25 HP!`, () => this.triggerEnemyTurn());
-          }
-        }
-      ];
-      acts.forEach(a => {
+    } else if (category === 'act' || category === 'pokemon') {
+      title.textContent = 'POKÉMON TEAM (SELECT TO BATTLE / SWITCH):';
+      const teamKeys = [...new Set([...this.playerTeam, ...Object.keys(this.dex).filter(k => this.dex[k])])];
+      teamKeys.forEach(key => {
+        const poke = this.speciesData[key];
+        if (!poke) return;
+        const isActive = (key === this.activePokemonKey);
         const btn = document.createElement('button');
-        btn.className = 'submenu-item-btn';
-        btn.innerHTML = `<span class="sub-item-name">${a.name}</span>`;
-        btn.addEventListener('click', a.action);
+        btn.className = `submenu-item-btn pokemon-team-btn ${isActive ? 'active-team-member' : ''}`;
+        btn.innerHTML = `
+          <div class="sub-pkmn-row">
+            <img src="${poke.spriteSrc}" alt="${poke.name}" class="sub-pkmn-thumb">
+            <div class="sub-pkmn-info">
+              <span class="sub-item-name">${poke.name} :L${poke.level} ${isActive ? '★ [ACTIVE]' : ''}</span>
+              <span class="sub-item-meta">[${poke.type1}/${poke.type2}] Moves: ${poke.moves.map(m => m.name).join(', ')}</span>
+            </div>
+            <span class="sub-pkmn-action">${isActive ? 'IN ARENA' : 'SWITCH IN'}</span>
+          </div>
+        `;
+        btn.addEventListener('click', () => this.switchBattlePokemon(key));
         grid.appendChild(btn);
       });
+
+      // Special trainer actions
+      const inspectBtn = document.createElement('button');
+      inspectBtn.className = 'submenu-item-btn';
+      inspectBtn.innerHTML = `<span class="sub-item-name">🔍 Inspect Wild ${this.pip.name}</span>`;
+      inspectBtn.addEventListener('click', () => this.typeDialogue(this.pip.inspect, () => this.closeSubmenu()));
+      grid.appendChild(inspectBtn);
+
+      const chaiBtn = document.createElement('button');
+      chaiBtn.className = 'submenu-item-btn';
+      chaiBtn.innerHTML = `<span class="sub-item-name">☕ Share Chai Break (+25 HP to Team)</span>`;
+      chaiBtn.addEventListener('click', () => {
+        sfx.playHeal();
+        this.player.hp = Math.min(this.player.maxHp, this.player.hp + 25);
+        this.updateHpUI();
+        this.typeDialogue(`Trainer shared warm celestial chai! Restored 25 HP!`, () => this.triggerEnemyTurn());
+      });
+      grid.appendChild(chaiBtn);
     } else if (category === 'item') {
       title.textContent = 'TRAINER BAG ITEMS:';
       const items = [
-        { name: `Hot Espresso (+30 HP) [x${this.inventory.potions}]`, count: this.inventory.potions, heal: 30, use: () => this.inventory.potions-- },
-        { name: `StackOverflow Elixir (+60 HP) [x${this.inventory.elixirs}]`, count: this.inventory.elixirs, heal: 60, use: () => this.inventory.elixirs-- },
-        { name: `Rare Code Candy (+1 Lvl) [x${this.inventory.candies}]`, count: this.inventory.candies, heal: 0, lvl: true, use: () => this.inventory.candies-- }
+        { name: `Celestial Tea (+30 HP) [x${this.inventory.potions}]`, count: this.inventory.potions, heal: 30, use: () => this.inventory.potions-- },
+        { name: `Sacred Elixir (+60 HP) [x${this.inventory.elixirs}]`, count: this.inventory.elixirs, heal: 60, use: () => this.inventory.elixirs-- },
+        { name: `Rare Candy (+1 Lvl) [x${this.inventory.candies}]`, count: this.inventory.candies, heal: 0, lvl: true, use: () => this.inventory.candies-- }
       ];
       items.forEach(it => {
         const btn = document.createElement('button');
@@ -2317,12 +2681,12 @@ class CatchThatPipGame {
           sfx.playHeal();
           if (it.lvl) {
             this.player.level += 1;
-            showToast(`Deepshikha reached Level ${this.player.level}!`);
+            showToast(`Trainer reached Level ${this.player.level}!`);
           } else {
             this.player.hp = Math.min(this.player.maxHp, this.player.hp + it.heal);
           }
           this.updateHpUI();
-          this.typeDialogue(`Deepshikha used an item from the bag!`, () => this.triggerEnemyTurn());
+          this.typeDialogue(`Trainer used an item from the satchel!`, () => this.triggerEnemyTurn());
         });
         grid.appendChild(btn);
       });
@@ -2350,6 +2714,38 @@ class CatchThatPipGame {
     }
   }
 
+  switchBattlePokemon(speciesKey) {
+    this.closeSubmenu();
+    if (speciesKey === this.activePokemonKey) {
+      showToast(`${this.speciesData[speciesKey].name} is already battling!`);
+      return;
+    }
+    this.activePokemonKey = speciesKey;
+    const poke = this.speciesData[speciesKey];
+    sfx.playSelect();
+
+    // Update UI elements in player battle card
+    const pNameEl = document.getElementById('player-battle-name');
+    const pType1 = document.getElementById('player-type-badge-1');
+    const pType2 = document.getElementById('player-type-badge-2');
+    const pPartnerImg = document.getElementById('player-partner-img');
+
+    if (pNameEl) pNameEl.textContent = poke.name;
+    if (pType1) {
+      pType1.textContent = poke.type1;
+      pType1.className = `psc-badge ${poke.badgeClass || 'type-trainer'}`;
+    }
+    if (pType2) pType2.textContent = poke.type2 || 'PARTNER';
+    if (pPartnerImg) {
+      pPartnerImg.src = poke.spriteSrc;
+      pPartnerImg.alt = poke.name;
+    }
+
+    this.typeDialogue(`DEEPSHIKHA sent out ${poke.name}! "I choose you!"`, () => {
+      this.triggerEnemyTurn();
+    });
+  }
+
   closeSubmenu() {
     sfx.playClick();
     const panel = document.getElementById('pip-submenu-panel');
@@ -2360,6 +2756,7 @@ class CatchThatPipGame {
     this.closeSubmenu();
     sfx.playAttack();
 
+    const activeData = this.speciesData[this.activePokemonKey] || this.speciesData.flamechar;
     const sprite = document.getElementById('enemy-sprite');
     if (sprite) {
       sprite.classList.add('arena-shake');
@@ -2369,9 +2766,14 @@ class CatchThatPipGame {
     // Type effectiveness check
     let mult = 1.0;
     let effectMsg = '';
-    if ((move.type === 'FIRE' && this.pip.type1 === 'GLITCH') ||
-        (move.type === 'DATA' && this.pip.type1 === 'FIRE') ||
-        (move.type === 'ELECTRIC' && this.pip.type1 === 'WATER')) {
+    const et1 = this.pip.type1;
+    const et2 = this.pip.type2;
+    if ((move.type === 'FIRE' && (et1 === 'GRASS' || et2 === 'GRASS' || et1 === 'STEEL' || et2 === 'STEEL')) ||
+        (move.type === 'WATER' && (et1 === 'FIRE' || et2 === 'FIRE')) ||
+        (move.type === 'GRASS' && (et1 === 'WATER' || et2 === 'WATER')) ||
+        (move.type === 'ELECTRIC' && (et1 === 'WATER' || et2 === 'WATER')) ||
+        (move.type === 'GHOST' && (et1 === 'PSYCHIC' || et2 === 'PSYCHIC')) ||
+        (move.type === 'PSYCHIC' && (et1 === 'POISON' || et2 === 'POISON'))) {
       mult = 1.5;
       effectMsg = " It's super effective!";
     }
@@ -2387,7 +2789,7 @@ class CatchThatPipGame {
         setTimeout(() => this.setMode('overworld'), 2000);
       });
     } else {
-      this.typeDialogue(`Deepshikha used ${move.name}! Dealt ${dealt} damage!${effectMsg}`, () => {
+      this.typeDialogue(`${activeData.name} used ${move.name}! Dealt ${dealt} damage!${effectMsg}`, () => {
         this.triggerEnemyTurn();
       });
     }
@@ -2404,7 +2806,7 @@ class CatchThatPipGame {
     sfx.playSelect();
     const dialogue = document.getElementById('pip-dialogue-text');
     if (dialogue) {
-      dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Deepshikha threw a Pip-Capsule...!`;
+      dialogue.innerHTML = `<span class="wobble-capsule">🔴</span> Trainer threw a Pip-Capsule...!`;
     }
 
     setTimeout(() => {
@@ -2430,6 +2832,9 @@ class CatchThatPipGame {
         sfx.playVictory();
         this.isTamed = true;
         this.dex[this.currentSpeciesKey] = true; // Registered to Pip-Dex!
+        if (!this.playerTeam.includes(this.currentSpeciesKey)) {
+          this.playerTeam.push(this.currentSpeciesKey);
+        }
         this.updateHUD();
 
         const tag = document.getElementById('enemy-status-tag');
@@ -2439,7 +2844,7 @@ class CatchThatPipGame {
         }
 
         this.typeDialogue(`🎉 GOTCHA! Wild ${this.pip.name} was caught and registered to your Pip-Dex! ⭐`, () => {
-          showToast(`Caught ${this.pip.name}! Added to Pip-Dex!`);
+          showToast(`Caught ${this.pip.name}! Added to Pip-Dex & Team!`);
           setTimeout(() => this.setMode('overworld'), 2200);
         });
       } else {
@@ -2599,9 +3004,10 @@ class CatchThatPipGame {
     Object.keys(this.speciesData).forEach(key => {
       const sp = this.speciesData[key];
       const isCaught = this.dex[key];
+      const isActive = (key === this.activePokemonKey);
 
       const card = document.createElement('div');
-      card.className = `dex-card ${isCaught ? 'caught' : ''}`;
+      card.className = `dex-card ${isCaught ? 'caught' : ''} ${isActive ? 'active-partner-card' : ''}`;
       card.innerHTML = `
         <span class="dex-card-num">${sp.id}</span>
         <img src="${sp.spriteSrc}" alt="${sp.name}" class="dex-card-img" style="filter: ${isCaught ? 'none' : 'brightness(0.3) grayscale(1)'};">
@@ -2610,8 +3016,20 @@ class CatchThatPipGame {
           <span class="psc-badge ${sp.badgeClass}">${sp.type1}</span>
           <span class="psc-badge type-code">${sp.type2}</span>
         </div>
-        <span class="dex-card-status ${isCaught ? 'caught' : 'wild'}">${isCaught ? '✓ CAUGHT' : 'UNKNOWN'}</span>
+        <span class="dex-card-status ${isCaught ? 'caught' : 'wild'}">${isCaught ? (isActive ? '★ ACTIVE PARTNER' : '✓ CAUGHT (Click to Partner)') : 'UNKNOWN'}</span>
       `;
+
+      if (isCaught) {
+        card.style.cursor = 'pointer';
+        card.title = `Click to set ${sp.name} as your following partner & battle lead!`;
+        card.addEventListener('click', () => {
+          sfx.playSelect();
+          this.activePokemonKey = key;
+          showToast(`Set ${sp.name} as your following partner!`);
+          this.renderDexUI();
+        });
+      }
+
       grid.appendChild(card);
     });
 
@@ -2758,14 +3176,5 @@ document.querySelectorAll('#resume-skills-filters .skill-filter-btn').forEach(bt
   });
 });
 
-// Dynamic Resume: Copy Email Button
-document.getElementById('resume-copy-email-btn')?.addEventListener('click', () => {
-  sfx.playClick();
-  navigator.clipboard.writeText('dey.deepshikha.283@gmail.com').then(() => {
-    showToast('Copied email dey.deepshikha.283@gmail.com to clipboard! 📋');
-  }).catch(() => {
-    showToast('dey.deepshikha.283@gmail.com');
-  });
-});
 
 } // End of browser environment guard

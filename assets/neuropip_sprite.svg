@@ -1,47 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <filter id="neuro-glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ec4899"/>
-    </filter>
-    <linearGradient id="neuro-body" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f472b6"/>
-      <stop offset="40%" stop-color="#c084fc"/>
-      <stop offset="100%" stop-color="#818cf8"/>
+    <linearGradient id="np-skin-grad" x1="20%" y1="10%" x2="80%" y2="90%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#e9d5ff"/>
+      <stop offset="75%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#9333ea"/>
     </linearGradient>
+    <linearGradient id="np-tail-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="50%" stop-color="#7e22ce"/>
+      <stop offset="100%" stop-color="#4c1d95"/>
+    </linearGradient>
+    <radialGradient id="np-aura-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d946ef" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#3b0764" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="np-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#581c87" flood-opacity="0.5"/>
+    </filter>
   </defs>
 
-  <!-- Psychic Wave Rings Floating Behind -->
-  <circle cx="80" cy="80" r="50" stroke="#f472b6" stroke-width="2" fill="none" opacity="0.4" stroke-dasharray="8 6" filter="url(#neuro-glow)"/>
-  <circle cx="80" cy="80" r="42" stroke="#818cf8" stroke-width="1.5" fill="none" opacity="0.5" stroke-dasharray="6 4"/>
+  <!-- Ground Levitation Shadow -->
+  <ellipse cx="64" cy="118" rx="30" ry="6" fill="#3b0764" opacity="0.45"/>
 
-  <!-- Elegant Floating Psychic Tail -->
-  <path d="M75 110 C85 135 120 145 135 125 C145 110 130 95 125 105" stroke="url(#neuro-body)" stroke-width="6" stroke-linecap="round" fill="none" filter="url(#neuro-glow)"/>
+  <!-- Psionic Energy Aura / Halo (Levitation phase) -->
+  <circle cx="64" cy="54" r="48" fill="url(#np-aura-glow)"/>
 
-  <!-- Floating Body -->
-  <ellipse cx="80" cy="88" rx="24" ry="26" fill="url(#neuro-body)" stroke="#6b21a8" stroke-width="2" filter="url(#neuro-glow)"/>
+  <!-- Heavy Coiling Genetic Tail (Behind) -->
+  <g id="tail-assembly">
+    <!-- Massive Sweeping Tail -->
+    <path d="M68 84 Q96 92 108 76 Q120 56 106 42 Q92 34 86 46 Q80 58 92 64 Q98 68 88 74 Q78 80 64 82 Z" fill="url(#np-tail-grad)" stroke="#3b0764" stroke-width="2.5"/>
+    <!-- Segment Rings along Tail -->
+    <path d="M96 74 Q102 70 100 64 M106 60 Q110 54 106 48" fill="none" stroke="#d8b4fe" stroke-width="1.8"/>
+  </g>
 
-  <!-- Tiny Floating Arms -->
-  <ellipse cx="64" cy="92" rx="5" ry="7" fill="#f472b6" stroke="#6b21a8" stroke-width="1.5"/>
-  <ellipse cx="96" cy="92" rx="5" ry="7" fill="#f472b6" stroke="#6b21a8" stroke-width="1.5"/>
+  <!-- Biomechanical Tube connecting Head to Spine -->
+  <path d="M52 38 Q42 46 54 62" fill="none" stroke="#7e22ce" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M52 38 Q42 46 54 62" fill="none" stroke="#d8b4fe" stroke-width="1.5" stroke-linecap="round"/>
 
-  <!-- Head -->
-  <circle cx="80" cy="54" r="26" fill="url(#neuro-body)" stroke="#6b21a8" stroke-width="2"/>
+  <!-- Sleek Genetic Silhouette -->
+  <g id="body-assembly" filter="url(#np-shadow)">
+    <!-- Levitation Legs -->
+    <!-- Left Leg (bent) -->
+    <path d="M50 78 Q38 88 44 102 Q50 108 54 98 Q56 86 52 78 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="2"/>
+    <ellipse cx="48" cy="104" rx="4" ry="2.5" fill="#e9d5ff"/>
 
-  <!-- Forehead Neural Crystal Gem -->
-  <polygon points="80,36 86,44 80,52 74,44" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5" filter="url(#neuro-glow)"/>
+    <!-- Right Leg (extended forward) -->
+    <path d="M68 80 Q78 92 76 106 Q72 112 66 104 Q64 90 66 80 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="2"/>
+    <ellipse cx="74" cy="108" rx="4" ry="2.5" fill="#e9d5ff"/>
 
-  <!-- Cute Cat-like Ears -->
-  <polygon points="62,40 50,22 68,30" fill="#c084fc" stroke="#6b21a8" stroke-width="2"/>
-  <polygon points="98,40 110,22 92,30" fill="#c084fc" stroke="#6b21a8" stroke-width="2"/>
+    <!-- Slender Torso -->
+    <path d="M50 48 Q44 68 50 82 Q64 86 72 82 Q78 68 70 48 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="2"/>
 
-  <!-- Deep Mystical Psychic Eyes -->
-  <ellipse cx="71" cy="54" rx="6" ry="8.5" fill="#1e1b4b"/>
-  <ellipse cx="89" cy="54" rx="6" ry="8.5" fill="#1e1b4b"/>
-  <ellipse cx="71" cy="54" rx="4.5" ry="7" fill="#ec4899"/>
-  <ellipse cx="89" cy="54" rx="4.5" ry="7" fill="#ec4899"/>
-  <circle cx="69" cy="51" r="2.5" fill="#ffffff"/>
-  <circle cx="87" cy="51" r="2.5" fill="#ffffff"/>
+    <!-- Left Arm & Floating Psionic Orb -->
+    <path d="M48 52 Q32 56 30 66 Q36 70 44 64 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="1.8"/>
+    <!-- Psionic Hand Sphere -->
+    <circle cx="26" cy="68" r="6" fill="#d946ef" filter="drop-shadow(0 0 4px #ec4899)"/>
+    <circle cx="26" cy="68" r="3" fill="#ffffff"/>
 
-  <!-- Soft Calm Smile -->
-  <path d="M77 62 Q80 65 83 62" stroke="#4c1d95" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    <!-- Right Arm & Floating Psionic Orb -->
+    <path d="M72 52 Q88 56 92 66 Q86 70 76 64 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="1.8"/>
+    <!-- Psionic Hand Sphere -->
+    <circle cx="96" cy="68" r="6" fill="#d946ef" filter="drop-shadow(0 0 4px #ec4899)"/>
+    <circle cx="96" cy="68" r="3" fill="#ffffff"/>
+
+    <!-- Sculpted Alien Head -->
+    <path d="M46 32 Q44 18 60 16 Q76 14 80 28 Q84 40 76 46 Q64 50 52 46 Q46 42 46 32 Z" fill="url(#np-skin-grad)" stroke="#581c87" stroke-width="2"/>
+
+    <!-- Twin Brow Horn Ridges -->
+    <polygon points="46,26 40,16 52,22" fill="#c084fc" stroke="#581c87" stroke-width="1.5"/>
+    <polygon points="76,24 86,16 78,28" fill="#c084fc" stroke="#581c87" stroke-width="1.5"/>
+
+    <!-- Piercing Lavender/Purple Psionic Eyes -->
+    <!-- Left Eye -->
+    <polygon points="50,30 58,34 52,38 48,34" fill="#a855f7" stroke="#3b0764" stroke-width="1"/>
+    <circle cx="53" cy="34" r="1.5" fill="#ffffff"/>
+
+    <!-- Right Eye -->
+    <polygon points="66,32 74,28 72,36 64,36" fill="#a855f7" stroke="#3b0764" stroke-width="1"/>
+    <circle cx="70" cy="33" r="1.5" fill="#ffffff"/>
+
+    <!-- Telepathic Focus Brow -->
+    <path d="M52 28 Q62 26 72 28" stroke="#581c87" stroke-width="1.5" fill="none"/>
+  </g>
 </svg>

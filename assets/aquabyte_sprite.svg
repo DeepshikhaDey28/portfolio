@@ -1,136 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- Water Glow Filter -->
-    <filter id="aqua-glow-filter" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="4" flood-color="#0c4a6e" flood-opacity="0.35"/>
-    </filter>
-
-    <!-- Body Gradients -->
-    <linearGradient id="ab-body-grad" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#bae6fd"/>
-      <stop offset="30%" stop-color="#7dd3fc"/>
-      <stop offset="75%" stop-color="#0284c7"/>
-      <stop offset="100%" stop-color="#0369a1"/>
-    </linearGradient>
-
-    <!-- Shell / Database Gradient -->
-    <linearGradient id="ab-shell-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#b45309"/>
-      <stop offset="40%" stop-color="#78350f"/>
-      <stop offset="85%" stop-color="#451a03"/>
-      <stop offset="100%" stop-color="#1e293b"/>
-    </linearGradient>
-
-    <!-- Belly Plate Gradient -->
-    <linearGradient id="ab-belly-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef9c3"/>
-      <stop offset="60%" stop-color="#fef08a"/>
-      <stop offset="100%" stop-color="#fde047"/>
-    </linearGradient>
-
-    <!-- Database Rim Glow -->
-    <linearGradient id="db-rim-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+    <linearGradient id="ab-skin-grad" x1="20%" y1="10%" x2="80%" y2="90%">
       <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="45%" stop-color="#0284c7"/>
+      <stop offset="85%" stop-color="#0369a1"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+    <linearGradient id="ab-shell-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="40%" stop-color="#b45309"/>
+      <stop offset="85%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="ab-plastron-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="ab-water-swirl" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#7dd3fc"/>
       <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
+    <filter id="ab-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#082f49" flood-opacity="0.4"/>
+    </filter>
   </defs>
 
-  <!-- Ground Shadow -->
-  <ellipse cx="102" cy="174" rx="60" ry="14" fill="rgba(12, 74, 110, 0.35)"/>
+  <!-- Ambient Ground Shadow -->
+  <ellipse cx="64" cy="116" rx="38" ry="8" fill="#1e293b" opacity="0.35"/>
 
-  <!-- SPIRAL WATER TAIL (Behind Body) -->
-  <g>
-    <path d="M125 132 C155 140 178 122 170 98 C162 82 144 88 140 102 C138 112 146 120 154 116 C158 114 160 108 156 104" 
-          fill="#38bdf8" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/>
-    <path d="M140 104 Q148 116 158 112" stroke="#ffffff" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <!-- Floating Water Bubbles -->
-    <circle cx="172" cy="88" r="3.5" fill="#bae6fd" opacity="0.8"/>
-    <circle cx="180" cy="102" r="2.5" fill="#38bdf8" opacity="0.7"/>
-    <circle cx="166" cy="128" r="2" fill="#ffffff" opacity="0.9"/>
+  <!-- Curled Water Wave Tail (Behind) -->
+  <g id="tail-assembly">
+    <!-- Big swirly water droplet tail -->
+    <path d="M40 84 Q20 86 16 70 Q12 52 30 48 Q38 46 42 54 Q44 64 36 68 Q28 70 30 76 Q34 80 44 80 Z" fill="url(#ab-skin-grad)" stroke="#0369a1" stroke-width="2"/>
+    <!-- Swirl Groove inside tail -->
+    <path d="M26 60 Q22 56 28 52 Q34 50 36 56" fill="none" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round"/>
+    <!-- Splash Droplets -->
+    <circle cx="14" cy="46" r="2.5" fill="url(#ab-water-swirl)"/>
+    <circle cx="22" cy="40" r="1.5" fill="url(#ab-water-swirl)"/>
   </g>
 
-  <!-- BACK DATABASE TURTLE SHELL -->
-  <!-- Shell Rim (Hexagonal Outer Ring) -->
-  <ellipse cx="118" cy="115" rx="44" ry="40" 
-           fill="url(#ab-shell-grad)" stroke="#1e293b" stroke-width="3.5"/>
-  <ellipse cx="118" cy="115" rx="38" ry="34" 
-           fill="none" stroke="#fef08a" stroke-width="2.5" opacity="0.85"/>
+  <!-- Shell Carapace (Back Profile) -->
+  <g id="shell-assembly" filter="url(#ab-shadow)">
+    <!-- Shell Dome -->
+    <ellipse cx="74" cy="80" rx="34" ry="28" fill="url(#ab-shell-grad)" stroke="#451a03" stroke-width="2.5"/>
+    <!-- Thick Cream Shell Rim / Collar -->
+    <path d="M46 94 Q74 112 104 90 Q108 82 102 78 Q74 100 48 84 Z" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+    <!-- Carapace Hexagonal Grooves -->
+    <polygon points="74,62 88,68 88,82 74,88 60,82 60,68" fill="none" stroke="#fde68a" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="74" y1="62" x2="74" y2="54" stroke="#fde68a" stroke-width="2"/>
+    <line x1="88" y1="68" x2="98" y2="64" stroke="#fde68a" stroke-width="2"/>
+    <line x1="88" y1="82" x2="100" y2="86" stroke="#fde68a" stroke-width="2"/>
+    <line x1="74" y1="88" x2="74" y2="98" stroke="#fde68a" stroke-width="2"/>
+    <line x1="60" y1="82" x2="50" y2="86" stroke="#fde68a" stroke-width="2"/>
+    <line x1="60" y1="68" x2="50" y2="64" stroke="#fde68a" stroke-width="2"/>
+  </g>
 
-  <!-- Database Cylindrical Disk Grooves -->
-  <ellipse cx="118" cy="102" rx="32" ry="14" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
-  <ellipse cx="118" cy="116" rx="32" ry="14" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
-  <ellipse cx="118" cy="130" rx="32" ry="14" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
+  <!-- Turtle Body & Front -->
+  <g id="body-assembly">
+    <!-- Back Left Leg -->
+    <rect x="42" y="94" width="14" height="20" rx="7" fill="#0369a1" stroke="#075985" stroke-width="1.8"/>
+    <path d="M43 112 Q46 108 49 112 M49 112 Q52 108 55 112" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
 
-  <!-- Hexagonal Database Core Pattern -->
-  <polygon points="118,100 128,106 128,118 118,124 108,118 108,106" 
-           fill="#0c4a6e" stroke="#7dd3fc" stroke-width="1.8"/>
+    <!-- Front Left Foot -->
+    <rect x="66" y="98" width="16" height="20" rx="8" fill="url(#ab-skin-grad)" stroke="#0369a1" stroke-width="1.8"/>
+    <path d="M68 116 Q71 110 74 116 M74 116 Q77 110 80 116" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
 
-  <!-- FEET & LEGS -->
-  <!-- Left Leg -->
-  <path d="M64 142 C54 142 46 150 48 162 C50 170 60 173 72 171 C84 169 86 156 80 146 Z" 
-        fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="2.5"/>
-  <circle cx="54" cy="169" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
-  <circle cx="62" cy="172" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
-  <circle cx="70" cy="170" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
+    <!-- Front Plastron (Belly Plate) -->
+    <path d="M46 66 Q42 84 48 98 Q60 104 68 98 Q66 80 60 66 Z" fill="url(#ab-plastron-grad)" stroke="#b45309" stroke-width="2"/>
+    <!-- Horizontal Grooves on Plastron -->
+    <path d="M46 76 Q54 80 62 76 M46 86 Q54 90 64 86" fill="none" stroke="#d97706" stroke-width="1.5"/>
 
-  <!-- Right Leg -->
-  <path d="M110 144 C104 156 106 168 118 171 C130 173 140 169 142 160 C144 148 136 142 124 142 Z" 
-        fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="2.5"/>
-  <circle cx="120" cy="170" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
-  <circle cx="128" cy="172" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
-  <circle cx="136" cy="169" r="3" fill="#ffffff" stroke="#0369a1" stroke-width="1"/>
+    <!-- Left Arm Forward -->
+    <path d="M44 70 Q30 76 34 84 Q40 88 48 78 Z" fill="url(#ab-skin-grad)" stroke="#0369a1" stroke-width="1.8"/>
+    <circle cx="31" cy="81" r="1.5" fill="#ffffff"/>
 
-  <!-- TORSO (Chubby Blue Body) -->
-  <path d="M62 102 C50 118 54 152 90 154 C126 152 130 118 120 102 C114 94 106 90 90 90 C74 90 66 94 62 102 Z" 
-        fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="3" filter="url(#aqua-glow-filter)"/>
+    <!-- Right Arm / Swimming Stance -->
+    <path d="M72 74 Q84 76 86 84 Q80 90 70 84 Z" fill="url(#ab-skin-grad)" stroke="#0369a1" stroke-width="1.8"/>
+    <circle cx="86" cy="80" r="1.5" fill="#ffffff"/>
 
-  <!-- Segmented Cream Belly (Turtle Plastron Plates) -->
-  <path d="M72 108 C66 122 70 146 90 146 C110 146 114 122 108 108 C102 100 78 100 72 108 Z" 
-        fill="url(#ab-belly-grad)" stroke="#ca8a04" stroke-width="2"/>
-  <!-- Plastron Grooves -->
-  <line x1="72" y1="124" x2="108" y2="124" stroke="#ca8a04" stroke-width="1.8"/>
-  <line x1="90" y1="102" x2="90" y2="146" stroke="#ca8a04" stroke-width="1.8"/>
+    <!-- Large Rounded Turtle Head -->
+    <circle cx="56" cy="38" r="22" fill="url(#ab-skin-grad)" stroke="#0369a1" stroke-width="2"/>
 
-  <!-- ARMS -->
-  <!-- Left Flipper Arm -->
-  <path d="M60 110 C46 116 42 126 50 130 C58 132 64 124 66 116 Z" 
-        fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="2.2"/>
-  <circle cx="46" cy="124" r="2" fill="#ffffff"/>
-  <circle cx="49" cy="128" r="2" fill="#ffffff"/>
+    <!-- Big Sparkling Aquamarine Eyes -->
+    <!-- Left Eye -->
+    <ellipse cx="44" cy="34" rx="5" ry="7.5" fill="#78350f" stroke="#451a03" stroke-width="1"/>
+    <ellipse cx="44" cy="35" rx="3.8" ry="5.8" fill="#b45309"/>
+    <circle cx="43" cy="32" r="2" fill="#ffffff"/>
 
-  <!-- Right Flipper Arm -->
-  <path d="M120 110 C132 116 136 126 128 130 C120 132 114 124 112 116 Z" 
-        fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="2.2"/>
-  <circle cx="134" cy="124" r="2" fill="#ffffff"/>
-  <circle cx="131" cy="128" r="2" fill="#ffffff"/>
+    <!-- Right Eye -->
+    <ellipse cx="64" cy="34" rx="6" ry="8.5" fill="#78350f" stroke="#451a03" stroke-width="1"/>
+    <ellipse cx="64" cy="35" rx="4.8" ry="6.8" fill="#b45309"/>
+    <circle cx="62" cy="31" r="2.5" fill="#ffffff"/>
+    <circle cx="66" cy="37" r="1.2" fill="#ffffff"/>
 
-  <!-- HEAD -->
-  <ellipse cx="90" cy="70" rx="40" ry="36" 
-           fill="url(#ab-body-grad)" stroke="#0369a1" stroke-width="3" filter="url(#aqua-glow-filter)"/>
+    <!-- Cute Smiling Beak / Snout -->
+    <path d="M50 46 Q56 52 64 46" stroke="#075985" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <path d="M52 47 Q56 54 62 47" fill="#ef4444"/>
 
-  <!-- Big Aquatic Squirtle Eyes -->
-  <!-- Left Eye -->
-  <ellipse cx="74" cy="64" rx="9.5" ry="13" fill="#082f49" stroke="#0c4a6e" stroke-width="1.5"/>
-  <ellipse cx="74" cy="65" rx="7" ry="10" fill="#0284c7"/>
-  <ellipse cx="74" cy="67" rx="4.5" ry="7" fill="#38bdf8"/>
-  <circle cx="71" cy="59" r="3.5" fill="#ffffff"/>
-  <circle cx="77" cy="71" r="1.8" fill="#ffffff"/>
-
-  <!-- Right Eye -->
-  <ellipse cx="106" cy="64" rx="9.5" ry="13" fill="#082f49" stroke="#0c4a6e" stroke-width="1.5"/>
-  <ellipse cx="106" cy="65" rx="7" ry="10" fill="#0284c7"/>
-  <ellipse cx="106" cy="67" rx="4.5" ry="7" fill="#38bdf8"/>
-  <circle cx="103" cy="59" r="3.5" fill="#ffffff"/>
-  <circle cx="109" cy="71" r="1.8" fill="#ffffff"/>
-
-  <!-- Cute Snout & Nostrils -->
-  <circle cx="87" cy="74" r="1.2" fill="#0369a1"/>
-  <circle cx="93" cy="74" r="1.2" fill="#0369a1"/>
-
-  <!-- Happy Turtle Smile -->
-  <path d="M82 80 Q90 89 98 80" stroke="#0c4a6e" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-
-  <!-- Soft Water Cheek Blush -->
-  <circle cx="64" cy="74" r="4.5" fill="#38bdf8" opacity="0.6"/>
-  <circle cx="116" cy="74" r="4.5" fill="#38bdf8" opacity="0.6"/>
+    <!-- Dynamic Hydro Splash Ring -->
+    <path d="M28 32 Q20 22 24 16 Q30 20 32 26" fill="none" stroke="url(#ab-water-swirl)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="20" cy="18" r="2" fill="#38bdf8"/>
+    <circle cx="28" cy="12" r="1.5" fill="#ffffff"/>
+  </g>
 </svg>

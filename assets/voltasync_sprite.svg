@@ -1,51 +1,87 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <filter id="volt-glow" x="-25%" y="-25%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#facc15"/>
-    </filter>
-    <linearGradient id="volt-body" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef08a"/>
-      <stop offset="40%" stop-color="#facc15"/>
-      <stop offset="100%" stop-color="#eab308"/>
+    <radialGradient id="vs-sphere-grad" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#cbd5e1"/>
+      <stop offset="70%" stop-color="#64748b"/>
+      <stop offset="95%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </radialGradient>
+    <radialGradient id="vs-eye-core" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#f87171"/>
+      <stop offset="70%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </radialGradient>
+    <linearGradient id="vs-mag-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="70%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#991b1b"/>
     </linearGradient>
+    <linearGradient id="vs-mag-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="70%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <filter id="vs-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.4"/>
+    </filter>
   </defs>
 
-  <!-- React Spark Lightning Tail -->
-  <path d="M105 105 L125 90 L115 80 L142 55 L125 60 L135 40" stroke="#facc15" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#volt-glow)"/>
-  <path d="M105 105 L125 90 L115 80 L142 55 L125 60 L135 40" stroke="#fef08a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Ambient Ground Shadow -->
+  <ellipse cx="64" cy="116" rx="34" ry="7" fill="#1e293b" opacity="0.35"/>
 
-  <!-- Feet -->
-  <ellipse cx="62" cy="132" rx="11" ry="7" fill="#ca8a04"/>
-  <ellipse cx="98" cy="132" rx="11" ry="7" fill="#ca8a04"/>
+  <!-- Left Horseshoe Magnet -->
+  <g id="left-magnet">
+    <!-- Horseshoe Gray Base -->
+    <path d="M40 50 L14 42 L12 86 L38 78 L34 70 L22 74 L24 54 L36 58 Z" fill="#64748b" stroke="#1e293b" stroke-width="2"/>
+    <!-- North / Red Pole -->
+    <polygon points="14,42 8,40 10,56 16,58" fill="url(#vs-mag-red)" stroke="#991b1b" stroke-width="1.5"/>
+    <text x="11" y="52" font-family="monospace" font-size="8" font-weight="900" fill="#ffffff">N</text>
+    <!-- South / Blue Pole -->
+    <polygon points="12,72 6,74 8,90 14,88" fill="url(#vs-mag-blue)" stroke="#1e40af" stroke-width="1.5"/>
+    <text x="9" y="84" font-family="monospace" font-size="8" font-weight="900" fill="#ffffff">S</text>
+  </g>
 
-  <!-- Chubby Electric Body -->
-  <ellipse cx="80" cy="98" rx="34" ry="28" fill="url(#volt-body)" stroke="#a16207" stroke-width="2.5" filter="url(#volt-glow)"/>
+  <!-- Right Horseshoe Magnet -->
+  <g id="right-magnet">
+    <!-- Horseshoe Gray Base -->
+    <path d="M88 50 L114 42 L116 86 L90 78 L94 70 L106 74 L104 54 L92 58 Z" fill="#64748b" stroke="#1e293b" stroke-width="2"/>
+    <!-- North / Red Pole -->
+    <polygon points="114,42 120,40 118,56 112,58" fill="url(#vs-mag-red)" stroke="#991b1b" stroke-width="1.5"/>
+    <text x="114" y="52" font-family="monospace" font-size="8" font-weight="900" fill="#ffffff">N</text>
+    <!-- South / Blue Pole -->
+    <polygon points="116,72 122,74 120,90 114,88" fill="url(#vs-mag-blue)" stroke="#1e40af" stroke-width="1.5"/>
+    <text x="115" y="84" font-family="monospace" font-size="8" font-weight="900" fill="#ffffff">S</text>
+  </g>
 
-  <!-- Cute Hands -->
-  <ellipse cx="58" cy="102" rx="7" ry="5" fill="#facc15" stroke="#a16207" stroke-width="1.5"/>
-  <ellipse cx="102" cy="102" rx="7" ry="5" fill="#facc15" stroke="#a16207" stroke-width="1.5"/>
+  <!-- Central Chrome Unit -->
+  <g id="central-unit" filter="url(#vs-shadow)">
+    <!-- Top Machine Screw -->
+    <rect x="60" y="14" width="8" height="12" fill="#94a3b8" stroke="#334155" stroke-width="1.8"/>
+    <polygon points="56,14 72,14 68,8 60,8" fill="#cbd5e1" stroke="#334155" stroke-width="1.8"/>
+    <line x1="58" y1="11" x2="70" y2="11" stroke="#334155" stroke-width="1.5"/>
 
-  <!-- Lightning Ears -->
-  <polygon points="52,48 30,16 58,32" fill="#facc15" stroke="#a16207" stroke-width="2.5"/>
-  <polygon points="38,28 30,16 48,24" fill="#0f172a"/>
-  
-  <polygon points="108,48 130,16 102,32" fill="#facc15" stroke="#a16207" stroke-width="2.5"/>
-  <polygon points="122,28 130,16 112,24" fill="#0f172a"/>
+    <!-- Bottom Left & Right Screws -->
+    <polygon points="44,92 48,104 42,106 38,94" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
+    <polygon points="84,92 80,104 86,106 90,94" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
 
-  <!-- Head -->
-  <circle cx="80" cy="62" r="28" fill="url(#volt-body)" stroke="#a16207" stroke-width="2.5"/>
+    <!-- Main Spherical Steel Body -->
+    <circle cx="64" cy="64" r="32" fill="url(#vs-sphere-grad)" stroke="#1e293b" stroke-width="2.5"/>
 
-  <!-- Red Electric Cheek Pouches -->
-  <circle cx="58" cy="70" r="7.5" fill="#ef4444" opacity="0.9"/>
-  <circle cx="102" cy="70" r="7.5" fill="#ef4444" opacity="0.9"/>
+    <!-- Central Camera / Eye Aperture Ring -->
+    <circle cx="64" cy="64" r="16" fill="#0f172a" stroke="#475569" stroke-width="2"/>
+    <circle cx="64" cy="64" r="12" fill="url(#vs-eye-core)"/>
+    <circle cx="64" cy="64" r="6" fill="#0f172a"/>
+    <!-- Specular Lens Highlights -->
+    <circle cx="61" cy="60" r="3.5" fill="#ffffff"/>
+    <circle cx="67" cy="67" r="1.5" fill="#fca5a5"/>
 
-  <!-- Big Sparkling Anime Eyes -->
-  <ellipse cx="68" cy="58" rx="6.5" ry="8.5" fill="#0f172a"/>
-  <ellipse cx="92" cy="58" rx="6.5" ry="8.5" fill="#0f172a"/>
-  <circle cx="66" cy="55" r="2.5" fill="#ffffff"/>
-  <circle cx="90" cy="55" r="2.5" fill="#ffffff"/>
-
-  <!-- Tiny Nose & Cat-mouth Smile -->
-  <circle cx="80" cy="64" r="1.5" fill="#713f12"/>
-  <path d="M75 68 Q80 72 85 68" stroke="#713f12" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <!-- Crackling Electric Arc bridging magnets to sphere -->
+    <path d="M24 64 Q38 56 46 62 Q54 68 64 64" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+    <path d="M104 64 Q90 56 82 62 Q74 68 64 64" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+    <!-- Blue lightning sparks -->
+    <polygon points="34,58 38,54 36,60 40,58" fill="#fde047"/>
+    <polygon points="94,58 90,54 92,60 88,58" fill="#fde047"/>
+  </g>
 </svg>

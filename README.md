@@ -130,5 +130,4 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - **GitHub**: [@DeepshikhaDey28](https://github.com/DeepshikhaDey28)
 - **LinkedIn**: [Deepshikha Dey](https://www.linkedin.com/in/deepshikha-dey-904a931aa/)
-- **Email**: `dey.deepshikha.283@gmail.com`
 - **Location**: Pune, Maharashtra, India
