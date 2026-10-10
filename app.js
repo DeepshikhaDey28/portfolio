@@ -55,6 +55,27 @@ class RetroAudioEngine {
       this.audioFiles.walkGravel.volume = 0.35;
     } catch (e) {}
 
+    // Dynamic Volume Control Levels
+    this.masterVolume = 1.0;
+    this.bgmVolume = 0.50;
+    this.sfxVolume = 0.70;
+
+    // Automatic Background Audio Pause on Phone/Browser Minimize & Screen Lock
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.pauseAllBgm();
+        } else {
+          if (this.bgmEnabled && this.isUnlocked) {
+            this.setBgmForView(this.currentView);
+          }
+        }
+      });
+      window.addEventListener('pagehide', () => {
+        this.pauseAllBgm();
+      });
+    }
+
     // Web Audio synthesizer for chiptune & retro backup
     this.audioCtx = null;
     this.bgmTimer = null;
@@ -229,6 +250,66 @@ class RetroAudioEngine {
     });
   }
 
+  // Volume & Audio Channel Controls
+  setMasterVolume(val) {
+    this.masterVolume = Math.max(0, Math.min(1, val));
+    this.updateAllVolumes();
+  }
+
+  setBgmVolume(val) {
+    this.bgmVolume = Math.max(0, Math.min(1, val));
+    this.updateAllVolumes();
+  }
+
+  setSfxVolume(val) {
+    this.sfxVolume = Math.max(0, Math.min(1, val));
+    this.updateAllVolumes();
+  }
+
+  toggleBgm(enabled) {
+    if (enabled !== undefined) this.bgmEnabled = !!enabled;
+    else this.bgmEnabled = !this.bgmEnabled;
+    this.updateAllVolumes();
+    if (!this.bgmEnabled) {
+      this.stopAllBgm();
+    } else {
+      this.setBgmForView(this.currentView);
+    }
+    return this.bgmEnabled;
+  }
+
+  toggleSfx(enabled) {
+    if (enabled !== undefined) this.sfxEnabled = !!enabled;
+    else this.sfxEnabled = !this.sfxEnabled;
+    this.updateAllVolumes();
+    return this.sfxEnabled;
+  }
+
+  updateAllVolumes() {
+    const bgmEffective = this.bgmEnabled ? (this.bgmVolume * this.masterVolume) : 0;
+    const sfxEffective = this.sfxEnabled ? (this.sfxVolume * this.masterVolume) : 0;
+
+    try {
+      this.audioFiles.websiteBgm.volume = Math.max(0, Math.min(1, bgmEffective * 0.75));
+      this.audioFiles.gameBgm.volume = Math.max(0, Math.min(1, bgmEffective * 0.85));
+
+      this.audioFiles.click.volume = Math.max(0, Math.min(1, sfxEffective * 0.7));
+      this.audioFiles.death.volume = Math.max(0, Math.min(1, sfxEffective * 0.8));
+
+      this.audioFiles.walkObsidian.volume = Math.max(0, Math.min(1, sfxEffective * 0.5));
+      this.audioFiles.walkSwim.volume = Math.max(0, Math.min(1, sfxEffective * 0.6));
+      this.audioFiles.walkGrass.volume = Math.max(0, Math.min(1, sfxEffective * 0.5));
+      this.audioFiles.walkSand.volume = Math.max(0, Math.min(1, sfxEffective * 0.5));
+      this.audioFiles.walkGravel.volume = Math.max(0, Math.min(1, sfxEffective * 0.5));
+    } catch (e) {}
+
+    if (this.bgmMasterGain && this.audioCtx) {
+      try {
+        this.bgmMasterGain.gain.setValueAtTime(bgmEffective * 0.15, this.audioCtx.currentTime);
+      } catch (e) {}
+    }
+  }
+
   // View-based dynamic background music manager
   setBgmForView(view) {
     this.currentView = view;
@@ -291,15 +372,14 @@ class RetroAudioEngine {
     }
   }
 
-  toggleBgm() {
-    this.bgmEnabled = !this.bgmEnabled;
-    if (this.bgmEnabled) {
-      this.setBgmForView(this.currentView);
-    } else {
-      this.stopAllBgm();
+  pauseAllBgm() {
+    try {
+      this.audioFiles.websiteBgm.pause();
+      this.audioFiles.gameBgm.pause();
+    } catch (e) {}
+    if (this.audioCtx && this.audioCtx.state === 'running') {
+      this.audioCtx.suspend().catch(() => {});
     }
-    this.syncUi(this.bgmEnabled);
-    return this.bgmEnabled;
   }
 
   stopAllBgm() {
@@ -1064,9 +1144,15 @@ class CatchThatPipGame {
     this.mapRows = 80;
     this.tileSize = 32;
 
-    // Preload Player Overworld Sprite (Image 2 - Auburn Hair, Brown Cap, Pink Blouse)
+    // Preload Player Overworld Sprites (Base Sprite + 4-Direction Walk Spritesheet)
     this.playerSpriteImg = new Image();
     this.playerSpriteImg.src = 'assets/player_sprite.png';
+
+    this.playerSpriteSheet = new Image();
+    this.playerSpriteSheet.src = 'assets/player_spritesheet.png';
+
+    // In-game Settings modal state
+    this.settingsOpen = false;
 
     // 5 Gym Leader Badges State
     this.badges = {
@@ -1640,14 +1726,9 @@ class CatchThatPipGame {
         return;
       }
 
-      // Minimize game to desktop via [Escape]
+      // Open / Toggle In-Game Settings & Volume Control via [Escape]
       if (k === 'escape') {
-        if (document.fullscreenElement) {
-          if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-        }
-        const gView = document.getElementById('game-view');
-        if (gView) gView.classList.remove('fullscreen-mode');
-        switchView('desktop');
+        this.toggleSettings();
         return;
       }
 
@@ -1769,6 +1850,137 @@ class CatchThatPipGame {
         gView.classList.toggle('fullscreen-mode', !!document.fullscreenElement);
       }
     });
+
+    // In-Game Settings Modal Controls & Volume Sliders
+    document.getElementById('game-settings-toggle-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.toggleSettings();
+    });
+
+    document.getElementById('settings-close-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.closeSettings();
+    });
+
+    document.getElementById('settings-resume-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.closeSettings();
+    });
+
+    document.getElementById('settings-desktop-btn')?.addEventListener('click', () => {
+      sfx.playClick();
+      this.closeSettings();
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+      }
+      const gView = document.getElementById('game-view');
+      if (gView) gView.classList.remove('fullscreen-mode');
+      switchView('desktop');
+    });
+
+    // Master Volume Slider
+    const masterSlider = document.getElementById('slider-master-vol');
+    const masterValBadge = document.getElementById('val-master-vol');
+    if (masterSlider) {
+      masterSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (masterValBadge) masterValBadge.textContent = `${val}%`;
+        sfx.setMasterVolume(val / 100);
+      });
+    }
+
+    // BGM Volume Slider & Toggle
+    const bgmSlider = document.getElementById('slider-bgm-vol');
+    const bgmValBadge = document.getElementById('val-bgm-vol');
+    const bgmToggleBtn = document.getElementById('btn-toggle-bgm');
+    if (bgmSlider) {
+      bgmSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (bgmValBadge) bgmValBadge.textContent = `${val}%`;
+        sfx.setBgmVolume(val / 100);
+      });
+    }
+    if (bgmToggleBtn) {
+      bgmToggleBtn.addEventListener('click', () => {
+        const enabled = sfx.toggleBgm();
+        bgmToggleBtn.textContent = enabled ? 'ON' : 'OFF';
+        bgmToggleBtn.classList.toggle('active', enabled);
+        sfx.playClick();
+      });
+    }
+
+    // SFX Volume Slider & Toggle
+    const sfxSlider = document.getElementById('slider-sfx-vol');
+    const sfxValBadge = document.getElementById('val-sfx-vol');
+    const sfxToggleBtn = document.getElementById('btn-toggle-sfx');
+    if (sfxSlider) {
+      sfxSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (sfxValBadge) sfxValBadge.textContent = `${val}%`;
+        sfx.setSfxVolume(val / 100);
+      });
+    }
+    if (sfxToggleBtn) {
+      sfxToggleBtn.addEventListener('click', () => {
+        const enabled = sfx.toggleSfx();
+        sfxToggleBtn.textContent = enabled ? 'ON' : 'OFF';
+        sfxToggleBtn.classList.toggle('active', enabled);
+        sfx.playClick();
+      });
+    }
+  }
+
+  openSettings() {
+    this.settingsOpen = true;
+    const overlay = document.getElementById('pip-settings-overlay');
+    if (overlay) overlay.style.display = 'flex';
+    this.syncSettingsUI();
+  }
+
+  closeSettings() {
+    this.settingsOpen = false;
+    const overlay = document.getElementById('pip-settings-overlay');
+    if (overlay) overlay.style.display = 'none';
+  }
+
+  toggleSettings() {
+    if (this.settingsOpen) {
+      this.closeSettings();
+    } else {
+      this.openSettings();
+    }
+  }
+
+  syncSettingsUI() {
+    const masterSlider = document.getElementById('slider-master-vol');
+    const masterValBadge = document.getElementById('val-master-vol');
+    const bgmSlider = document.getElementById('slider-bgm-vol');
+    const bgmValBadge = document.getElementById('val-bgm-vol');
+    const bgmToggleBtn = document.getElementById('btn-toggle-bgm');
+    const sfxSlider = document.getElementById('slider-sfx-vol');
+    const sfxValBadge = document.getElementById('val-sfx-vol');
+    const sfxToggleBtn = document.getElementById('btn-toggle-sfx');
+
+    const mVal = Math.round(sfx.masterVolume * 100);
+    const bVal = Math.round(sfx.bgmVolume * 100);
+    const sVal = Math.round(sfx.sfxVolume * 100);
+
+    if (masterSlider) masterSlider.value = mVal;
+    if (masterValBadge) masterValBadge.textContent = `${mVal}%`;
+
+    if (bgmSlider) bgmSlider.value = bVal;
+    if (bgmValBadge) bgmValBadge.textContent = `${bVal}%`;
+    if (bgmToggleBtn) {
+      bgmToggleBtn.textContent = sfx.bgmEnabled ? 'ON' : 'OFF';
+      bgmToggleBtn.classList.toggle('active', sfx.bgmEnabled);
+    }
+
+    if (sfxSlider) sfxSlider.value = sVal;
+    if (sfxValBadge) sfxValBadge.textContent = `${sVal}%`;
+    if (sfxToggleBtn) {
+      sfxToggleBtn.textContent = sfx.sfxEnabled ? 'ON' : 'OFF';
+      sfxToggleBtn.classList.toggle('active', sfx.sfxEnabled);
+    }
   }
 
   setMode(targetMode) {
@@ -1837,7 +2049,7 @@ class CatchThatPipGame {
   }
 
   updateOverworldPhysics() {
-    if (this.dialogueActive) return;
+    if (this.dialogueActive || this.settingsOpen) return;
 
     const p = this.player;
     let dx = 0;
@@ -2468,22 +2680,52 @@ class CatchThatPipGame {
       ctx.fill();
     }
 
-    // 2. Draw Sprite Image (Image 2 - Auburn Hair, Brown Cap, Pink Top, White Skirt, Boots)
-    if (this.playerSpriteImg && this.playerSpriteImg.complete && this.playerSpriteImg.naturalWidth > 0) {
+    // 2. Draw Sprite with Full Walking Animation (4 Directions x 4 Walking Frames)
+    if (this.playerSpriteSheet && this.playerSpriteSheet.complete && this.playerSpriteSheet.naturalWidth > 0) {
+      const sw = 73;
+      const sh = 113;
+      const col = isMoving ? (animFrame % 4) : 0;
+      let row = 0; // 0: Down (Facing South)
+      if (dir === 1) row = 1; // 1: Up (Facing North / Back View)
+      else if (dir === 2 || dir === 3) row = 2; // 2: Side Profile
+
+      const sx = col * sw;
+      const sy = row * sh;
+
       ctx.save();
-      ctx.imageSmoothingEnabled = false; // preserve pixelated look
+      ctx.imageSmoothingEnabled = false; // preserve crisp pixel art
       if (dir === 2) {
-        // Facing Left: flip horizontally
+        // Facing Left: horizontal flip of side walk cycle
         ctx.translate(px + 12, 0);
         ctx.scale(-1, 1);
-        ctx.drawImage(this.playerSpriteImg, -12, drawY, drawW, drawH);
+        ctx.drawImage(this.playerSpriteSheet, sx, sy, sw, sh, -12, drawY, drawW, drawH);
       } else {
         // Facing Right / Down / Up
-        ctx.drawImage(this.playerSpriteImg, drawX, drawY, drawW, drawH);
+        ctx.drawImage(this.playerSpriteSheet, sx, sy, sw, sh, drawX, drawY, drawW, drawH);
       }
       ctx.restore();
 
       // Translucent water wash over submerged legs when swimming in water
+      if (isWater) {
+        ctx.fillStyle = 'rgba(2, 132, 199, 0.45)';
+        ctx.fillRect(px + 2, py + 18, 20, 10);
+      }
+      return;
+    }
+
+    // Fallback if spritesheet is loading: single image fallback
+    if (this.playerSpriteImg && this.playerSpriteImg.complete && this.playerSpriteImg.naturalWidth > 0) {
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      if (dir === 2) {
+        ctx.translate(px + 12, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.playerSpriteImg, -12, drawY, drawW, drawH);
+      } else {
+        ctx.drawImage(this.playerSpriteImg, drawX, drawY, drawW, drawH);
+      }
+      ctx.restore();
+
       if (isWater) {
         ctx.fillStyle = 'rgba(2, 132, 199, 0.45)';
         ctx.fillRect(px + 2, py + 18, 20, 10);
@@ -2916,6 +3158,16 @@ class CatchThatPipGame {
     if (balloon) {
       const greeting = options.isGym ? `Face my ${this.pip.name}! Prove your worth!` : `"${this.pip.greeting}"`;
       balloon.innerHTML = `<span>${greeting}</span>`;
+      balloon.style.opacity = '1';
+      balloon.style.display = 'block';
+      if (this.balloonTimer) clearTimeout(this.balloonTimer);
+      this.balloonTimer = setTimeout(() => {
+        balloon.style.transition = 'opacity 0.5s ease-out';
+        balloon.style.opacity = '0';
+        setTimeout(() => {
+          balloon.style.display = 'none';
+        }, 500);
+      }, 4000);
     }
     if (mascotImg && this.pip.spriteSrc) {
       mascotImg.src = this.pip.spriteSrc;

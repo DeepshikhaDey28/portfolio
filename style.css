@@ -4670,11 +4670,15 @@ html, body {
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 1.35;
-  max-width: 210px;
+  width: max-content;
+  min-width: 150px;
+  max-width: 230px;
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: break-word;
   box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
   z-index: 10;
   pointer-events: none;
-  word-break: break-word;
 }
 
 .enemy-speech-balloon::after {
@@ -6247,23 +6251,41 @@ html, body {
   }
 
   .enemy-speech-balloon {
-    max-width: 150px !important;
-    font-size: 0.62rem !important;
-    padding: 0.3rem 0.5rem !important;
-    top: 6px !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    top: -26px !important;
     bottom: auto !important;
-    right: calc(100% + 8px) !important;
+    transform: translateX(-50%) !important;
+    width: max-content !important;
+    min-width: 160px !important;
+    max-width: min(260px, 86vw) !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    text-align: center !important;
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.68rem !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    z-index: 25 !important;
   }
 
   .enemy-speech-balloon::after {
-    top: 10px !important;
-    right: -5px !important;
-    bottom: auto !important;
-    left: auto !important;
-    border-top: 2px solid #1e293b !important;
-    border-right: 2px solid #1e293b !important;
+    content: "" !important;
+    position: absolute !important;
+    top: auto !important;
+    bottom: -5px !important;
+    left: 50% !important;
+    right: auto !important;
+    width: 10px !important;
+    height: 10px !important;
+    background-color: #fff !important;
+    transform: translateX(-50%) rotate(45deg) !important;
+    border-top: none !important;
     border-left: none !important;
-    border-bottom: none !important;
+    border-right: 2px solid #1e293b !important;
+    border-bottom: 2px solid #1e293b !important;
   }
 
   .player-partner-sprite-card {
@@ -6568,6 +6590,311 @@ html, body {
 .active-partner-card {
   border-color: #facc15 !important;
   box-shadow: 0 0 14px rgba(250, 204, 21, 0.4) !important;
+}
+
+/* ======================================================== */
+/* IN-GAME SETTINGS & VOLUME CONTROL MODAL OVERLAY */
+/* ======================================================== */
+.settings-ctrl-pill {
+  background-color: #1e293b !important;
+  color: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+}
+
+.settings-ctrl-pill:hover {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+.pip-settings-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.pip-settings-modal {
+  background: #090d16;
+  border: 3px solid #38bdf8;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  max-height: 92%;
+  overflow-y: auto;
+  padding: 1.15rem 1.4rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.85), 0 0 24px rgba(56, 189, 248, 0.25);
+  font-family: var(--font-mono);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #1e293b;
+  padding-bottom: 0.65rem;
+}
+
+.settings-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-pixel-icon {
+  font-size: 1.2rem;
+  color: #38bdf8;
+}
+
+.settings-modal-header h3 {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #f8fafc;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.settings-close-x {
+  background: #1e293b;
+  border: 1px solid #475569;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.settings-close-x:hover {
+  background: #dc2626;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.settings-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.settings-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: #131c2e;
+  border: 1.5px solid #1e293b;
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+}
+
+.settings-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #e2e8f0;
+}
+
+.settings-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.settings-val-badge {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #38bdf8;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 1px 6px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.settings-toggle-btn {
+  background: #334155;
+  border: 1.5px solid #475569;
+  color: #94a3b8;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 1px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-toggle-btn.active {
+  background: #16a34a;
+  border-color: #4ade80;
+  color: #ffffff;
+}
+
+.retro-range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.retro-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  transition: transform 0.1s;
+}
+
+.retro-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #0284c7;
+}
+
+.retro-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.settings-audio-legend {
+  background: #0b1120;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.legend-title {
+  font-size: 0.64rem;
+  font-weight: 900;
+  color: #94a3b8;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.05em;
+}
+
+.legend-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.legend-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.settings-key-guide {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.35rem;
+  background: #0b1120;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+}
+
+.key-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  color: #cbd5e1;
+}
+
+.key-item kbd {
+  background: #1e293b;
+  color: #facc15;
+  border: 1.5px solid #475569;
+  border-bottom-width: 3px;
+  border-radius: 4px;
+  padding: 0px 4px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.settings-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 2px solid #1e293b;
+  padding-top: 0.75rem;
+}
+
+.settings-btn-primary {
+  flex: 1;
+  background: #38bdf8;
+  color: #0f172a;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-btn-primary:hover {
+  background: #7dd3fc;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+}
+
+.settings-btn-secondary {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1.5px solid #475569;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-btn-secondary:hover {
+  background: #334155;
+  color: #f8fafc;
 }
 
 

@@ -819,6 +819,9 @@
             <button id="game-dex-toggle-btn" class="cabinet-ctrl-pill" title="Press [Q] for Pip-Dex">
               <span>Pip-Dex</span>
             </button>
+            <button id="game-settings-toggle-btn" class="cabinet-ctrl-pill settings-ctrl-pill" title="Press [Esc] for Settings &amp; Volume">
+              <span>⚙ Settings [Esc]</span>
+            </button>
           </div>
         </div>
 
@@ -1080,6 +1083,82 @@
             </div>
           </div>
 
+          <!-- SCREEN LAYER 5: IN-GAME SETTINGS & VOLUME CONTROL MODAL OVERLAY -->
+          <div class="pip-settings-overlay" id="pip-settings-overlay" style="display: none;">
+            <div class="pip-settings-modal">
+              <div class="settings-modal-header">
+                <div class="settings-title-wrap">
+                  <span class="settings-pixel-icon">⚙</span>
+                  <h3>GAME SETTINGS &amp; AUDIO</h3>
+                </div>
+                <button class="settings-close-x" id="settings-close-btn" title="Close Settings [Esc]">&times;</button>
+              </div>
+
+              <div class="settings-modal-body">
+                <!-- Master Volume Slider -->
+                <div class="settings-control-group">
+                  <div class="settings-label-row">
+                    <span class="settings-label">🔊 Master Volume</span>
+                    <span class="settings-val-badge" id="val-master-vol">100%</span>
+                  </div>
+                  <input type="range" id="slider-master-vol" class="retro-range-slider" min="0" max="100" value="100">
+                </div>
+
+                <!-- Music (BGM) Volume Slider & Toggle -->
+                <div class="settings-control-group">
+                  <div class="settings-label-row">
+                    <span class="settings-label">🎵 Music (BGM)</span>
+                    <div class="settings-right-actions">
+                      <span class="settings-val-badge" id="val-bgm-vol">50%</span>
+                      <button class="settings-toggle-btn active" id="btn-toggle-bgm">ON</button>
+                    </div>
+                  </div>
+                  <input type="range" id="slider-bgm-vol" class="retro-range-slider" min="0" max="100" value="50">
+                </div>
+
+                <!-- Sound Effects (SFX) Volume Slider & Toggle -->
+                <div class="settings-control-group">
+                  <div class="settings-label-row">
+                    <span class="settings-label">👟 Sound Effects (SFX)</span>
+                    <div class="settings-right-actions">
+                      <span class="settings-val-badge" id="val-sfx-vol">70%</span>
+                      <button class="settings-toggle-btn active" id="btn-toggle-sfx">ON</button>
+                    </div>
+                  </div>
+                  <input type="range" id="slider-sfx-vol" class="retro-range-slider" min="0" max="100" value="70">
+                </div>
+
+                <!-- Footstep Audio Legend -->
+                <div class="settings-audio-legend">
+                  <div class="legend-title">FOOTSTEP AUDIO MAP:</div>
+                  <div class="legend-tags">
+                    <span class="legend-tag tag-water">🌊 Water: Swim</span>
+                    <span class="legend-tag tag-grass">🌿 Grass: Meadow</span>
+                    <span class="legend-tag tag-sand">🏖️ Sand: Beach</span>
+                    <span class="legend-tag tag-obsidian">⚡ Matrix: Obsidian</span>
+                    <span class="legend-tag tag-gravel">🪨 Path: Gravel</span>
+                  </div>
+                </div>
+
+                <!-- Keyboard Controls Guide -->
+                <div class="settings-key-guide">
+                  <div class="key-item"><kbd>WASD</kbd> / <kbd>↑↓←→</kbd> <span>Walk</span></div>
+                  <div class="key-item"><kbd>Shift</kbd> <span>Sprint</span></div>
+                  <div class="key-item"><kbd>E</kbd> / <kbd>Space</kbd> <span>Interact</span></div>
+                  <div class="key-item"><kbd>Q</kbd> <span>Pip-Dex</span></div>
+                  <div class="key-item"><kbd>F</kbd> <span>Fullscreen</span></div>
+                  <div class="key-item"><kbd>Esc</kbd> <span>Settings</span></div>
+                  <div class="key-item"><kbd>R</kbd> <span>Flee Battle</span></div>
+                </div>
+              </div>
+
+              <div class="settings-modal-footer">
+                <button class="settings-btn-primary" id="settings-resume-btn">▶ Resume Game [Esc]</button>
+                <button class="settings-btn-secondary" id="settings-desktop-btn">Exit to Desktop</button>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- Integrated Handheld D-Pad & Control Deck (Clean, Minimal, No Unnecessary Icons) -->
@@ -1094,7 +1173,7 @@
           </div>
 
           <div class="handheld-middle-lore">
-            <span class="lore-text">WASD: Move &bull; Shift: Sprint &bull; [E] / Space: Interact &bull; [Q]: Pip-Dex &bull; [F]: Fullscreen &bull; [ESC]: Minimize &bull; [R]: Run from Battle</span>
+            <span class="lore-text">WASD: Move &bull; Shift: Sprint &bull; [E] / Space: Interact &bull; [Q]: Pip-Dex &bull; [F]: Fullscreen &bull; [ESC]: Settings &bull; [R]: Run from Battle</span>
           </div>
 
           <div class="handheld-action-keys">
