@@ -37,7 +37,7 @@
 
         <div class="desktop-icon-item" id="icon-works" tabindex="0" role="button" aria-label="Open Works and Projects Archive">
           <div class="icon-box custom-game-icon-box">
-            <img src="assets/icon_projects_modern.svg" alt="Projects Directory" class="game-icon-img">
+            <img src="assets/icon_projects_laptop.png" alt="Projects Directory" class="game-icon-img" style="image-rendering: pixelated; transform: scale(1.15);">
           </div>
           <span class="icon-label">projects.dir</span>
           <span class="icon-hint">Code &amp; Repos</span>
@@ -1219,99 +1219,274 @@
           </div>
         </div>
 
-        <!-- Formatted In-Browser View (Always works across all mobile & desktop browsers) -->
-        <div id="resume-formatted-view" class="resume-sheet-preview">
-          <div class="rsp-header">
-            <h2>DEEPSHIKHA DEY</h2>
-            <p class="rsp-sub">Computer Science Student &bull; Pune, India &bull; Graduation 2027</p>
-            <p class="rsp-contacts">
-              <a href="mailto:dey.deepshikha.283@gmail.com">dey.deepshikha.283@gmail.com</a> |
-              <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank">LinkedIn</a> |
-              <a href="https://github.com/DeepshikhaDey28" target="_blank">GitHub</a>
-            </p>
+        <!-- Formatted In-Browser View (Interactive & Aesthetic Dynamic Portfolio Resume) -->
+        <div id="resume-formatted-view" class="resume-sheet-preview aesthetic-resume-sheet">
+          
+          <!-- Resume Top Header Profile -->
+          <div class="resume-dynamic-header">
+            <div class="rdh-avatar-wrap">
+              <img src="assets/profile.jpg" alt="Deepshikha Dey" class="rdh-avatar">
+              <span class="rdh-status-pulse" title="Available for Data Science &amp; SWE roles"></span>
+            </div>
+            <div class="rdh-info">
+              <div class="rdh-title-row">
+                <h2>DEEPSHIKHA DEY</h2>
+                <span class="rdh-badge">DATA SCIENTIST &bull; SWE</span>
+              </div>
+              <p class="rdh-sub">B.Tech Computer Science (Cyber Security) &bull; Pune, Maharashtra, India</p>
+              <div class="rdh-contacts-bar">
+                <a href="mailto:dey.deepshikha.283@gmail.com" class="rdh-contact-pill" title="Send Email">
+                  <span class="rcp-icon">✉️</span> dey.deepshikha.283@gmail.com
+                </a>
+                <a href="https://www.linkedin.com/in/deepshikha-dey-904a931aa/" target="_blank" rel="noopener noreferrer" class="rdh-contact-pill" title="LinkedIn Profile">
+                  <span class="rcp-icon">💼</span> LinkedIn
+                </a>
+                <a href="https://github.com/DeepshikhaDey28" target="_blank" rel="noopener noreferrer" class="rdh-contact-pill" title="GitHub Profile">
+                  <span class="rcp-icon">🐙</span> GitHub
+                </a>
+                <button type="button" class="rdh-contact-pill copy-btn" id="resume-copy-email-btn" title="Copy Email to Clipboard">
+                  <span class="rcp-icon">📋</span> Copy Email
+                </button>
+              </div>
+            </div>
           </div>
 
+          <!-- Self Introduction / Executive Summary -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title">SELF INTRODUCTION</h4>
-            <p class="rsp-text">
-              I am a B.Tech Computer Science student specializing in Data Science, with a CGPA of 8.94 (recent SGPA: 9.45). I have consistently paired academic excellence with hands-on application across multiple internships. I specialize in bridging the gap between front-end development and data analytics, using Python and SQL to engineer robust solutions and Tableau to translate complex data into clear, actionable insights. Having worked in diverse settings, I can work well in a team environment and under various projects.
-            </p>
+            <h4 class="rsp-sec-title"><span>✦</span> EXECUTIVE PROFILE</h4>
+            <div class="rsp-summary-card">
+              <p class="rsp-text">
+                B.Tech Computer Science student specializing in <strong>Data Science &amp; Cyber Security</strong> (CGPA: <strong>8.94 / 10.0</strong>, Recent SGPA: <strong>9.45</strong>). Proven track record across multiple industry engineering internships bridging the gap between full-stack frontend interfaces and data analytics pipelines. Experienced in orchestrating high-performance telemetry monitoring with Python and SQL, creating enterprise BI dashboards with Tableau, and leading agile cross-functional engineering teams.
+              </p>
+            </div>
           </div>
 
+          <!-- Dynamic Interactive Technical Skills -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title">TECHNICAL SKILLS</h4>
-            <ul class="rsp-skills-list">
-              <li><strong>Languages:</strong> Python, SQL (MySQL), C, HTML, CSS, React</li>
-              <li><strong>Data Science:</strong> Pandas, NumPy, Tableau, Data Cleaning, Dashboarding</li>
-              <li><strong>Core CS:</strong> Data Structures, Algorithms, Cybersecurity Fundamentals</li>
-              <li><strong>Tools:</strong> Git, GitHub, Microsoft Office, Figma, VS Code</li>
-            </ul>
-          </div>
-
-          <div class="rsp-section">
-            <h4 class="rsp-sec-title">EXPERIENCE</h4>
+            <div class="rsp-sec-header-row">
+              <h4 class="rsp-sec-title"><span>✦</span> TECHNICAL COMPETENCIES</h4>
+              <div class="skills-filter-row" id="resume-skills-filters">
+                <button type="button" class="skill-filter-btn active" data-skill-cat="all">All</button>
+                <button type="button" class="skill-filter-btn" data-skill-cat="languages">Languages</button>
+                <button type="button" class="skill-filter-btn" data-skill-cat="data">Data Science</button>
+                <button type="button" class="skill-filter-btn" data-skill-cat="web">Frontend</button>
+                <button type="button" class="skill-filter-btn" data-skill-cat="tools">Tools &amp; Core</button>
+              </div>
+            </div>
             
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>Sevra AI (MyCare) | Team Lead – Front-End &amp; Data Science Intern</strong>
-                <span class="rsp-date">June 2026 – July 2026</span>
+            <div class="resume-skills-grid" id="resume-skills-grid">
+              <div class="skill-chip-pill" data-cat="languages">
+                <span class="scp-dot lang"></span>
+                <strong>Python</strong>
+                <span class="scp-tag">Advanced</span>
               </div>
-              <p>
-                Led a cross-functional development team to architect and build the complete front-end interface for the SevraOS device using Figma, HTML, CSS, and React.js. Engineered data pipelines to perform advanced analytics on system telemetry, utilizing Python and SQL to extract actionable insights and optimize overall system performance.
-              </p>
-            </div>
-
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>Erfinden Technologies | E-commerce Platform Development Intern</strong>
-                <span class="rsp-date">May 2025 – July 2025</span>
+              <div class="skill-chip-pill" data-cat="languages">
+                <span class="scp-dot lang"></span>
+                <strong>SQL (MySQL)</strong>
+                <span class="scp-tag">Pipelines</span>
               </div>
-              <p>
-                Developed a full-scale e-commerce platform for a retail company, implementing product listings and shopping cart functionality. Integrated secure payment gateways and managed order processing workflows.
-              </p>
-            </div>
-
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>Yhills | Data Science Intern</strong>
-                <span class="rsp-date">May 2024 – July 2024</span>
+              <div class="skill-chip-pill" data-cat="languages">
+                <span class="scp-dot lang"></span>
+                <strong>C</strong>
+                <span class="scp-tag">Systems</span>
               </div>
-              <p>
-                Executed data cleaning and preprocessing on raw datasets to ensure high data quality for analysis. Designed and created interactive dashboards using Tableau to provide actionable business insights.
-              </p>
+              <div class="skill-chip-pill" data-cat="web">
+                <span class="scp-dot web"></span>
+                <strong>React.js</strong>
+                <span class="scp-tag">Frontend</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="web">
+                <span class="scp-dot web"></span>
+                <strong>JavaScript (ES6+)</strong>
+                <span class="scp-tag">Frontend</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="web">
+                <span class="scp-dot web"></span>
+                <strong>HTML5 / CSS3</strong>
+                <span class="scp-tag">Responsive</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="data">
+                <span class="scp-dot data"></span>
+                <strong>Pandas &amp; NumPy</strong>
+                <span class="scp-tag">Analytics</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="data">
+                <span class="scp-dot data"></span>
+                <strong>Tableau</strong>
+                <span class="scp-tag">BI Dashboards</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="data">
+                <span class="scp-dot data"></span>
+                <strong>Telemetry Analytics</strong>
+                <span class="scp-tag">Real-Time</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="tools">
+                <span class="scp-dot tools"></span>
+                <strong>Git &amp; GitHub</strong>
+                <span class="scp-tag">CI/CD</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="tools">
+                <span class="scp-dot tools"></span>
+                <strong>Figma UI/UX</strong>
+                <span class="scp-tag">Design Systems</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="tools">
+                <span class="scp-dot tools"></span>
+                <strong>Cyber Security</strong>
+                <span class="scp-tag">Network Defense</span>
+              </div>
+              <div class="skill-chip-pill" data-cat="tools">
+                <span class="scp-dot tools"></span>
+                <strong>Data Structures &amp; Algorithms</strong>
+                <span class="scp-tag">Core CS</span>
+              </div>
             </div>
           </div>
 
+          <!-- Interactive Experience Timeline -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title">EDUCATION</h4>
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>Symbiosis Skills and Professional University</strong>
-                <span class="rsp-date">2023 – 2027</span>
+            <h4 class="rsp-sec-title"><span>✦</span> INDUSTRY EXPERIENCE</h4>
+            
+            <div class="resume-timeline-container">
+              <!-- Timeline Item 1 -->
+              <div class="resume-timeline-card">
+                <div class="rtc-marker"></div>
+                <div class="rtc-content">
+                  <div class="rtc-header">
+                    <div>
+                      <h5 class="rtc-role">Team Lead &ndash; Front-End &amp; Data Science Intern</h5>
+                      <span class="rtc-company">Sevra AI (MyCare)</span>
+                    </div>
+                    <span class="rtc-date">June 2026 &ndash; July 2026</span>
+                  </div>
+                  <div class="rtc-tags">
+                    <span class="rtc-tag leader">Team Lead</span>
+                    <span class="rtc-tag">React.js</span>
+                    <span class="rtc-tag">Python &amp; SQL</span>
+                    <span class="rtc-tag">Telemetry Analytics</span>
+                    <span class="rtc-tag">Figma</span>
+                  </div>
+                  <ul class="rtc-bullets">
+                    <li>Led a cross-functional development team to design, architect, and construct the complete client-facing UI for the <strong>SevraOS device</strong> using Figma, HTML5, CSS3, and React.js.</li>
+                    <li>Engineered automated data pipelines to perform real-time system telemetry analytics, querying device performance metrics via Python and SQL to eliminate hardware bottlenecking.</li>
+                  </ul>
+                </div>
               </div>
-              <p>B.Tech in Computer Science (Cyber Security) | Cumulative GPA: <strong>8.94 / 10.0</strong> | Recent Semester SGPA: <strong>9.45 / 10.0</strong></p>
-            </div>
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>MIT ADT Junior College</strong>
-                <span class="rsp-date">2021 – 2023</span>
+
+              <!-- Timeline Item 2 -->
+              <div class="resume-timeline-card">
+                <div class="rtc-marker"></div>
+                <div class="rtc-content">
+                  <div class="rtc-header">
+                    <div>
+                      <h5 class="rtc-role">E-commerce Platform Development Intern</h5>
+                      <span class="rtc-company">Erfinden Technologies</span>
+                    </div>
+                    <span class="rtc-date">May 2025 &ndash; July 2025</span>
+                  </div>
+                  <div class="rtc-tags">
+                    <span class="rtc-tag">E-Commerce</span>
+                    <span class="rtc-tag">Frontend Architecture</span>
+                    <span class="rtc-tag">Shopping Cart</span>
+                    <span class="rtc-tag">Payment Gateways</span>
+                  </div>
+                  <ul class="rtc-bullets">
+                    <li>Developed an end-to-end e-commerce platform for commercial retail, implementing searchable product catalogs and reactive shopping cart flows.</li>
+                    <li>Integrated secure payment gateway connections and streamlined order fulfillment lifecycles with error-resilient client validation.</li>
+                  </ul>
+                </div>
               </div>
-              <p>Higher Secondary Education (12th Grade)</p>
-            </div>
-            <div class="rsp-item">
-              <div class="rsp-item-top">
-                <strong>Pawar Public School</strong>
-                <span class="rsp-date">Completed</span>
+
+              <!-- Timeline Item 3 -->
+              <div class="resume-timeline-card">
+                <div class="rtc-marker"></div>
+                <div class="rtc-content">
+                  <div class="rtc-header">
+                    <div>
+                      <h5 class="rtc-role">Data Science Intern</h5>
+                      <span class="rtc-company">Yhills</span>
+                    </div>
+                    <span class="rtc-date">May 2024 &ndash; July 2024</span>
+                  </div>
+                  <div class="rtc-tags">
+                    <span class="rtc-tag">Tableau</span>
+                    <span class="rtc-tag">Data Cleaning</span>
+                    <span class="rtc-tag">Exploratory Data Analysis</span>
+                    <span class="rtc-tag">BI Insights</span>
+                  </div>
+                  <ul class="rtc-bullets">
+                    <li>Conducted extensive exploratory data analysis, dataset cleaning, and transformation pipelines ensuring high fidelity for analytics modeling.</li>
+                    <li>Constructed interactive, stakeholder-ready Tableau dashboards translating multi-source datasets into clear, actionable business metrics.</li>
+                  </ul>
+                </div>
               </div>
-              <p>Secondary Education (10th Grade)</p>
             </div>
           </div>
 
+          <!-- Academic Education Section -->
           <div class="rsp-section">
-            <h4 class="rsp-sec-title">LANGUAGES &amp; SOFT SKILLS</h4>
-            <p><strong>Languages:</strong> English (Professional), German (A2), Hindi, Marathi, Bengali (Native/Bilingual)</p>
-            <p><strong>Soft Skills:</strong> Critical Thinking &amp; Analytical Problem Solving, Project Management &amp; Team Leadership, Effective Verbal and Written Communication, Time Management &amp; Prioritization, Cross-Functional Communication</p>
+            <h4 class="rsp-sec-title"><span>✦</span> ACADEMIC CREDENTIALS</h4>
+            <div class="resume-education-grid">
+              <div class="edu-card-highlight">
+                <div class="ech-top">
+                  <div>
+                    <h5>Symbiosis Skills and Professional University</h5>
+                    <p class="ech-degree">B.Tech in Computer Science (Cyber Security Specialization)</p>
+                  </div>
+                  <span class="ech-years">2023 &ndash; 2027</span>
+                </div>
+                <div class="ech-score-strip">
+                  <span class="score-badge cgpa">⭐ Cumulative CGPA: <strong>8.94 / 10.0</strong></span>
+                  <span class="score-badge sgpa">🎯 Recent Semester SGPA: <strong>9.45 / 10.0</strong></span>
+                </div>
+              </div>
+              <div class="edu-card-simple">
+                <div class="ech-top">
+                  <div>
+                    <h6>MIT ADT Junior College</h6>
+                    <p class="ech-subtext">Higher Secondary Education (12th Grade)</p>
+                  </div>
+                  <span class="ech-years">2021 &ndash; 2023</span>
+                </div>
+              </div>
+              <div class="edu-card-simple">
+                <div class="ech-top">
+                  <div>
+                    <h6>Pawar Public School</h6>
+                    <p class="ech-subtext">Secondary Education (10th Grade)</p>
+                  </div>
+                  <span class="ech-years">Completed</span>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Languages & Soft Skills -->
+          <div class="rsp-section">
+            <h4 class="rsp-sec-title"><span>✦</span> LANGUAGES &amp; LEADERSHIP</h4>
+            <div class="rsp-two-col-grid">
+              <div class="rsp-mini-block">
+                <h6>Spoken &amp; Written Languages</h6>
+                <div class="lang-pills-row">
+                  <span class="lang-pill">English <em>(Professional)</em></span>
+                  <span class="lang-pill">German <em>(A2 Level)</em></span>
+                  <span class="lang-pill">Hindi <em>(Fluent)</em></span>
+                  <span class="lang-pill">Marathi <em>(Fluent)</em></span>
+                  <span class="lang-pill">Bengali <em>(Native)</em></span>
+                </div>
+              </div>
+              <div class="rsp-mini-block">
+                <h6>Leadership &amp; Collaboration</h6>
+                <div class="soft-pills-row">
+                  <span class="soft-pill">Cross-Functional Leadership</span>
+                  <span class="soft-pill">Critical Problem Solving</span>
+                  <span class="soft-pill">Agile Project Management</span>
+                  <span class="soft-pill">Stakeholder Communication</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
         
         <!-- Embedded PDF Fallback -->

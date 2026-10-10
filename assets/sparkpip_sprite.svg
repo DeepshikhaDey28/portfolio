@@ -1,32 +1,130 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <radialGradient id="spark-body" cx="40%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#fef08a"/>
-      <stop offset="60%" stop-color="#facc15"/>
+    <!-- Lightning Glow Filter -->
+    <filter id="spark-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#ca8a04" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- Electric Bolt Glow -->
+    <filter id="bolt-aura" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Body Gradients -->
+    <radialGradient id="sp-body-grad" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fef9c3"/>
+      <stop offset="35%" stop-color="#fef08a"/>
+      <stop offset="70%" stop-color="#facc15"/>
       <stop offset="100%" stop-color="#eab308"/>
     </radialGradient>
+
+    <!-- Tail Gradient -->
+    <linearGradient id="sp-tail-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="25%" stop-color="#ca8a04"/>
+      <stop offset="60%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+
+    <!-- Red Cheeks -->
+    <radialGradient id="sp-cheek-grad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="70%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </radialGradient>
   </defs>
-  <!-- Long Pointy Ears with Black Tips -->
-  <polygon points="18,22 8,4 16,14" fill="#000000"/>
-  <polygon points="18,22 14,10 24,18" fill="url(#spark-body)"/>
-  <polygon points="46,22 56,4 48,14" fill="#000000"/>
-  <polygon points="46,22 50,10 40,18" fill="url(#spark-body)"/>
-  <!-- Lightning Tail -->
-  <path d="M48 44 L56 38 L52 32 L60 24 L52 28 L54 36 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
-  <!-- Round Chubby Body -->
-  <ellipse cx="32" cy="38" rx="20" ry="18" fill="url(#spark-body)" stroke="#ca8a04" stroke-width="2"/>
-  <!-- Spark Eyes -->
-  <circle cx="25" cy="33" r="3.5" fill="#1e293b"/>
-  <circle cx="24" cy="32" r="1.2" fill="#ffffff"/>
-  <circle cx="39" cy="33" r="3.5" fill="#1e293b"/>
-  <circle cx="38" cy="32" r="1.2" fill="#ffffff"/>
-  <!-- Red Rosy Electric Cheeks -->
-  <circle cx="18" cy="40" r="4.5" fill="#ef4444"/>
-  <circle cx="46" cy="40" r="4.5" fill="#ef4444"/>
-  <!-- Cute Nose and Smile -->
-  <circle cx="32" cy="37" r="1" fill="#78350f"/>
-  <path d="M29 41 Q32 44 35 41" stroke="#78350f" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  <!-- Paws -->
-  <ellipse cx="26" cy="52" rx="4" ry="2.5" fill="#eab308"/>
-  <ellipse cx="38" cy="52" rx="4" ry="2.5" fill="#eab308"/>
+
+  <!-- Ground Shadow -->
+  <ellipse cx="100" cy="176" rx="55" ry="13" fill="rgba(113, 63, 18, 0.35)"/>
+
+  <!-- LIGHTNING ZIG-ZAG TAIL (Behind Body) -->
+  <g filter="url(#bolt-aura)">
+    <!-- Tail Segments (Classic Pikachu Bolt) -->
+    <path d="M115 135 L138 128 L130 114 L152 104 L142 86 L175 60 L168 52 L132 80 L140 98 L122 108 L128 122 L110 130 Z" 
+          fill="url(#sp-tail-grad)" stroke="#854d0e" stroke-width="2.5" stroke-linejoin="miter"/>
+    <!-- Brown Base of Tail -->
+    <path d="M115 135 L125 132 L120 125 L110 130 Z" fill="#78350f"/>
+    <!-- Electric Spark Particles -->
+    <polygon points="175,45 180,50 178,54 185,55 178,60 176,66 173,61 167,62 170,56 168,50" fill="#fef08a"/>
+    <circle cx="152" cy="40" r="2.5" fill="#facc15"/>
+    <circle cx="188" cy="70" r="2" fill="#fef08a"/>
+  </g>
+
+  <!-- EARS (Behind Head) -->
+  <!-- Left Ear -->
+  <g>
+    <path d="M68 62 C58 45 42 22 36 10 C34 6 42 12 50 25 C60 40 70 56 74 66 Z" 
+          fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2.5"/>
+    <!-- Black Ear Tip -->
+    <path d="M46 22 L36 10 C34 6 42 12 50 25 Z" fill="#18181b"/>
+  </g>
+
+  <!-- Right Ear -->
+  <g>
+    <path d="M126 66 C132 54 148 35 158 20 C164 10 162 18 156 30 C146 50 134 60 128 66 Z" 
+          fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2.5"/>
+    <!-- Black Ear Tip -->
+    <path d="M152 28 L158 20 C164 10 162 18 156 30 Z" fill="#18181b"/>
+  </g>
+
+  <!-- FEET & PAWS -->
+  <!-- Left Foot -->
+  <ellipse cx="74" cy="170" rx="14" ry="8" fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2.2"/>
+  <circle cx="66" cy="170" r="1.5" fill="#a16207"/>
+  <circle cx="72" cy="171" r="1.5" fill="#a16207"/>
+  <circle cx="78" cy="170" r="1.5" fill="#a16207"/>
+
+  <!-- Right Foot -->
+  <ellipse cx="126" cy="170" rx="14" ry="8" fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2.2"/>
+  <circle cx="122" cy="170" r="1.5" fill="#a16207"/>
+  <circle cx="128" cy="171" r="1.5" fill="#a16207"/>
+  <circle cx="134" cy="170" r="1.5" fill="#a16207"/>
+
+  <!-- TORSO (Chubby Round Mouse Body) -->
+  <ellipse cx="100" cy="125" rx="44" ry="42" 
+           fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="3" filter="url(#spark-glow)"/>
+
+  <!-- Brown Back Stripes (Subtle on left flank) -->
+  <path d="M60 115 Q75 118 64 125" stroke="#78350f" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <path d="M62 130 Q76 133 65 140" stroke="#78350f" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+  <!-- FRONT PAWS -->
+  <!-- Left Paw -->
+  <ellipse cx="80" cy="132" rx="8" ry="6" fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2" transform="rotate(-15 80 132)"/>
+  <!-- Right Paw -->
+  <ellipse cx="120" cy="132" rx="8" ry="6" fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="2" transform="rotate(15 120 132)"/>
+
+  <!-- HEAD -->
+  <ellipse cx="100" cy="85" rx="42" ry="38" 
+           fill="url(#sp-body-grad)" stroke="#a16207" stroke-width="3" filter="url(#spark-glow)"/>
+
+  <!-- BRIGHT RED ELECTRIC CHEEK POUCHES -->
+  <circle cx="68" cy="95" r="10" fill="url(#sp-cheek-grad)" stroke="#b91c1c" stroke-width="1.8"/>
+  <circle cx="132" cy="95" r="10" fill="url(#sp-cheek-grad)" stroke="#b91c1c" stroke-width="1.8"/>
+  <!-- Cheek Highlights -->
+  <circle cx="66" cy="92" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="130" cy="92" r="3" fill="#ffffff" opacity="0.6"/>
+
+  <!-- Big Shining Anime Eyes -->
+  <!-- Left Eye -->
+  <circle cx="82" cy="78" r="9" fill="#18181b"/>
+  <circle cx="80" cy="75" r="3.6" fill="#ffffff"/>
+  <circle cx="85" cy="82" r="1.5" fill="#ffffff"/>
+
+  <!-- Right Eye -->
+  <circle cx="118" cy="78" r="9" fill="#18181b"/>
+  <circle cx="116" cy="75" r="3.6" fill="#ffffff"/>
+  <circle cx="121" cy="82" r="1.5" fill="#ffffff"/>
+
+  <!-- Tiny Nose -->
+  <polygon points="100,84 98.5,86 101.5,86" fill="#78350f"/>
+
+  <!-- Cute Cat-like Smile (Open W-mouth) -->
+  <path d="M92 90 Q96 95 100 91 Q104 95 108 90" stroke="#78350f" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <!-- Rosy Open Mouth -->
+  <path d="M96 92 Q100 102 104 92 Z" fill="#f43f5e"/>
+
+  <!-- Head Specular Highlight -->
+  <ellipse cx="88" cy="56" rx="8" ry="4" fill="#ffffff" opacity="0.5" transform="rotate(-15 88 56)"/>
 </svg>

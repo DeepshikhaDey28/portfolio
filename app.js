@@ -1051,7 +1051,7 @@ class CatchThatPipGame {
       }
     }
 
-    // NPCs
+    // NPCs across all regions
     this.npcs = [
       {
         id: 'oak',
@@ -1059,7 +1059,27 @@ class CatchThatPipGame {
         x: 8 * 32,
         y: 4 * 32,
         color: '#dc2626',
-        dialogue: "Welcome, Deepshikha! The Open Dev Region is brimming with 6 wild algorithmic Pips! Step into tall grass or approach roaming creatures on the routes to catch them and complete your Pip-Dex!"
+        hatColor: '#ffffff',
+        dialogue: "Welcome, Deepshikha! Use [WASD] to roam. Press [E] or Space near any NPC to interact! In battle, use [1-4] to attack, or press [R] anytime to run away!"
+      },
+      {
+        id: 'nurse_chai',
+        name: 'NURSE CHAI (ESPRESSO HUB)',
+        x: 5 * 32,
+        y: 3 * 32,
+        color: '#f43f5e',
+        hatColor: '#fecdd3',
+        dialogue: "Fresh espresso is ready! Deepshikha and all registered Pips were restored to 100% HP!",
+        action: () => this.healTrainer()
+      },
+      {
+        id: 'pip_researcher',
+        name: 'PIP RESEARCHER MAYA',
+        x: 14 * 32,
+        y: 8 * 32,
+        color: '#8b5cf6',
+        hatColor: '#c4b5fd',
+        dialogue: "Wild Pips roam freely in the grass! Approach any creature to initiate battle. Weaken their HP before throwing a Pip-Capsule for a guaranteed capture!"
       },
       {
         id: 'python_dev',
@@ -1067,7 +1087,17 @@ class CatchThatPipGame {
         x: 27 * 32,
         y: 7 * 32,
         color: '#2563eb',
+        hatColor: '#1d4ed8',
         dialogue: "Did you know? Deepshikha architected the First_Python algorithmic hub and B2B eCommerce platform! Wild Flamechar and Bulbasprout love clean Python loops!"
+      },
+      {
+        id: 'data_rea',
+        name: 'DATA SCIENTIST REA',
+        x: 18 * 32,
+        y: 12 * 32,
+        color: '#0284c7',
+        hatColor: '#38bdf8',
+        dialogue: "I'm monitoring the SQL stream in the Data Lake! Deepshikha's 8.94 CGPA and Tableau expertise make telemetry analysis look effortless. Look for Aquabyte nearby!"
       },
       {
         id: 'telemetry_lead',
@@ -1075,7 +1105,17 @@ class CatchThatPipGame {
         x: 9 * 32,
         y: 16 * 32,
         color: '#059669',
+        hatColor: '#34d399',
         dialogue: "At Sevra AI, Deepshikha led front-end UI and built SQL data pipelines monitoring device telemetry in real-time. Look into the Data Lake for wild Aquabyte!"
+      },
+      {
+        id: 'speedrun_alex',
+        name: 'TRAINER ALEX',
+        x: 22 * 32,
+        y: 15 * 32,
+        color: '#ea580c',
+        hatColor: '#f97316',
+        dialogue: "Hey Deepshikha! I'm trying to catch all 6 wild Pips. Sparkpip is fast as lightning with 60 FPS electric attacks!"
       },
       {
         id: 'cyber_sec',
@@ -1083,6 +1123,7 @@ class CatchThatPipGame {
         x: 23 * 32,
         y: 20 * 32,
         color: '#7c3aed',
+        hatColor: '#a78bfa',
         dialogue: "Deepshikha's B.Tech Computer Science Cyber Security specialization (CGPA 8.94)! In this Cyber Matrix, Buggypip, Voltasync, and Neuropip thrive!"
       }
     ];
@@ -1175,7 +1216,52 @@ class CatchThatPipGame {
 
   initDOM() {
     this.owCanvas = document.getElementById('pip-overworld-canvas');
-    if (this.owCanvas) this.owCtx = this.owCanvas.getContext('2d');
+    if (this.owCanvas) {
+      this.owCtx = this.owCanvas.getContext('2d');
+      // Direct click on canvas to talk to NPCs or interact
+      this.owCanvas.addEventListener('click', (e) => {
+        if (this.mode !== 'overworld') return;
+        if (this.dialogueActive) {
+          this.closeDialogue();
+          return;
+        }
+        const rect = this.owCanvas.getBoundingClientRect();
+        const scaleX = this.owCanvas.width / rect.width;
+        const scaleY = this.owCanvas.height / rect.height;
+        const clickX = (e.clientX - rect.left) * scaleX + this.camera.x;
+        const clickY = (e.clientY - rect.top) * scaleY + this.camera.y;
+
+        // Check if clicked directly near any NPC
+        for (const npc of this.npcs) {
+          const d = Math.hypot(clickX - (npc.x + 16), clickY - (npc.y + 16));
+          if (d < 38) {
+            sfx.playClick();
+            if (npc.action) npc.action();
+            else this.showDialogue(npc.name, npc.dialogue);
+            return;
+          }
+        }
+
+        // Check if clicked directly near any interactive object
+        for (const obj of this.interactives) {
+          const d = Math.hypot(clickX - (obj.x + 16), clickY - (obj.y + 16));
+          if (d < 38) {
+            sfx.playClick();
+            if (obj.action) obj.action();
+            else if (obj.type === 'sign') this.showDialogue('SIGNPOST', obj.text);
+            else if (obj.type === 'item' && !obj.collected) {
+              obj.collected = true;
+              sfx.playItemChime();
+              obj.grant();
+            }
+            return;
+          }
+        }
+
+        // Otherwise trigger regular action press
+        this.handleActionPress();
+      });
+    }
 
     this.dodgeCanvas = document.getElementById('pip-dodge-canvas');
     if (this.dodgeCanvas) this.dodgeCtx = this.dodgeCanvas.getContext('2d');
@@ -1695,25 +1781,66 @@ class CatchThatPipGame {
       }
     });
 
-    // 3. Draw NPCs
+    // 3. Draw NPCs with unique styling and floating prompt
     this.npcs.forEach(npc => {
       const nx = npc.x - cx;
       const ny = npc.y - cy;
-      if (nx < -32 || nx > this.camera.width || ny < -32 || ny > this.camera.height) return;
+      if (nx < -40 || nx > this.camera.width + 10 || ny < -40 || ny > this.camera.height + 10) return;
+
+      const pDist = Math.hypot((this.player.x + 16) - (npc.x + 16), (this.player.y + 16) - (npc.y + 16));
+
+      // Little shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.beginPath();
+      ctx.ellipse(nx + 16, ny + 29, 9, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
 
       // NPC Body
       ctx.fillStyle = npc.color;
-      ctx.fillRect(nx + 8, ny + 10, 16, 18);
+      ctx.fillRect(nx + 8, ny + 11, 16, 17);
+
       // Head
       ctx.fillStyle = '#fed7aa';
       ctx.beginPath();
       ctx.arc(nx + 16, ny + 8, 7, 0, Math.PI * 2);
       ctx.fill();
-      // Little shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+
+      // Hat / Hair accessory
+      ctx.fillStyle = npc.hatColor || '#1e293b';
       ctx.beginPath();
-      ctx.ellipse(nx + 16, ny + 28, 8, 4, 0, 0, Math.PI * 2);
+      ctx.arc(nx + 16, ny + 6, 7, Math.PI, Math.PI * 2);
       ctx.fill();
+
+      // Floating interactive bubble when player is within 56px!
+      if (pDist < 56) {
+        const bounce = Math.sin(Date.now() / 160) * 3;
+        const bubbleY = ny - 16 + bounce;
+
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1.5;
+
+        // Pill speech bubble
+        ctx.beginPath();
+        ctx.roundRect(nx + 2, bubbleY, 28, 14, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        // Speech tail
+        ctx.beginPath();
+        ctx.moveTo(nx + 13, bubbleY + 14);
+        ctx.lineTo(nx + 16, bubbleY + 18);
+        ctx.lineTo(nx + 19, bubbleY + 14);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#1e293b';
+        ctx.font = 'bold 8px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('[E] TALK', nx + 16, bubbleY + 7);
+      }
     });
 
     // 4. Draw Roaming Wild Pips (Mini Sprites in Overworld!)
@@ -1844,31 +1971,39 @@ class CatchThatPipGame {
       return;
     }
 
-    // Check entity in front of player
+    // Check entity in front of player or in immediate proximity
     const p = this.player;
-    let checkX = p.x + p.w / 2;
-    let checkY = p.y + p.h / 2;
-    const reach = 28;
+    const pxCenter = p.x + p.w / 2;
+    const pyCenter = p.y + p.h / 2;
+    let checkX = pxCenter;
+    let checkY = pyCenter;
+    const reach = 32;
 
     if (p.dir === 0) checkY += reach;
     else if (p.dir === 1) checkY -= reach;
     else if (p.dir === 2) checkX -= reach;
     else if (p.dir === 3) checkX += reach;
 
-    // Check NPC interaction
+    // Check NPC interaction: both directional check AND proximity check (< 46px)
     for (const npc of this.npcs) {
-      const dist = Math.hypot(checkX - (npc.x + 16), checkY - (npc.y + 16));
-      if (dist < 28) {
+      const dirDist = Math.hypot(checkX - (npc.x + 16), checkY - (npc.y + 16));
+      const proxDist = Math.hypot(pxCenter - (npc.x + 16), pyCenter - (npc.y + 16));
+      if (dirDist < 46 || proxDist < 46) {
         sfx.playClick();
-        this.showDialogue(npc.name, npc.dialogue);
+        if (npc.action) {
+          npc.action();
+        } else {
+          this.showDialogue(npc.name, npc.dialogue);
+        }
         return;
       }
     }
 
     // Check Interactive Objects
     for (const obj of this.interactives) {
-      const dist = Math.hypot(checkX - (obj.x + 16), checkY - (obj.y + 16));
-      if (dist < 28) {
+      const dirDist = Math.hypot(checkX - (obj.x + 16), checkY - (obj.y + 16));
+      const proxDist = Math.hypot(pxCenter - (obj.x + 16), pyCenter - (obj.y + 16));
+      if (dirDist < 46 || proxDist < 46) {
         sfx.playClick();
         if (obj.action) obj.action();
         else if (obj.type === 'sign') this.showDialogue('SIGNPOST', obj.text);
@@ -2582,6 +2717,36 @@ toggleResumeBtn?.addEventListener('click', () => {
     resumeFormattedView.style.display = 'none';
     resumePdfView.style.display = 'block';
   }
+});
+
+// Dynamic Resume: Interactive Skill Filters
+document.querySelectorAll('#resume-skills-filters .skill-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    sfx.playSelect();
+    document.querySelectorAll('#resume-skills-filters .skill-filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cat = btn.getAttribute('data-skill-cat');
+    const chips = document.querySelectorAll('#resume-skills-grid .skill-chip-pill');
+    chips.forEach(chip => {
+      const chipCat = chip.getAttribute('data-cat');
+      if (cat === 'all' || chipCat === cat) {
+        chip.classList.remove('hidden-by-filter');
+      } else {
+        chip.classList.add('hidden-by-filter');
+      }
+    });
+  });
+});
+
+// Dynamic Resume: Copy Email Button
+document.getElementById('resume-copy-email-btn')?.addEventListener('click', () => {
+  sfx.playClick();
+  navigator.clipboard.writeText('dey.deepshikha.283@gmail.com').then(() => {
+    showToast('Copied email dey.deepshikha.283@gmail.com to clipboard! 📋');
+  }).catch(() => {
+    showToast('dey.deepshikha.283@gmail.com');
+  });
 });
 
 } // End of browser environment guard
