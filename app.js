@@ -585,6 +585,13 @@ const langColors = {
 };
 
 const WORKING_REPOS_MAP = {
+  'starville-game': {
+    url: 'projects/starville-game/index.html',
+    title: 'starville-game',
+    desc: 'Starville: The Midnight Broadcast — Retro point-and-click pixel mystery adventure game with sound & interactive puzzles.',
+    tag: 'RETRO MYSTERY GAME',
+    lang: 'JavaScript / HTML5'
+  },
   'smart_traffic_simulation': {
     url: 'projects/traffic-grid-simulation/index.html',
     title: 'smart_traffic_simulation',
@@ -678,6 +685,15 @@ async function fetchGitHubRepos(forceRefresh = false) {
   // Fallback seed repositories based on user's GitHub sorted newest first
   const fallbackRepos = [
     {
+      name: 'starville-game',
+      html_url: 'https://github.com/DeepshikhaDey28/starville-game',
+      description: 'Starville: The Midnight Broadcast — Retro point-and-click pixel mystery adventure game with sound & interactive puzzles.',
+      language: 'HTML',
+      stargazers_count: 0,
+      forks_count: 0,
+      updated_at: '2026-10-11T05:13:52Z'
+    },
+    {
       name: 'portfolio',
       html_url: 'https://github.com/DeepshikhaDey28/portfolio',
       description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
@@ -733,25 +749,25 @@ async function fetchGitHubRepos(forceRefresh = false) {
     }
   ];
 
-  // Check LocalStorage cache first unless force refresh requested
-  if (!forceRefresh) {
-    const cached = localStorage.getItem(REPOS_CACHE_KEY);
-    if (cached) {
-      try {
-        const parsed = JSON.parse(cached);
-        if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
-          renderRepos(parsed.data);
-          updateSyncUI(parsed.data.length, 'Live Cache');
-          if (parsed.timestamp && Date.now() - parsed.timestamp < 1000 * 60 * 15) {
-            return;
-          }
-        }
-      } catch (e) {}
-    }
+  // 1. Optimistic render from cache for immediate 0ms load (never blocks live fetch)
+  let previousCount = 0;
+  const cached = localStorage.getItem(REPOS_CACHE_KEY);
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
+        previousCount = parsed.data.length;
+        renderRepos(parsed.data);
+        updateSyncUI(parsed.data.length, 'Cached (Syncing...)');
+      }
+    } catch (e) {}
   }
 
+  // 2. ALWAYS fetch straight from GitHub live with cache-busting timestamp
   try {
-    const res = await fetch(GITHUB_API_URL, {
+    const fetchUrl = `${GITHUB_API_URL}&_nocache=${Date.now()}`;
+    const res = await fetch(fetchUrl, {
+      cache: 'no-store',
       headers: { 'Accept': 'application/vnd.github.v3+json' }
     });
 
@@ -765,7 +781,10 @@ async function fetchGitHubRepos(forceRefresh = false) {
       }));
       renderRepos(repos);
       updateSyncUI(repos.length, 'Live Synced');
-      if (forceRefresh) {
+
+      if (previousCount > 0 && repos.length > previousCount) {
+        showToast(`⚡ New repository detected! Synced ${repos.length} live repos.`);
+      } else if (forceRefresh) {
         showToast(`Synced ${repos.length} GitHub repositories!`);
       }
     } else {
@@ -774,10 +793,10 @@ async function fetchGitHubRepos(forceRefresh = false) {
   } catch (err) {
     console.warn('GitHub fetch error, checking fallback cache:', err);
     let rendered = false;
-    const cached = localStorage.getItem(REPOS_CACHE_KEY);
-    if (cached) {
+    const cachedFallback = localStorage.getItem(REPOS_CACHE_KEY);
+    if (cachedFallback) {
       try {
-        const parsed = JSON.parse(cached);
+        const parsed = JSON.parse(cachedFallback);
         if (parsed && Array.isArray(parsed.data) && parsed.data.length > 0) {
           renderRepos(parsed.data);
           updateSyncUI(parsed.data.length, 'Offline Cache');
@@ -889,6 +908,22 @@ function loadGitHubRepos() {
 document.getElementById('refresh-github-btn')?.addEventListener('click', () => {
   sfx.playClick();
   fetchGitHubRepos(true);
+});
+
+// Continuous Live GitHub Auto-Sync:
+// Periodically checks GitHub every 60s so any newly pushed repo automatically appears live
+setInterval(() => {
+  fetchGitHubRepos(false);
+}, 60000);
+
+// Also instantly sync straight from GitHub whenever user switches back to this browser tab
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    fetchGitHubRepos(false);
+  }
+});
+window.addEventListener('focus', () => {
+  fetchGitHubRepos(false);
 });
 
 
