@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repository Live Preview &amp; Sandbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel-bg: #111722;
+      --card-bg: #16202e;
+      --border: #243247;
+      --text: #d8e2ec;
+      --text-muted: #8394a8;
+      --accent: #58a6ff;
+      --gold: #f4d06f;
+      --maroon: #541219;
+      --green: #3fb950;
+      --font-mono: 'Fira Code', monospace;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+    header {
+      background: #0d131c;
+      border-bottom: 2px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.9); }
+    }
+    .repo-title {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .repo-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(88, 166, 255, 0.15);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+    .badge.gold {
+      background: rgba(244, 208, 111, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .badge.green {
+      background: rgba(63, 185, 80, 0.15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      border: 1px solid var(--border);
+      background: var(--panel-bg);
+      color: var(--text);
+    }
+    .btn:hover {
+      background: #1a2436;
+      border-color: var(--accent);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .btn.primary {
+      background: var(--maroon);
+      border-color: #801d27;
+      color: #fff;
+    }
+    .btn.primary:hover {
+      background: #6d1720;
+      border-color: var(--gold);
+    }
+    .nav-tabs {
+      background: #0f1520;
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.25rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .tab-btn {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.65rem 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+    }
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+      background: rgba(244, 208, 111, 0.05);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .tab-panel {
+      display: none;
+      flex: 1;
+      overflow: auto;
+      padding: 1.25rem;
+    }
+    .tab-panel.active {
+      display: flex;
+      flex-direction: column;
+    }
+    /* Live Preview iframe or runner */
+    #panel-live {
+      padding: 0;
+    }
+    .live-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      flex: 1;
+      background: #ffffff;
+    }
+    .live-fallback-banner {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.25rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .live-fallback-banner h3 {
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .live-fallback-banner p {
+      color: var(--text-muted);
+      max-width: 600px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    /* Explorer View */
+    .explorer-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1rem;
+      height: 100%;
+      min-height: 400px;
+    }
+    @media (max-width: 768px) {
+      .explorer-layout { grid-template-columns: 1fr; }
+    }
+    .file-tree {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      overflow-y: auto;
+      max-height: 600px;
+    }
+    .file-tree-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .file-item {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      transition: all 0.1s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-item:hover {
+      background: #1a2436;
+      color: var(--accent);
+    }
+    .file-item.active {
+      background: rgba(88, 166, 255, 0.2);
+      color: #fff;
+      font-weight: 600;
+    }
+    .code-viewer {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .code-viewer-header {
+      background: #161b22;
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .code-content {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    /* Readme View */
+    .readme-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .readme-card h1, .readme-card h2, .readme-card h3 {
+      color: #fff;
+      margin-top: 1.25rem;
+      margin-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+    .readme-card p {
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .readme-card code {
+      font-family: var(--font-mono);
+      background: #161b22;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: var(--gold);
+    }
+    .readme-card pre {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .readme-card pre code {
+      background: transparent;
+      padding: 0;
+      color: #c9d1d9;
+    }
+    .readme-card a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="status-dot"></div>
+      <h2 class="repo-title" id="repo-title">Loading repository...</h2>
+      <div class="repo-badges">
+        <span class="badge" id="lang-badge">Code</span>
+        <span class="badge gold" id="stars-badge">★ 0</span>
+        <span class="badge green" id="sync-badge">Live Synced</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="#" target="_blank" id="gh-dev-link" class="btn" title="Open repository in GitHub Dev (Web VS Code)">
+        <span>💻 Web VS Code</span>
+      </a>
+      <a href="#" target="_blank" id="gh-repo-link" class="btn primary" title="View repository on GitHub">
+        <span>↗ GitHub Repo</span>
+      </a>
+      <button id="copy-clone-btn" class="btn" title="Copy git clone command">
+        <span>📋 Copy Clone</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-tab="live">▶ Live Interactive Preview</button>
+    <button class="tab-btn" data-tab="readme">📄 README &amp; Documentation</button>
+    <button class="tab-btn" data-tab="files">📂 Source Code Explorer</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: LIVE INTERACTIVE PREVIEW -->
+    <div id="panel-live" class="tab-panel active">
+      <div id="live-container" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+        <div class="live-fallback-banner" id="live-banner">
+          <div class="loading-spinner" id="live-spinner"></div>
+          <h3 id="live-banner-title">Initializing Live Repository Sandbox...</h3>
+          <p id="live-banner-desc">Connecting to GitHub API to inspect files and detect web applications or runnable scripts.</p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+            <a href="#" target="_blank" id="banner-open-btn" class="btn primary">Launch Full Tab Preview</a>
+            <button class="btn" onclick="switchTab('files')">Browse Code Files</button>
+          </div>
+        </div>
+        <iframe id="live-iframe" class="live-frame" style="display: none;" title="Live Interactive Sandbox"></iframe>
+      </div>
+    </div>
+
+    <!-- TAB 2: README -->
+    <div id="panel-readme" class="tab-panel">
+      <div class="readme-card" id="readme-content">
+        <div style="text-align: center; padding: 2rem;">
+          <div class="loading-spinner"></div>
+          <p style="margin-top: 1rem; color: var(--text-muted);">Fetching repository documentation...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: SOURCE CODE EXPLORER -->
+    <div id="panel-files" class="tab-panel">
+      <div class="explorer-layout">
+        <div class="file-tree">
+          <div class="file-tree-title">Repository Files</div>
+          <div id="files-list">
+            <div style="padding: 0.5rem; color: var(--text-muted); font-size: 0.8rem;">Loading tree...</div>
+          </div>
+        </div>
+        <div class="code-viewer">
+          <div class="code-viewer-header">
+            <span id="current-filename">Select a file</span>
+            <button class="btn" id="copy-code-btn" style="padding: 2px 8px; font-size: 0.7rem;">Copy</button>
+          </div>
+          <pre class="code-content" id="code-display">// Click any file in the left explorer to view source code.</pre>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const USER = 'DeepshikhaDey28';
+    const params = new URLSearchParams(window.location.search);
+    const repoName = params.get('repo') || 'portfolio';
+    const repoLang = params.get('lang') || 'Code';
+
+    document.getElementById('repo-title').textContent = repoName;
+    document.getElementById('lang-badge').textContent = repoLang;
+    document.getElementById('gh-dev-link').href = `https://github.dev/${USER}/${repoName}`;
+    document.getElementById('gh-repo-link').href = `https://github.com/${USER}/${repoName}`;
+
+    document.getElementById('copy-clone-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(`git clone https://github.com/${USER}/${repoName}.git`);
+      const btn = document.getElementById('copy-clone-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.innerHTML = '<span>📋 Copy Clone</span>'; }, 2000);
+    });
+
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = {
+      live: document.getElementById('panel-live'),
+      readme: document.getElementById('panel-readme'),
+      files: document.getElementById('panel-files')
+    };
+
+    function switchTab(target) {
+      tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-tab') === target));
+      Object.keys(panels).forEach(k => {
+        panels[k].classList.toggle('active', k === target);
+      });
+    }
+
+    tabs.forEach(t => {
+      t.addEventListener('click', () => switchTab(t.getAttribute('data-tab')));
+    });
+
+    // Live preview resolution
+    async function initLivePreview() {
+      const banner = document.getElementById('live-banner');
+      const bannerTitle = document.getElementById('live-banner-title');
+      const bannerDesc = document.getElementById('live-banner-desc');
+      const bannerBtn = document.getElementById('banner-open-btn');
+      const iframe = document.getElementById('live-iframe');
+
+      bannerBtn.href = `https://github.dev/${USER}/${repoName}`;
+      bannerBtn.textContent = 'Open in Web VS Code';
+
+      // 1. Check if repo has GitHub Pages or custom web index
+      const pagesUrl = `https://${USER}.github.io/${repoName}/`;
+      try {
+        const testRes = await fetch(pagesUrl, { method: 'HEAD' });
+        if (testRes.ok) {
+          iframe.src = pagesUrl;
+          iframe.style.display = 'block';
+          banner.style.display = 'none';
+          bannerBtn.href = pagesUrl;
+          bannerBtn.textContent = 'Open Full Tab';
+          return;
+        }
+      } catch (e) {}
+
+      // 2. Check if repo has raw index.html on main/master branch
+      const rawHtmlUrl = `https://raw.githubusercontent.com/${USER}/${repoName}/main/index.html`;
+      try {
+        const rawRes = await fetch(rawHtmlUrl);
+        if (rawRes.ok) {
+          const htmlContent = await rawRes.text();
+          iframe.srcdoc = htmlContent;
+          iframe.style.display = 'block';
+          banner.style.display = 'none';
+          return;
+        }
+      } catch (e) {}
+
+      // 3. Fallback for code repositories (Python, Algorithms, Utilities)
+      document.getElementById('live-spinner').style.display = 'none';
+      bannerTitle.textContent = `${repoName} — Interactive Code Repository`;
+      bannerDesc.textContent = `This repository contains source code and algorithms. You can inspect all files, read the documentation, or launch the complete development environment directly in Web VS Code.`;
+      bannerBtn.href = `https://github.dev/${USER}/${repoName}`;
+      bannerBtn.textContent = '💻 Launch in Web VS Code';
+    }
+
+    // README Fetcher
+    async function loadReadme() {
+      const readmeBox = document.getElementById('readme-content');
+      try {
+        const res = await fetch(`https://api.github.com/repos/${USER}/${repoName}/readme`, {
+          headers: { 'Accept': 'application/vnd.github.v3.html' }
+        });
+        if (res.ok) {
+          const html = await res.text();
+          readmeBox.innerHTML = html;
+        } else {
+          readmeBox.innerHTML = `
+            <h3>${repoName} Documentation</h3>
+            <p>No formatted README.md found in this repository. Visit the repository on GitHub for full commit logs and tree.</p>
+            <a href="https://github.com/${USER}/${repoName}" target="_blank" class="btn primary">View on GitHub</a>
+          `;
+        }
+      } catch (e) {
+        readmeBox.innerHTML = `<p style="color: var(--text-muted);">Could not load README from GitHub. <a href="https://github.com/${USER}/${repoName}" target="_blank">Open on GitHub</a></p>`;
+      }
+    }
+
+    // File Tree Fetcher
+    let fileContentsMap = {};
+    async function loadFiles() {
+      const listEl = document.getElementById('files-list');
+      try {
+        const res = await fetch(`https://api.github.com/repos/${USER}/${repoName}/contents`);
+        if (res.ok) {
+          const files = await res.json();
+          listEl.innerHTML = '';
+          files.forEach(f => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            const icon = f.type === 'dir' ? '📁' : '📄';
+            item.innerHTML = `<span>${icon}</span><span>${f.name}</span>`;
+            if (f.type !== 'dir') {
+              item.addEventListener('click', () => {
+                document.querySelectorAll('.file-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                viewFile(f);
+              });
+            }
+            listEl.appendChild(item);
+          });
+          // Open first non-dir file automatically
+          const firstFile = files.find(f => f.type !== 'dir');
+          if (firstFile) viewFile(firstFile);
+        } else {
+          listEl.innerHTML = '<div style="padding: 0.5rem; color: var(--text-muted);">No files found.</div>';
+        }
+      } catch (e) {
+        listEl.innerHTML = '<div style="padding: 0.5rem; color: var(--text-muted);">Could not fetch file list.</div>';
+      }
+    }
+
+    async function viewFile(file) {
+      document.getElementById('current-filename').textContent = file.name;
+      const display = document.getElementById('code-display');
+      display.textContent = 'Loading file contents...';
+
+      if (fileContentsMap[file.path]) {
+        display.textContent = fileContentsMap[file.path];
+        return;
+      }
+
+      try {
+        const res = await fetch(file.download_url);
+        if (res.ok) {
+          const text = await res.text();
+          fileContentsMap[file.path] = text;
+          display.textContent = text;
+        } else {
+          display.textContent = '// Unable to preview this file directly.';
+        }
+      } catch (e) {
+        display.textContent = '// Error loading file content.';
+      }
+    }
+
+    document.getElementById('copy-code-btn').addEventListener('click', () => {
+      const code = document.getElementById('code-display').textContent;
+      navigator.clipboard.writeText(code);
+      const btn = document.getElementById('copy-code-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+
+    // Metadata & Initial load
+    async function loadMeta() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${USER}/${repoName}`);
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('stars-badge').textContent = `★ ${data.stargazers_count || 0}`;
+          if (data.language) document.getElementById('lang-badge').textContent = data.language;
+        }
+      } catch (e) {}
+    }
+
+    loadMeta();
+    initLivePreview();
+    loadReadme();
+    loadFiles();
+  </script>
+</body>
+</html>

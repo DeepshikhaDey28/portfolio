@@ -592,6 +592,13 @@ const WORKING_REPOS_MAP = {
     tag: 'RETRO MYSTERY GAME',
     lang: 'JavaScript / HTML5'
   },
+  'portfolio': {
+    url: 'https://portfolio-deepshika3.vercel.app',
+    title: 'portfolio',
+    desc: 'Developer portfolio & retro OS workspace featuring live GitHub sync, scrapbooking aesthetics, and Pip dodge mini-game.',
+    tag: 'LIVE PORTFOLIO & OS',
+    lang: 'HTML / CSS / JS'
+  },
   'smart_traffic_simulation': {
     url: 'projects/traffic-grid-simulation/index.html',
     title: 'smart_traffic_simulation',
@@ -633,27 +640,109 @@ const WORKING_REPOS_MAP = {
     desc: 'Precision algorithmic calculator suite with standard, scientific, unit conversion, and financial splitters.',
     tag: 'MATH UTILITY',
     lang: 'JavaScript'
+  },
+  'sevra-os-telemetry': {
+    url: 'projects/sevra-os-telemetry/index.html',
+    title: 'sevra-os-telemetry',
+    desc: 'Interactive telemetry & process monitoring interface for Sevra OS.',
+    tag: 'SYSTEM TELEMETRY',
+    lang: 'JavaScript / HTML'
+  },
+  'yhills-bi-dashboard': {
+    url: 'projects/yhills-bi-dashboard/index.html',
+    title: 'yhills-bi-dashboard',
+    desc: 'Business intelligence and analytics performance dashboard.',
+    tag: 'BI DASHBOARD',
+    lang: 'JavaScript / Charts'
   }
 };
+
+/**
+ * Automatically resolves live preview configuration for ANY repository.
+ * Guarantees every applicable repository gets an in-app interactive preview by default.
+ */
+function resolveRepoPreview(repo) {
+  if (!repo || !repo.name) return null;
+
+  // 1. Direct match in WORKING_REPOS_MAP
+  if (WORKING_REPOS_MAP[repo.name]) {
+    return {
+      isApplicable: true,
+      url: WORKING_REPOS_MAP[repo.name].url,
+      title: WORKING_REPOS_MAP[repo.name].title || repo.name,
+      desc: WORKING_REPOS_MAP[repo.name].desc || repo.description,
+      tag: WORKING_REPOS_MAP[repo.name].tag || 'LIVE APP'
+    };
+  }
+
+  // 2. Normalized alphanumeric match (handling dash vs underscore variations)
+  const norm = repo.name.toLowerCase().replace(/[-_]/g, '');
+  for (const [key, val] of Object.entries(WORKING_REPOS_MAP)) {
+    if (key.toLowerCase().replace(/[-_]/g, '') === norm) {
+      return {
+        isApplicable: true,
+        url: val.url,
+        title: val.title || repo.name,
+        desc: val.desc || repo.description,
+        tag: val.tag || 'LIVE APP'
+      };
+    }
+  }
+
+  // 3. Deployed homepage URL (e.g., Vercel, Netlify, Render, custom domains)
+  if (repo.homepage && typeof repo.homepage === 'string' && repo.homepage.startsWith('http') && !repo.homepage.includes('github.com/')) {
+    return {
+      isApplicable: true,
+      url: repo.homepage,
+      title: repo.name,
+      desc: repo.description || 'Live deployed web application.',
+      tag: 'LIVE DEPLOYED'
+    };
+  }
+
+  // 4. GitHub Pages
+  if (repo.has_pages) {
+    const owner = (repo.owner && repo.owner.login) ? repo.owner.login : 'DeepshikhaDey28';
+    return {
+      isApplicable: true,
+      url: `https://${owner}.github.io/${repo.name}/`,
+      title: repo.name,
+      desc: repo.description || 'Hosted live on GitHub Pages.',
+      tag: 'GITHUB PAGES'
+    };
+  }
+
+  // 5. Automatic In-App Universal Live Preview & Sandbox Runner
+  // Any public repository by user is automatically previewable live by default
+  const langUpper = (repo.language || 'CODE').toUpperCase();
+  return {
+    isApplicable: true,
+    url: `projects/repo-viewer/index.html?repo=${encodeURIComponent(repo.name)}&lang=${encodeURIComponent(repo.language || 'Code')}`,
+    title: repo.name,
+    desc: repo.description || `Interactive ${repo.language || 'code'} repository & live sandbox.`,
+    tag: `${langUpper} RUNNER`
+  };
+}
 
 function renderFeaturedProjects(repos) {
   const container = document.getElementById('featured-projects-grid');
   if (!container) return;
 
-  // Filter for projects with a working interactive app, excluding the portfolio itself
+  // Filter for projects with live preview enabled by default automatically
+  // Show top 5 newest updated projects
   const workingProjects = repos
-    .filter(r => r.name !== 'portfolio' && WORKING_REPOS_MAP[r.name])
-    .sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0))
+    .map(repo => ({ repo, preview: resolveRepoPreview(repo) }))
+    .filter(item => item.preview && item.preview.isApplicable)
+    .sort((a, b) => new Date(b.repo.updated_at || 0) - new Date(a.repo.updated_at || 0))
     .slice(0, 5);
 
   if (workingProjects.length === 0) return;
 
   container.innerHTML = '';
-  workingProjects.forEach(repo => {
-    const app = WORKING_REPOS_MAP[repo.name];
+  workingProjects.forEach(({ repo, preview }) => {
     const card = document.createElement('div');
     card.className = 'emg-card run-project-btn';
-    card.setAttribute('data-url', app.url);
+    card.setAttribute('data-url', preview.url);
     card.setAttribute('data-title', repo.name);
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
@@ -661,11 +750,11 @@ function renderFeaturedProjects(repos) {
 
     card.innerHTML = `
       <div class="emg-card-header">
-        <span class="emg-card-tag">${app.tag}</span>
+        <span class="emg-card-tag">${preview.tag}</span>
         <span class="emg-popup-hint">⤢ In-App</span>
       </div>
       <h4 class="emg-card-title">${repo.name}</h4>
-      <p class="emg-card-desc">${app.desc}</p>
+      <p class="emg-card-desc">${preview.desc}</p>
     `;
     container.appendChild(card);
   });
@@ -696,6 +785,7 @@ async function fetchGitHubRepos(forceRefresh = false) {
     {
       name: 'portfolio',
       html_url: 'https://github.com/DeepshikhaDey28/portfolio',
+      homepage: 'https://portfolio-deepshika3.vercel.app',
       description: 'Developer portfolio & retro OS workspace featuring live GitHub sync and Catch That Pip Pokémon-style game.',
       language: 'HTML',
       stargazers_count: 0,
@@ -841,10 +931,13 @@ function renderRepos(repos) {
     card.className = 'repo-card';
     card.setAttribute('data-category', 'github ' + (repo.language ? repo.language.toLowerCase() : ''));
 
-    const workingApp = WORKING_REPOS_MAP[repo.name];
-    if (workingApp) {
+    // Automatically resolve live preview for every applicable repo
+    const preview = resolveRepoPreview(repo);
+    const hasPreview = preview && preview.isApplicable;
+
+    if (hasPreview) {
       card.classList.add('run-project-btn');
-      card.setAttribute('data-url', workingApp.url);
+      card.setAttribute('data-url', preview.url);
       card.setAttribute('data-title', repo.name);
       card.style.cursor = 'pointer';
       card.setAttribute('title', `Click to launch ${repo.name} in in-app popup window`);
@@ -852,16 +945,16 @@ function renderRepos(repos) {
 
     const lang = repo.language || 'Code';
     const langColor = langColors[lang] || langColors.Default;
-    const desc = (workingApp && workingApp.desc) ? workingApp.desc : (repo.description || 'Public repository under @DeepshikhaDey28.');
+    const desc = (preview && preview.desc) ? preview.desc : (repo.description || 'Public repository under @DeepshikhaDey28.');
 
-    const liveBadgeHtml = workingApp
+    const liveBadgeHtml = hasPreview
       ? `<span class="repo-live-tag" title="Interactive application runnable in popup window">● RUNNABLE</span>`
       : '';
 
-    const actionsHtml = workingApp
+    const actionsHtml = hasPreview
       ? `
         <div class="repo-action-group">
-          <button class="repo-action-btn live-preview-btn run-project-btn" data-url="${workingApp.url}" data-title="${repo.name}" title="Open working project in popup window">
+          <button class="repo-action-btn live-preview-btn run-project-btn" data-url="${preview.url}" data-title="${repo.name}" title="Open working project in popup window">
             <span>▶ Live Preview</span>
           </button>
           <a href="${repo.html_url}" target="_blank" class="repo-action-btn code-link-btn" title="View repository source code on GitHub">
@@ -981,7 +1074,10 @@ function launchProjectApp(url, title) {
     `;
   }
   if (runnerExternalLink) {
-    runnerExternalLink.href = url;
+    const extUrl = url.includes('projects/repo-viewer')
+      ? `https://github.com/DeepshikhaDey28/${title}`
+      : url;
+    runnerExternalLink.href = extUrl;
     runnerExternalLink.title = `Open ${title} in a full browser tab`;
   }
   if (runnerIframe) runnerIframe.src = url;
