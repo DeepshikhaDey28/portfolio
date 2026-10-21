@@ -390,7 +390,7 @@
             <button class="btn" onclick="switchTab('files')">Browse Code Files</button>
           </div>
         </div>
-        <iframe id="live-iframe" class="live-frame" style="display: none;" title="Live Interactive Sandbox"></iframe>
+        <iframe id="live-iframe" class="live-frame" style="display: none;" title="Live Interactive Sandbox" allow="fullscreen; autoplay" allowfullscreen></iframe>
       </div>
     </div>
 
@@ -487,17 +487,25 @@
       } catch (e) {}
 
       // 2. Check if repo has raw index.html on main/master branch
-      const rawHtmlUrl = `https://raw.githubusercontent.com/${USER}/${repoName}/main/index.html`;
-      try {
-        const rawRes = await fetch(rawHtmlUrl);
-        if (rawRes.ok) {
-          const htmlContent = await rawRes.text();
-          iframe.srcdoc = htmlContent;
-          iframe.style.display = 'block';
-          banner.style.display = 'none';
-          return;
-        }
-      } catch (e) {}
+      for (const branch of ['main', 'master']) {
+        const rawHtmlUrl = `https://raw.githubusercontent.com/${USER}/${repoName}/${branch}/index.html`;
+        try {
+          const rawRes = await fetch(rawHtmlUrl);
+          if (rawRes.ok) {
+            let htmlContent = await rawRes.text();
+            const baseTag = `<base href="https://raw.githubusercontent.com/${USER}/${repoName}/${branch}/">`;
+            if (/<head[^>]*>/i.test(htmlContent)) {
+              htmlContent = htmlContent.replace(/<head[^>]*>/i, `$&${baseTag}`);
+            } else {
+              htmlContent = baseTag + htmlContent;
+            }
+            iframe.srcdoc = htmlContent;
+            iframe.style.display = 'block';
+            banner.style.display = 'none';
+            return;
+          }
+        } catch (e) {}
+      }
 
       // 3. Fallback for code repositories (Python, Algorithms, Utilities)
       document.getElementById('live-spinner').style.display = 'none';
